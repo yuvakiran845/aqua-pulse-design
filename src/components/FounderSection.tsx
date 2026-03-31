@@ -18,15 +18,7 @@ const FounderSection = () => {
               <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
             </div>
             <Button variant="aqua" size="sm" asChild>
-              <a
-                href="#founder"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("founder")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-              >
-                Founder Details
-              </a>
+              <a href="/#founder">Founder Details</a>
             </Button>
           </div>
 

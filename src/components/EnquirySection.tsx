@@ -2,6 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, CheckCircle } from "lucide-react";
 
+const GOOGLE_SHEETS_ENDPOINT =
+  import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL ?? "YOUR_GOOGLE_APPS_SCRIPT_URL";
+const WHATSAPP_NUMBER =
+  import.meta.env.VITE_WHATSAPP_NUMBER ?? "919999999999";
+
 const EnquirySection = () => {
   const [form, setForm] = useState({ name: "", phone: "", program: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -24,11 +29,32 @@ const EnquirySection = () => {
       return;
     }
     setErrors({});
-    // Build WhatsApp message
+
+    const payload = {
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+      program: form.program,
+      message: form.message.trim(),
+      timestamp: new Date().toISOString(),
+    };
+
+    // Fire-and-forget Google Sheets sync; do not block WhatsApp redirect.
+    if (GOOGLE_SHEETS_ENDPOINT !== "YOUR_GOOGLE_APPS_SCRIPT_URL") {
+      fetch(GOOGLE_SHEETS_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }).catch((err) => {
+        console.error("Google Sheets sync failed:", err);
+      });
+    } else {
+      console.error("Google Apps Script URL not configured.");
+    }
+
     const msg = encodeURIComponent(
-      `Hi, I'm ${form.name}. I'm interested in ${form.program}. ${form.message}`.trim()
+      `Name: ${payload.name}\nPhone: ${payload.phone}\nProgram: ${payload.program}\nMessage: ${payload.message}`
     );
-    window.open(`https://wa.me/919999999999?text=${msg}`, "_blank");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
     setSubmitted(true);
   };
 
