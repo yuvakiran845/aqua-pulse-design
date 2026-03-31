@@ -1,4 +1,4 @@
-import { Waves, Globe, Mail, MapPin, Instagram } from "lucide-react";
+import { Waves, Globe, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
 
 const quickLinks = [
   { label: "Home", href: "/#home" },
@@ -62,12 +62,31 @@ const Footer = () => {
             <h4 className="font-heading font-semibold text-foreground">Follow Us</h4>
             <div className="flex gap-3">
               <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-10 h-10 rounded-xl bg-[#1877F2]/10 border border-[#1877F2]/20 flex items-center justify-center hover:bg-[#1877F2]/20 transition-all group"
+              >
+                <Facebook className="w-5 h-5 text-[#1877F2] group-hover:scale-110 transition-transform" />
+              </a>
+              <a
                 href="https://instagram.com/aquapulse.swimmingacademy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-secondary/50 border border-border/50 flex items-center justify-center hover:bg-primary/20 hover:border-primary/50 transition-all"
+                aria-label="Instagram"
+                className="w-10 h-10 rounded-xl bg-[#E1306C]/10 border border-[#E1306C]/20 flex items-center justify-center hover:bg-[#E1306C]/20 transition-all group"
               >
-                <Instagram className="w-4 h-4 text-muted-foreground" />
+                <Instagram className="w-5 h-5 text-[#E1306C] group-hover:scale-110 transition-transform" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="w-10 h-10 rounded-xl bg-[#FF0000]/10 border border-[#FF0000]/20 flex items-center justify-center hover:bg-[#FF0000]/20 transition-all group"
+              >
+                <Youtube className="w-5 h-5 text-[#FF0000] group-hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>

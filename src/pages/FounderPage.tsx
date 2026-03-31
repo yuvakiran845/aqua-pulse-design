@@ -62,20 +62,20 @@ const FounderPage = () => {
 
               {/* Hero: Image + Name/Bio */}
               <div className="grid lg:grid-cols-[auto_1fr] gap-0 lg:gap-4 items-center">
-                <div className="flex justify-center lg:justify-start mb-6 lg:mb-0">
-                  <div className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
+                <div className="flex justify-center lg:justify-start mb-6 lg:mb-0 -translate-x-5">
+                  <div className="w-[240px] h-[240px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
                     <img src={founderImg} alt="Founder - Mr. Venkata Ramana" className="w-full h-full object-cover object-top" />
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <p className="text-lg md:text-xl font-bold tracking-[1.5px] text-[#22D3EE] uppercase">
+                  <p className="text-sm md:text-base font-bold tracking-[1.5px] text-[#22D3EE] uppercase">
                     Head Coach & Program Director
                   </p>
-                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-foreground leading-tight">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
                     Mr. Venkata Ramana
                   </h1>
-                  <p className="text-lg md:text-xl lg:text-2xl text-[#cbd5e1] leading-[1.7] max-w-4xl">
+                  <p className="text-base md:text-lg text-[#cbd5e1] leading-[1.7] max-w-4xl">
                     Founder & Managing Director. "Our vision is to create a world-class aquatic ecosystem where safety,
                     performance, and passion converge to shape the next generation of swimmers."
                   </p>
