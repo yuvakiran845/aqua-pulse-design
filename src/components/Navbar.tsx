@@ -63,7 +63,7 @@ const Navbar = () => {
             </a>
           ))}
           <Button variant="navCta" size="sm" asChild>
-            <a href="/#enquiry">Register</a>
+            <a href="/register">Student Registration</a>
           </Button>
         </div>
 
@@ -88,7 +88,7 @@ const Navbar = () => {
               </a>
             ))}
             <Button variant="navCta" size="sm" asChild>
-              <a href="/#enquiry" onClick={() => setOpen(false)}>Register</a>
+              <a href="/register" onClick={() => setOpen(false)}>Student Registration</a>
             </Button>
           </div>
         </div>

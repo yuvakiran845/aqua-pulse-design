@@ -288,6 +288,15 @@ const SwimmingAcademy = () => {
                 </div>
               ))}
             </div>
+
+            <div className="flex justify-center mt-10">
+              <a
+                href="/register"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-lg transition-all shadow-[0_0_25px_rgba(34,211,238,0.3)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] hover:-translate-y-0.5"
+              >
+                🏊 Student Registration
+              </a>
+            </div>
           </div>
         </section>
       </main>
