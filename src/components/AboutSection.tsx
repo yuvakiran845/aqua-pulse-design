@@ -1,5 +1,5 @@
 const stats = [
-  { value: "500+", label: "Students Trained", emoji: "🏊" },
+  { value: "3000+", label: "Students Trained", emoji: "🏊" },
   { value: "10+", label: "Certified Coaches", emoji: "🎓" },
   { value: "5+", label: "Years Experience", emoji: "⭐" },
   { value: "10", label: "Programs Offered", emoji: "📋" },

@@ -1,10 +1,11 @@
 import { Waves, Globe, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import logoImg from "@/assets/aqua-pulse-logo.png";
 
 const quickLinks = [
   { label: "Home", href: "/#home" },
   { label: "Founder", href: "/#founder" },
   { label: "Swimming Academy", href: "/swimming-academy" },
-  { label: "Sports Arena", href: "/#divisions" },
+  { label: "Hub Sports Arena", href: "/hub-sports-arena" },
   { label: "Contact", href: "/#enquiry" },
 ];
 
@@ -15,10 +16,27 @@ const Footer = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Waves className="w-6 h-6 text-primary" />
-              <span className="font-heading font-bold gradient-aqua-text text-lg">Aqua Pulse</span>
-            </div>
+            <a href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity shrink-0 min-w-0">
+              <div className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] rounded-full overflow-hidden shrink-0 shadow-[0_0_14px_rgba(34,211,238,0.22)]">
+                <img
+                  src={logoImg}
+                  alt="Aqua Pulse Swimming Academy"
+                  className="w-full h-full object-cover object-center block"
+                  style={{ mixBlendMode: "normal", filter: "none", imageRendering: "-webkit-optimize-contrast", transform: "scale(1.12)", transformOrigin: "center center" }}
+                />
+              </div>
+              <div 
+                className="flex flex-col justify-center gap-[2px] leading-[1.1] whitespace-nowrap min-w-0 antialiased"
+                style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textRendering: "optimizeLegibility" }}
+              >
+                <span className="text-[26px] font-[700] tracking-[1px] text-[#22D3EE] uppercase">
+                  AQUA PULSE
+                </span>
+                <span className="text-[14px] font-[500] tracking-[3px] text-[#94A3B8] uppercase">
+                  SWIMMING ACADEMY
+                </span>
+              </div>
+            </a>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Professional swimming training & aquatic programs for all ages and skill levels.
             </p>
@@ -49,7 +67,7 @@ const Footer = () => {
 
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>Hyderabad, Telangana, India</span>
+                <span>Vinayak Sagar, Tirupati</span>
               </div>
             </div>
           </div>

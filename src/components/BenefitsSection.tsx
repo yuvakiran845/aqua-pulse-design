@@ -22,21 +22,8 @@ const BenefitsSection = () => {
           </p>
         </div>
 
-        {/* Mobile / small screens: compact list */}
-        <div className="max-w-2xl mx-auto space-y-3 md:hidden">
-          {benefits.map((b) => (
-            <div key={b.title} className="flex items-start gap-3">
-              <b.icon className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-              <p className="text-sm text-foreground">
-                <span className="font-semibold">{b.title}</span>
-                <span className="text-muted-foreground"> – {b.desc}</span>
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* Tablet / desktop: card-based grid layout */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* All screens: card-based grid layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {benefits.map((b) => (
             <div
               key={b.title}
@@ -44,7 +31,7 @@ const BenefitsSection = () => {
             >
               <div className="flex items-center gap-3">
                 <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <b.icon className="w-5 h-5" />
+                  <b.icon className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="text-base lg:text-lg font-semibold text-foreground">
                   {b.title}
