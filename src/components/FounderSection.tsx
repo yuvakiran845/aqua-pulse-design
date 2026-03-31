@@ -17,7 +17,7 @@ const FounderSection = () => {
             <div className="w-[280px] md:w-[300px] lg:w-[320px] aspect-[4/5] rounded-2xl overflow-hidden border-2 border-primary/30 shadow-lg">
               <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
             </div>
-            <Button variant="aqua" size="sm" asChild>
+            <Button variant="aqua" size="lg" className="w-[280px] md:w-[300px] lg:w-[320px] text-base" asChild>
               <a
                 href="#founder"
                 onClick={(e) => {
