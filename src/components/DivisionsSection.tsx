@@ -94,11 +94,11 @@ const DivisionsSection = () => {
                 </div>
 
                 {d.link ? (
-                  <Button variant="ghost" className="text-primary hover:text-accent p-0 h-auto font-semibold text-sm group-hover:translate-x-1 transition-transform duration-300" asChild>
+                  <Button variant="ghost" className="hover:bg-transparent text-primary hover:text-accent p-0 h-auto font-semibold text-sm group-hover:translate-x-1 transition-transform duration-300" asChild>
                     <a href={d.link}>Explore More →</a>
                   </Button>
                 ) : (
-                  <Button variant="ghost" className="text-primary hover:text-accent p-0 h-auto font-semibold text-sm group-hover:translate-x-1 transition-transform duration-300">
+                  <Button variant="ghost" className="hover:bg-transparent text-primary hover:text-accent p-0 h-auto font-semibold text-sm group-hover:translate-x-1 transition-transform duration-300">
                     Explore More →
                   </Button>
                 )}
