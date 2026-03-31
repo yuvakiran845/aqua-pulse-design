@@ -1,4 +1,4 @@
-import { Waves, Globe, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import { Globe, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
 import logoImg from "@/assets/aqua-pulse-logo.png";
 
 const quickLinks = [
@@ -6,6 +6,7 @@ const quickLinks = [
   { label: "Founder", href: "/#founder" },
   { label: "Swimming Academy", href: "/swimming-academy" },
   { label: "Hub Sports Arena", href: "/hub-sports-arena" },
+  { label: "Facility Management", href: "/facility-management" },
   { label: "Contact", href: "/#enquiry" },
 ];
 

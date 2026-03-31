@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER ?? "918330945566";
