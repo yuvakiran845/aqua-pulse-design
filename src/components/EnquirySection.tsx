@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, MessageCircle } from "lucide-react";
+import { CheckCircle, MessageCircle, MapPin, Mail } from "lucide-react";
 
 const ENQUIRY_API_ENDPOINT =
   import.meta.env.VITE_ENQUIRY_API_URL ?? "YOUR_API_URL";
 const WHATSAPP_NUMBER =
-  import.meta.env.VITE_WHATSAPP_NUMBER ?? "919999999999";
+  import.meta.env.VITE_WHATSAPP_NUMBER ?? "918330945566";
 const WHATSAPP_FLOATING_MESSAGE =
   import.meta.env.VITE_WHATSAPP_FLOATING_MESSAGE ?? "Hello, I want to enquire about swimming programs.";
 
@@ -95,9 +95,10 @@ const EnquirySection = () => {
       </div>
 
       <div className="container-main relative">
-        <div className="max-w-lg mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto items-start">
+          <div className="w-full max-w-lg mx-auto lg:mx-0">
+            <div className="text-center lg:text-left mb-8">
+              <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
               <span className="gradient-aqua-text">Get In Touch</span>
             </h2>
             <p className="text-muted-foreground text-sm">We will contact you shortly after receiving your enquiry.</p>
@@ -176,16 +177,69 @@ const EnquirySection = () => {
             {submitError && <p className="text-destructive text-xs text-center">{submitError}</p>}
           </form>
         </div>
+
+          {/* Reach Us Column */}
+          <div className="w-full max-w-lg mx-auto lg:mx-0">
+            <div className="text-center lg:text-left mb-8">
+              <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
+                <span className="mr-2">👉</span><span className="gradient-aqua-text">REACH US DIRECTLY</span>
+              </h2>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              <a href={`https://wa.me/918330945566`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-[#25D366]/30 shadow-[0_0_20px_rgba(37,211,102,0.1)] hover:bg-[#25D366]/5 hover:shadow-[0_0_30px_rgba(37,211,102,0.2)] hover:border-[#25D366]/50 transition-all duration-300 group">
+                <div className="w-14 h-14 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#25D366]/30 transition-all duration-300">
+                  <MessageCircle className="w-7 h-7 text-[#25D366]" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">WhatsApp</h3>
+                  <p className="text-muted-foreground">+91 83309 45566</p>
+                </div>
+              </a>
+
+              <a href="mailto:aquapulseswimmingacademy@gmail.com" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-primary/20 shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:bg-primary/5 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:border-primary/40 transition-all duration-300 group">
+                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/30 transition-all duration-300">
+                  <Mail className="w-7 h-7 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">Email</h3>
+                  <p className="text-muted-foreground text-sm sm:text-base break-all sm:break-normal">aquapulseswimmingacademy@gmail.com</p>
+                </div>
+              </a>
+
+              <a href="https://www.google.com/maps?q=Vinayak+Sagar+Tirupati" target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-primary/20 shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:bg-primary/5 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:border-primary/40 transition-all duration-300 group">
+                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/30 transition-all duration-300">
+                  <MapPin className="w-7 h-7 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">Office</h3>
+                  <p className="text-muted-foreground">Vinayak Sagar, Tirupati</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-      <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_FLOATING_MESSAGE)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat on WhatsApp"
-        className="fixed bottom-6 right-6 z-50 inline-flex items-center justify-center w-14 h-14 rounded-full bg-whatsapp text-foreground shadow-lg hover:brightness-110 transition-all duration-300"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </a>
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
+        <a
+          href="https://www.google.com/maps?q=Vinayak+Sagar+Tirupati"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View on Google Maps"
+          className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] hover:bg-primary/90 hover:scale-[1.05] transition-all duration-300"
+        >
+          <MapPin className="w-6 h-6" />
+        </a>
+        <a
+          href={`https://wa.me/918330945566?text=${encodeURIComponent(WHATSAPP_FLOATING_MESSAGE)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+          className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-[0_0_15px_rgba(37,211,102,0.5)] hover:bg-[#20bd5a] hover:scale-[1.05] transition-all duration-300"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </a>
+      </div>
     </section>
   );
 };
