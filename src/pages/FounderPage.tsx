@@ -11,40 +11,43 @@ const WHATSAPP_FOUNDER_MESSAGE =
 const certificationsData = [
   {
     id: 1,
-    title: "Elite Coaching Certification",
-    subtitle: "International Aquatic Training Institute",
-    file: "/certificates/sample1.pdf",
+    title: "NSNIS Certification",
+    subtitle: "National Sports Institute of India",
     icon: Medal,
-    iconClass: "text-amber-300",
-    iconWrapClass: "bg-[linear-gradient(135deg,rgba(251,191,36,0.35),rgba(34,211,238,0.15))]",
+    iconClass: "text-amber-400",
+    iconBg: "bg-amber-500/20",
   },
   {
     id: 2,
-    title: "Advanced Swimming Techniques",
-    subtitle: "Global Swimming Federation",
-    file: "/certificates/sample2.pdf",
+    title: "WSCA Certification",
+    subtitle: "World Swimming Coaches Association – International",
     icon: BadgeCheck,
-    iconClass: "text-blue-300",
-    iconWrapClass: "bg-[linear-gradient(135deg,rgba(96,165,250,0.35),rgba(34,211,238,0.15))]",
+    iconClass: "text-blue-400",
+    iconBg: "bg-blue-500/20",
   },
   {
     id: 3,
-    title: "Professional Aquatic Safety",
-    subtitle: "World Safety Council",
-    file: "/certificates/sample3.pdf",
+    title: "WSCA Membership",
+    subtitle: "Official Member – World Swimming Coaches Association",
     icon: Award,
-    iconClass: "text-teal-300",
-    iconWrapClass: "bg-[linear-gradient(135deg,rgba(45,212,191,0.35),rgba(59,130,246,0.15))]",
+    iconClass: "text-emerald-400",
+    iconBg: "bg-emerald-500/20",
   },
   {
     id: 4,
-    title: "Sports Physiology Certification",
-    subtitle: "International Sports Science Board",
-    file: "/certificates/sample4.pdf",
+    title: "SFI Coach Member",
+    subtitle: "Swimming Federation of India – Coach Member",
     icon: Medal,
-    iconClass: "text-yellow-300",
-    iconWrapClass: "bg-[linear-gradient(135deg,rgba(253,224,71,0.3),rgba(34,211,238,0.15))]",
+    iconClass: "text-amber-400",
+    iconBg: "bg-amber-500/20",
   },
+];
+
+const quickStats = [
+  { label: "Role", value: "Founder, Head Coach & Program Director", color: "text-rose-400" },
+  { label: "Academy", value: "Aqua Pulse Swimming Academy", color: "text-green-400" },
+  { label: "Experience", value: "10+ Years of Experience", color: "text-yellow-400" },
+  { label: "Students", value: "3,000+ Trained", color: "text-cyan-400" },
 ];
 
 const FounderPage = () => {
@@ -53,111 +56,77 @@ const FounderPage = () => {
       <Navbar />
 
       <main className="pt-24">
-        <section id="founder-page-section" className="py-20 px-5">
-          <div className="container-main">
-            <div className="max-w-6xl mx-auto space-y-6 animate-fade-up">
-              <div className="grid lg:grid-cols-[280px_1fr] gap-6 md:gap-8 items-center">
-                <div className="flex justify-center lg:justify-start">
-                  <div className="w-[240px] h-[240px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
-                    <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
+        <section id="founder-page-section" className="py-16 md:py-20 -mt-[10px] pl-[15px]">
+          <div className="w-full px-6 md:px-10 lg:px-16 xl:px-24">
+            <div className="space-y-10">
+
+              {/* Hero: Image + Name/Bio */}
+              <div className="grid lg:grid-cols-[auto_1fr] gap-0 lg:gap-4 items-center">
+                <div className="flex justify-center lg:justify-start mb-6 lg:mb-0">
+                  <div className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
+                    <img src={founderImg} alt="Founder - Mr. Venkata Ramana" className="w-full h-full object-cover object-top" />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <p className="text-sm md:text-base font-bold tracking-[1px] text-[#22D3EE] uppercase">
+                <div className="space-y-4">
+                  <p className="text-lg md:text-xl font-bold tracking-[1.5px] text-[#22D3EE] uppercase">
                     Head Coach & Program Director
                   </p>
-                  <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-foreground leading-tight">
                     Mr. Venkata Ramana
                   </h1>
-                  <p className="text-[#cbd5e1] leading-[1.6] max-w-4xl">
+                  <p className="text-lg md:text-xl lg:text-2xl text-[#cbd5e1] leading-[1.7] max-w-4xl">
                     Founder & Managing Director. "Our vision is to create a world-class aquatic ecosystem where safety,
                     performance, and passion converge to shape the next generation of swimmers."
                   </p>
                 </div>
               </div>
 
-              <div className="grid lg:grid-cols-[320px_1fr] gap-6 md:gap-8 items-start">
-                <div className="space-y-3">
-                  <div className="rounded-[14px] border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.7)] p-4 space-y-3">
-                    <h2 className="text-xl font-heading font-semibold text-foreground">Quick Stats</h2>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-3">
-                      <div className="rounded-xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.6)] p-4">
-                        <p className="text-xs uppercase tracking-wider text-primary/80">Role</p>
-                        <p className="text-foreground font-medium">Founder & Managing Director</p>
-                      </div>
-                      <div className="rounded-xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.6)] p-4">
-                        <p className="text-xs uppercase tracking-wider text-primary/80">Academy</p>
-                        <p className="text-foreground font-medium">Aqua Pulse Swimming Academy</p>
-                      </div>
-                      <div className="rounded-xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.6)] p-4">
-                        <p className="text-xs uppercase tracking-wider text-primary/80">Experience</p>
-                        <p className="text-foreground font-medium">15+ years in sports management</p>
-                      </div>
-                      <div className="rounded-xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.6)] p-4">
-                        <p className="text-xs uppercase tracking-wider text-primary/80">Students</p>
-                        <p className="text-foreground font-medium">Guided across age groups</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h2 className="text-xl md:text-2xl font-heading font-bold uppercase tracking-[1px] text-[#22D3EE]">
-                      Certifications & Affiliations
-                    </h2>
-                    <div className="space-y-4">
-                      {certificationsData.map((item) => (
-                        <a
-                          key={item.id}
-                          href={item.file}
-                          download
-                          className="rounded-[14px] p-4 border border-[rgba(34,211,238,0.2)] bg-[linear-gradient(135deg,rgba(34,211,238,0.15),rgba(59,130,246,0.15))] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_12px_rgba(34,211,238,0.3)] cursor-pointer"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className={`${item.iconWrapClass} p-2 rounded-[10px] shrink-0`}>
-                              <item.icon className={`w-5 h-5 ${item.iconClass}`} />
-                            </div>
-                            <div>
-                              <h3 className="text-foreground font-semibold">{item.title}</h3>
-                              <p className="text-sm text-muted-foreground">{item.subtitle}</p>
-                            </div>
-                          </div>
-                        </a>
+              {/* Quick Stats + Certifications */}
+              <div className="grid lg:grid-cols-[360px_1fr] gap-8 lg:gap-12 items-start">
+                {/* Quick Stats */}
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.7)] p-5 md:p-6 space-y-4">
+                    <h2 className="text-2xl font-heading font-bold text-foreground">Quick Stats</h2>
+                    <div className="grid gap-3">
+                      {quickStats.map((stat) => (
+                        <div key={stat.label} className="rounded-xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.6)] p-4">
+                          <p className={`text-xs uppercase tracking-wider font-semibold ${stat.color}`}>{stat.label}</p>
+                          <p className="text-foreground font-medium text-base mt-1">{stat.value}</p>
+                        </div>
                       ))}
                     </div>
                   </div>
                 </div>
+
+                {/* Certifications & Affiliations */}
+                <div className="space-y-5">
+                  <h2 className="text-2xl md:text-3xl font-heading font-bold uppercase tracking-[1.5px] text-[#22D3EE]">
+                    Certifications & Affiliations
+                  </h2>
+                  <div className="rounded-2xl border border-[rgba(34,211,238,0.15)] bg-[rgba(15,23,42,0.5)] p-5 md:p-6 space-y-1">
+                    {certificationsData.map((item, idx) => (
+                      <div
+                        key={item.id}
+                        className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:bg-[rgba(34,211,238,0.05)] ${
+                          idx < certificationsData.length - 1 ? "border-b border-[rgba(34,211,238,0.1)]" : ""
+                        }`}
+                      >
+                        <div className={`${item.iconBg} p-3 rounded-xl shrink-0`}>
+                          <item.icon className={`w-6 h-6 ${item.iconClass}`} />
+                        </div>
+                        <div>
+                          <h3 className="text-foreground font-bold text-base md:text-lg">{item.title}</h3>
+                          <p className="text-sm md:text-base text-muted-foreground">{item.subtitle}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                <h2 className="text-xl font-heading font-semibold text-foreground uppercase tracking-wide">
-                  Key Highlights
-                </h2>
-                <ul className="space-y-2 text-[#e2e8f0] leading-[1.8]">
-                  <li className="flex items-start gap-3">
-                    <span className="mt-2 inline-block w-2 h-2 rounded-full bg-[#22D3EE] shrink-0" />
-                    <span>Former competitive swimmer</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="mt-2 inline-block w-2 h-2 rounded-full bg-[#22D3EE] shrink-0" />
-                    <span>Built a structured aquatic training ecosystem</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="mt-2 inline-block w-2 h-2 rounded-full bg-[#22D3EE] shrink-0" />
-                    <span>Guided swimmer development across age groups</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="mt-2 inline-block w-2 h-2 rounded-full bg-[#22D3EE] shrink-0" />
-                    <span>Promoted community-focused water safety programs</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="mt-2 inline-block w-2 h-2 rounded-full bg-[#22D3EE] shrink-0" />
-                    <span>Passionate advocate for water safety education</span>
-                  </li>
-                </ul>
-              </div>
+
+
             </div>
           </div>
         </section>
