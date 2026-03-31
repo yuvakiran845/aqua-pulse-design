@@ -10,6 +10,7 @@ import FacilityManagement from "./pages/FacilityManagement.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import FloatingElements from "./components/FloatingElements.tsx";
 import HubSportsArena from "./pages/HubSportsArena.tsx";
+import Registration from "./pages/Registration.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/founder" element={<FounderPage />} />
           <Route path="/facility-management" element={<FacilityManagement />} />
           <Route path="/hub-sports-arena" element={<HubSportsArena />} />
+          <Route path="/register" element={<Registration />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
