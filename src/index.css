@@ -141,3 +141,15 @@ select option {
   background-color: hsl(220 35% 10%);
   color: hsl(210 40% 96%);
 }
+
+/* Remove increment/decrement controls from Age number input */
+input[type="number"].no-spin::-webkit-outer-spin-button,
+input[type="number"].no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"].no-spin {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

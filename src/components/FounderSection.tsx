@@ -18,7 +18,7 @@ const FounderSection = () => {
               <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
             </div>
             <Button variant="aqua" size="sm" asChild>
-              <a href="/#founder">Founder Details</a>
+              <a href="/founder#founder-page-section">Founder Details</a>
             </Button>
           </div>
 
