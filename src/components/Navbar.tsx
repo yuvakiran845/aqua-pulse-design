@@ -4,11 +4,11 @@ import { Menu, X } from "lucide-react";
 import logoImg from "@/assets/aqua-pulse-logo.png";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Swimming Academy", href: "#divisions" },
-  { label: "Sports Arena", href: "#divisions" },
-  { label: "Facility Management", href: "#divisions" },
-  { label: "Founder", href: "#founder" },
+  { label: "Home", href: "/#home" },
+  { label: "Swimming Academy", href: "/swimming-academy" },
+  { label: "Sports Arena", href: "/#divisions" },
+  { label: "Facility Management", href: "/#divisions" },
+  { label: "Founder", href: "/#founder" },
 ];
 
 const Navbar = () => {
@@ -29,7 +29,7 @@ const Navbar = () => {
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
       <div className="container-main flex items-center justify-between min-h-[80px] py-2.5">
-        <a href="#home" className="flex items-center gap-3 md:gap-4 shrink-0 min-w-0">
+        <a href="/" className="flex items-center gap-3 md:gap-4 shrink-0 min-w-0">
           <img
             src={logoImg}
             alt="Aqua Pulse Swimming Academy"
@@ -61,7 +61,7 @@ const Navbar = () => {
             </a>
           ))}
           <Button variant="navCta" size="sm" asChild>
-            <a href="#enquiry">Register</a>
+            <a href="/#enquiry">Register</a>
           </Button>
         </div>
 
@@ -86,7 +86,7 @@ const Navbar = () => {
               </a>
             ))}
             <Button variant="navCta" size="sm" asChild>
-              <a href="#enquiry" onClick={() => setOpen(false)}>Register</a>
+              <a href="/#enquiry" onClick={() => setOpen(false)}>Register</a>
             </Button>
           </div>
         </div>
