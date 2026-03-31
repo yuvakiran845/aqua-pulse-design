@@ -15,7 +15,7 @@ const FacilityManagement = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <main className="pt-24 pb-16 md:pt-32 md:pb-24">
+      <main className="pt-[140px] pb-16 md:pt-32 md:pb-24">
         {/* Intro & Features Section */}
         <section className="section-padding relative">
           <div className="container-main">

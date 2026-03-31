@@ -5,7 +5,7 @@ const quickLinks = [
   { label: "Home", href: "/#home" },
   { label: "Founder", href: "/#founder" },
   { label: "Swimming Academy", href: "/swimming-academy" },
-  { label: "Sports Arena", href: "/#divisions" },
+  { label: "Hub Sports Arena", href: "/hub-sports-arena" },
   { label: "Contact", href: "/#enquiry" },
 ];
 

@@ -14,13 +14,13 @@ const divisions = [
   },
   {
     emoji: "🏆",
-    title: "Sports Arena",
+    title: "Hub Sports Arena",
     description: "State-of-the-art multi-sport facility hosting tournaments and training sessions. Experience world-class infrastructure for peak performance.",
     gradient: "from-amber-500 to-orange-600",
     bgGlow: "bg-amber-500/20",
     borderColor: "border-amber-500/40",
     hoverShadow: "hover:shadow-[0_0_40px_hsl(38_92%_50%/0.35)]",
-    link: null,
+    link: "/hub-sports-arena",
     features: ["🏟️ World-class Facility", "🎯 Multi-sport", "⚡ Peak Performance"],
   },
   {

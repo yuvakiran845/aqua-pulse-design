@@ -55,7 +55,7 @@ const FounderPage = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <main className="pt-24">
+      <main className="pt-36 md:pt-32">
         <section id="founder-page-section" className="py-16 md:py-20 -mt-[10px] pl-[15px]">
           <div className="w-full px-6 md:px-10 lg:px-16 xl:px-24">
             <div className="space-y-10">

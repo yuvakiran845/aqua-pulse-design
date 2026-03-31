@@ -19,15 +19,14 @@ const FloatingElements = () => {
 
   return (
     <>
-      {/* Back Arrow - Left Side Top (under navbar) */}
+      {/* Back Arrow - Top Left (under navbar) */}
       {!isHome && (
         <button
           onClick={() => navigate("/")}
-          className="fixed top-24 left-4 sm:left-6 z-40 flex items-center gap-2 bg-secondary/80 backdrop-blur-md border border-border/50 text-foreground px-4 py-2.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)] hover:bg-secondary hover:-translate-x-1 hover:shadow-[0_4px_20px_rgba(34,211,238,0.2)] transition-all duration-300 group"
+          className="fixed top-[90px] md:top-28 left-4 md:left-6 z-40 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-secondary/80 backdrop-blur-md border border-border/50 text-foreground rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.1)] hover:bg-secondary hover:text-[#22D3EE] hover:scale-105 hover:shadow-[0_4px_20px_rgba(34,211,238,0.2)] transition-all duration-300 group"
           aria-label="Go Back to Home"
         >
-          <ArrowLeft className="w-5 h-5 text-primary group-hover:text-accent transition-colors" />
-          <span className="font-semibold text-sm tracking-wide">Back</span>
+          <ArrowLeft className="w-5 h-5 md:w-6 md:h-6 transition-colors" />
         </button>
       )}
 
