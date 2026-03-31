@@ -97,7 +97,7 @@ const EnquirySection = () => {
                 value={form.program}
                 onChange={(e) => setForm({ ...form, program: e.target.value })}
               >
-                <option value="">Select a Program</option>
+                <option value="" disabled hidden>Select a Program</option>
                 <option value="Summer Camp">Summer Camp</option>
                 <option value="Beginners Program">Beginners Program</option>
                 <option value="Intermediate Program">Intermediate Program</option>
