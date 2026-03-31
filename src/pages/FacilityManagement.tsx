@@ -19,9 +19,9 @@ const FacilityManagement = () => {
         {/* Intro & Features Section */}
         <section className="section-padding relative">
           <div className="container-main">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-              {/* Left Column: Intro */}
-              <div className="space-y-8">
+            {/* Intro Header */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-10 mb-10">
+              <div className="max-w-2xl flex-1 space-y-5">
                 <div className="flex flex-wrap gap-3">
                   <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wider font-heading">
                     OUR SYSTEM
@@ -31,40 +31,42 @@ const FacilityManagement = () => {
                   </span>
                 </div>
 
-                <div className="space-y-4">
-                  <h1 className="text-4xl md:text-5xl lg:text-5xl font-heading font-bold leading-[1.15]">
-                    AQUA PULSE ATHLETE<br />
-                    <span className="gradient-aqua-text">DEVELOPMENT SYSTEM</span>
-                  </h1>
-                  <p className="text-xl md:text-2xl font-heading font-semibold text-foreground/90 mt-2">
-                    <span className="mr-2">👉</span>More than just swimming — a complete athlete development journey
-                  </p>
-                  <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-lg mt-4">
-                    Our facility offers a <span className="text-primary font-medium">world-class environment</span> purposefully designed for growth and performance. We integrate aquatic training with <span className="text-blue-400 font-medium">comprehensive support systems</span> to ensure every student maximizes their potential safely and effectively.
-                  </p>
-                </div>
+                <h1 className="text-3xl md:text-4xl lg:text-[2.5rem] font-heading font-bold leading-tight">
+                  AQUA PULSE ATHLETE<br />
+                  <span className="gradient-aqua-text">DEVELOPMENT SYSTEM</span>
+                </h1>
+                
+                <p className="text-lg md:text-xl font-heading font-medium text-foreground/85 mt-2">
+                  More than just swimming — a complete athlete development journey
+                </p>
               </div>
+              
+              <div className="lg:max-w-md xl:max-w-[500px] shrink-0">
+                <div className="w-12 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mb-4 hidden lg:block" />
+                <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
+                  Our facility offers a <span className="text-primary font-medium">world-class environment</span> purposefully designed for growth and performance. We integrate aquatic training with <span className="text-blue-400 font-medium">comprehensive support systems</span> to ensure every student maximizes their potential safely and effectively.
+                </p>
+              </div>
+            </div>
 
-              {/* Right Column: Features */}
-              <div className="space-y-4">
-                {/* Feature Cards array */}
-                {[
-                  { icon: ArrowUpRight, title: "Structured Progression Pathway", desc: "Clear milestones mapping from beginner confidence to competitive excellence.", color: "text-cyan-400", bgIcon: "bg-cyan-500/10 border-cyan-500/20" },
-                  { icon: Dumbbell, title: "Dry Land Workouts", desc: "Specialized fitness routines to build core strength and endurance out of the water.", color: "text-orange-400", bgIcon: "bg-orange-500/10 border-orange-500/20" },
-                  { icon: Award, title: "Skill Certification", desc: "Recognized certificates rewarding skill mastery at every level of development.", color: "text-purple-400", bgIcon: "bg-purple-500/10 border-purple-500/20" },
-                  { icon: ShieldCheck, title: "Safety First", desc: "Stringent hygiene and professional supervision in a controlled environment.", color: "text-green-400", bgIcon: "bg-green-500/10 border-green-500/20" },
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-5 p-4 rounded-xl bg-card border border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:bg-white/[0.03] hover:border-white/10 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(34,211,238,0.1)] transition-all duration-300 group">
-                    <div className={`w-12 h-12 flex items-center justify-center rounded-lg border ${feature.bgIcon} group-hover:scale-110 transition-transform`}>
-                      <feature.icon className={`w-6 h-6 ${feature.color}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-heading font-semibold text-foreground">{feature.title}</h3>
-                      <p className="text-muted-foreground text-sm leading-snug mt-0.5">{feature.desc}</p>
-                    </div>
+            {/* Features Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { icon: ArrowUpRight, title: "Structured Progression Pathway", desc: "Clear milestones mapping from beginner confidence to competitive excellence.", color: "text-cyan-400", bgIcon: "bg-cyan-500/10 border-cyan-500/20", glow: "hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]" },
+                { icon: Dumbbell, title: "Dry Land Workouts", desc: "Specialized fitness routines to build core strength and endurance out of the water.", color: "text-orange-400", bgIcon: "bg-orange-500/10 border-orange-500/20", glow: "hover:shadow-[0_0_30px_rgba(251,146,60,0.15)]" },
+                { icon: Award, title: "Skill Certification", desc: "Recognized certificates rewarding skill mastery at every level of development.", color: "text-purple-400", bgIcon: "bg-purple-500/10 border-purple-500/20", glow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]" },
+                { icon: ShieldCheck, title: "Safety First", desc: "Stringent hygiene and professional supervision in a controlled environment.", color: "text-green-400", bgIcon: "bg-green-500/10 border-green-500/20", glow: "hover:shadow-[0_0_30px_rgba(74,222,128,0.15)]" },
+              ].map((feature, idx) => (
+                <div key={idx} className={`flex flex-col p-6 rounded-2xl bg-card border border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:bg-white/[0.03] hover:border-white/10 hover:-translate-y-2 ${feature.glow} transition-all duration-300 group`}>
+                  <div className={`w-14 h-14 flex items-center justify-center rounded-xl border ${feature.bgIcon} group-hover:scale-110 transition-transform mb-5`}>
+                    <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <h3 className="font-heading font-semibold text-foreground text-xl mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -74,7 +76,7 @@ const FacilityManagement = () => {
           <div className="container-main">
             <div className="text-center md:text-left mb-10">
               <h2 className="text-3xl md:text-[2rem] font-heading font-bold">
-                <span className="mr-2">👉</span><span className="gradient-aqua-text">STUDENT PROGRESSION & CERTIFICATION</span>
+                <span className="gradient-aqua-text">STUDENT PROGRESSION & CERTIFICATION</span>
               </h2>
               <p className="text-muted-foreground mt-2 max-w-2xl">A structured, multi-tier program tracking growth across essential swimming disciplines.</p>
             </div>
@@ -139,9 +141,9 @@ const FacilityManagement = () => {
           <div className="container-main">
             <div className="text-center md:text-left mb-10">
               <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-3 flex items-center justify-center md:justify-start gap-2">
-                <span className="mr-1">👉</span><span className="gradient-aqua-text uppercase">Athlete Support System</span>
+                <span className="gradient-aqua-text uppercase">Athlete Support System</span>
               </h2>
-              <p className="text-lg text-foreground/90 font-medium">👉 Complete support beyond the pool — we care about the whole athlete</p>
+              <p className="text-lg text-foreground/90 font-medium">Complete support beyond the pool — we care about the whole athlete</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
@@ -178,10 +180,10 @@ const FacilityManagement = () => {
                 </div>
                 <div className="text-center md:text-left">
                   <h2 className="text-2xl md:text-3xl font-heading font-bold mb-3 flex items-center justify-center md:justify-start gap-2">
-                    <span className="mr-1">👉</span> <span className="text-foreground">SKILL CERTIFICATION</span>
+                    <span className="text-foreground">SKILL CERTIFICATION</span>
                   </h2>
                   <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    👉 Students receive Aqua Pulse <span className="text-primary font-medium">Swimming Skill Certificates</span> after completing each level.
+                    Students receive Aqua Pulse <span className="text-primary font-medium">Swimming Skill Certificates</span> after completing each level.
                   </p>
                 </div>
               </div>
