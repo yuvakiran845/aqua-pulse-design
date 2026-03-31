@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Founder", href: "/founder#founder-page-section" },
   { label: "Swimming Academy", href: "/swimming-academy" },
   { label: "Sports Arena", href: "/#divisions" },
-  { label: "Facility Management", href: "/#divisions" },
+  { label: "Facility Management", href: "/facility-management" },
 ];
 
 const Navbar = () => {
