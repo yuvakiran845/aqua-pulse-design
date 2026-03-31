@@ -11,9 +11,9 @@ const benefits = [
 
 const BenefitsSection = () => {
   return (
-    <section className="section-padding relative">
+    <section className="py-12 md:py-16 relative">
       <div className="container-main">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
             Why Choose <span className="gradient-aqua-text">Aqua Pulse</span>
           </h2>
@@ -22,14 +22,14 @@ const BenefitsSection = () => {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-2xl mx-auto space-y-3">
           {benefits.map((b) => (
-            <div key={b.title} className="bg-card rounded-2xl p-6 border border-border/50 card-glow text-center">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <b.icon className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="font-heading font-semibold text-foreground mb-2">{b.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{b.desc}</p>
+            <div key={b.title} className="flex items-start gap-3">
+              <b.icon className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+              <p className="text-sm text-foreground">
+                <span className="font-semibold">{b.title}</span>
+                <span className="text-muted-foreground"> – {b.desc}</span>
+              </p>
             </div>
           ))}
         </div>
