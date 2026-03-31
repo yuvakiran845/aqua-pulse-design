@@ -13,7 +13,7 @@ const MedicalSection = () => {
     <section className="section-padding relative">
       <div className="w-full px-6 md:px-10 lg:px-16 xl:px-24">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6 tracking-tight">
             Medical <span className="gradient-aqua-text">Support Team</span>
           </h2>
         </div>
@@ -34,18 +34,18 @@ const MedicalSection = () => {
           {/* Info */}
           <div className="space-y-6">
             <div>
-              <h3 className="text-2xl font-heading font-bold text-foreground">Dr. Kumar Chandra Reddy D</h3>
-              <p className="text-primary font-medium mt-1">Physical Therapist & Sports Specialist</p>
+              <h3 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">Dr. Kumar Chandra Reddy D</h3>
+              <p className="text-primary font-bold text-lg md:text-xl">Physical Therapist & Sports Specialist</p>
             </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-base md:text-lg lg:text-xl leading-relaxed">
               Board-certified sports medicine specialist with extensive experience in athlete rehabilitation,
               injury prevention, and performance optimization. Ensuring every swimmer trains safely and recovers efficiently.
             </p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {services.map((s) => (
-                <div key={s.label} className="flex items-center gap-3 bg-secondary/50 rounded-xl px-4 py-3">
-                  <s.icon className="w-5 h-5 text-primary shrink-0" />
-                  <span className="text-sm text-foreground">{s.label}</span>
+                <div key={s.label} className="flex items-center gap-4 bg-secondary/50 rounded-xl px-5 py-4">
+                  <s.icon className="w-6 h-6 text-primary shrink-0" />
+                  <span className="text-base md:text-lg font-medium text-foreground">{s.label}</span>
                 </div>
               ))}
             </div>

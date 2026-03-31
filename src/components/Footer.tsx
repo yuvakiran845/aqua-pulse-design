@@ -46,10 +46,7 @@ const Footer = () => {
                 <Mail className="w-4 h-4 text-primary shrink-0" />
                 <span className="break-all">aquapulseswimmingacademy@gmail.com</span>
               </a>
-              <a href="https://instagram.com/aquapulse.swimmingacademy" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
-                <Instagram className="w-4 h-4 text-primary shrink-0" />
-                <span>@aquapulse.swimmingacademy</span>
-              </a>
+
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span>Hyderabad, Telangana, India</span>
