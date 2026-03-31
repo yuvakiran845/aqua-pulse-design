@@ -26,7 +26,7 @@ const Navbar = () => {
   }, [open]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
+    <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
       <div className="container-main flex items-center justify-between h-16 md:h-18">
         <a href="#home" className="flex items-center gap-2 group">
           <Waves className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
