@@ -42,10 +42,10 @@ const Navbar = () => {
             className="flex flex-col justify-center gap-[2px] leading-[1.1] whitespace-nowrap min-w-0 antialiased"
             style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textRendering: "optimizeLegibility" }}
           >
-            <span className="text-[26px] font-[700] tracking-[1px] text-[#22D3EE] uppercase">
+            <span className="text-xl md:text-2xl font-[700] tracking-[1px] text-[#22D3EE] uppercase">
               AQUA PULSE
             </span>
-            <span className="text-[14px] font-[500] tracking-[3px] text-[#94A3B8] uppercase">
+            <span className="text-[11px] md:text-xs font-[500] tracking-[2px] text-[#94A3B8] uppercase">
               SWIMMING ACADEMY
             </span>
           </div>
@@ -57,7 +57,7 @@ const Navbar = () => {
             <a
               key={l.label}
               href={l.href}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-300"
+              className="text-[15px] font-bold text-foreground/80 hover:text-[#22D3EE] transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#22D3EE] after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-300"
             >
               {l.label}
             </a>
@@ -82,7 +82,7 @@ const Navbar = () => {
                 key={l.label}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+                className="text-base font-bold text-foreground/90 hover:text-[#22D3EE] transition-colors py-2 border-b border-white/5"
               >
                 {l.label}
               </a>

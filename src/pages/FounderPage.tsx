@@ -1,10 +1,18 @@
-import { Award, BadgeCheck, Medal, MessageCircle } from "lucide-react";
+import { Award, BadgeCheck, Medal, MessageCircle, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import founderImg from "@/assets/founder-real.png";
 
+const experiencesData = [
+  "Conducted multiple swimming camps across age groups",
+  "Led aquatic safety awareness programs",
+  "Organized and judged swimming competitions",
+  "Expert in adaptive aquatics for special needs",
+  "Certified in sports physiology and injury prevention"
+];
+
 const WHATSAPP_NUMBER =
-  import.meta.env.VITE_WHATSAPP_NUMBER ?? "919999999999";
+  import.meta.env.VITE_WHATSAPP_NUMBER ?? "918330945566";
 const WHATSAPP_FOUNDER_MESSAGE =
   import.meta.env.VITE_WHATSAPP_FOUNDER_MESSAGE ?? "Hello, I want to enquire about swimming programs.";
 
@@ -56,13 +64,13 @@ const FounderPage = () => {
       <Navbar />
 
       <main className="pt-36 md:pt-32">
-        <section id="founder-page-section" className="py-16 md:py-20 -mt-[10px] pl-[15px]">
+        <section id="founder-page-section" className="py-16 md:py-20 -mt-[10px]">
           <div className="w-full px-6 md:px-10 lg:px-16 xl:px-24">
-            <div className="space-y-10">
+            <div className="space-y-4 md:space-y-8">
 
               {/* Hero: Image + Name/Bio */}
-              <div className="grid lg:grid-cols-[auto_1fr] gap-0 lg:gap-4 items-center">
-                <div className="flex justify-center lg:justify-start mb-6 lg:mb-0 -translate-x-5">
+              <div className="grid lg:grid-cols-[auto_1fr] gap-0 lg:gap-4 items-center -mt-[30px]">
+                <div className="flex justify-center lg:justify-start mb-6 lg:mb-0">
                   <div className="w-[240px] h-[240px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
                     <img src={founderImg} alt="Founder - Mr. Venkata Ramana" className="w-full h-full object-cover object-top" />
                   </div>
@@ -125,22 +133,32 @@ const FounderPage = () => {
                 </div>
               </div>
 
-
+              {/* Experiences */}
+              <div className="mt-20 pt-10 flex flex-col items-center">
+                <h2 className="text-2xl md:text-3xl font-heading font-bold uppercase tracking-[1.5px] text-[#22D3EE] text-center mb-8">
+                  EXPERIENCES
+                </h2>
+                
+                <div className="max-w-3xl mx-auto rounded-3xl border border-[rgba(34,211,238,0.15)] bg-[rgba(15,23,42,0.4)] backdrop-blur-sm p-8 md:p-12 shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:border-[rgba(34,211,238,0.3)] transition-all duration-300">
+                  <div className="space-y-5">
+                    {experiencesData.map((exp, idx) => (
+                      <div key={idx} className="flex items-start gap-4 group/item">
+                        <ChevronRight className="w-5 h-5 text-blue-400 mt-0.5 shrink-0 transition-transform group-hover/item:translate-x-1" />
+                        <p className="text-[#E2E8F0] text-base md:text-lg leading-relaxed font-medium">
+                          {exp}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
             </div>
           </div>
         </section>
       </main>
 
-      <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_FOUNDER_MESSAGE)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat on WhatsApp"
-        className="fixed bottom-6 right-6 z-50 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-foreground shadow-[0_0_10px_rgba(37,211,102,0.6)] hover:brightness-110 transition-all duration-300"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </a>
+
 
       <Footer />
     </div>

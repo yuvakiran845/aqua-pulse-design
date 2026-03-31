@@ -15,13 +15,13 @@ const FacilityManagement = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <main className="pt-[140px] pb-16 md:pt-32 md:pb-24">
+      <main className="pt-[125px] flex-col flex pb-0 md:pt-28 md:pb-0">
         {/* Intro & Features Section */}
         <section className="section-padding relative">
           <div className="container-main">
             {/* Intro Header */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-10 mb-10">
-              <div className="max-w-2xl flex-1 space-y-5">
+            <div className="flex flex-col mb-10">
+              <div className="max-w-3xl space-y-5">
                 <div className="flex flex-wrap gap-3">
                   <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wider font-heading">
                     OUR SYSTEM
@@ -38,13 +38,6 @@ const FacilityManagement = () => {
                 
                 <p className="text-lg md:text-xl font-heading font-medium text-foreground/85 mt-2">
                   More than just swimming — a complete athlete development journey
-                </p>
-              </div>
-              
-              <div className="lg:max-w-md xl:max-w-[500px] shrink-0">
-                <div className="w-12 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full mb-4 hidden lg:block" />
-                <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                  Our facility offers a <span className="text-primary font-medium">world-class environment</span> purposefully designed for growth and performance. We integrate aquatic training with <span className="text-blue-400 font-medium">comprehensive support systems</span> to ensure every student maximizes their potential safely and effectively.
                 </p>
               </div>
             </div>
@@ -168,7 +161,7 @@ const FacilityManagement = () => {
         </section>
 
         {/* Skill Certification Highlight */}
-        <section className="px-4 pb-16 pt-8">
+        <section className="px-4 py-8 md:py-12 mb-10">
           <div className="container-main">
             <div className="relative p-8 md:p-10 rounded-3xl overflow-hidden border border-primary/30 shadow-[0_0_40px_rgba(34,211,238,0.1)] bg-card/80 backdrop-blur-md group">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-blue-500/5 to-transparent pointer-events-none" />
