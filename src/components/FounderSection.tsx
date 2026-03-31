@@ -18,7 +18,15 @@ const FounderSection = () => {
               <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
             </div>
             <Button variant="aqua" size="sm" asChild>
-              <a href="#founder-details">Founder Details</a>
+              <a
+                href="#founder"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("founder")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+              >
+                Founder Details
+              </a>
             </Button>
           </div>
 
@@ -48,32 +56,6 @@ const FounderSection = () => {
           </div>
         </div>
 
-        <div id="founder-details" className="max-w-4xl mx-auto mt-10 grid md:grid-cols-3 gap-6">
-          <div className="bg-card border border-border/60 rounded-xl p-5 space-y-3">
-            <h4 className="font-heading font-semibold text-foreground">Qualifications</h4>
-            <ul className="text-sm text-muted-foreground space-y-2">
-              <li>• Certified Aquatic Facility Operator</li>
-              <li>• 15+ years in sports management</li>
-              <li>• Former competitive swimmer</li>
-            </ul>
-          </div>
-          <div className="bg-card border border-border/60 rounded-xl p-5 space-y-3">
-            <h4 className="font-heading font-semibold text-foreground">Certificates</h4>
-            <ul className="text-sm text-muted-foreground space-y-2">
-              <li>• Aquatic Safety and Operations Certification</li>
-              <li>• Sports Management Professional Certification</li>
-              <li>• Water Safety Education Instructor Certification</li>
-            </ul>
-          </div>
-          <div className="bg-card border border-border/60 rounded-xl p-5 space-y-3">
-            <h4 className="font-heading font-semibold text-foreground">Achievements</h4>
-            <ul className="text-sm text-muted-foreground space-y-2">
-              <li>• Built a structured aquatic training ecosystem</li>
-              <li>• Guided swimmer development across age groups</li>
-              <li>• Promoted community-focused water safety programs</li>
-            </ul>
-          </div>
-        </div>
       </div>
     </section>
   );

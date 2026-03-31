@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import logoImg from "@/assets/aqua-pulse-logo-blue.png";
+import logoImg from "@/assets/aqua-pulse-logo.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -33,14 +33,17 @@ const Navbar = () => {
           <img
             src={logoImg}
             alt="Aqua Pulse Swimming Academy"
-            className="h-[46px] md:h-[64px] w-auto object-contain shrink-0"
-            style={{ imageRendering: "auto", WebkitImageRendering: "optimize-contrast" } as CSSProperties}
+            className="w-[45px] h-[45px] md:w-[60px] md:h-[60px] rounded-full bg-transparent object-contain shrink-0 mix-blend-screen antialiased p-[10%]"
+            style={{ transform: "translateZ(0)", willChange: "transform" }}
           />
-          <div className="flex flex-col justify-center leading-[1.1] whitespace-nowrap min-w-0">
-            <span className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[26px] font-bold text-[#22D3EE]">
+          <div 
+            className="flex flex-col justify-center gap-[2px] leading-[1.1] whitespace-nowrap min-w-0 antialiased"
+            style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textRendering: "optimizeLegibility" }}
+          >
+            <span className="text-[26px] font-[700] tracking-[1px] text-[#22D3EE] uppercase">
               AQUA PULSE
             </span>
-            <span className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] tracking-[1px] text-[#94A3B8]">
+            <span className="text-[14px] font-[500] tracking-[3px] text-[#94A3B8] uppercase">
               SWIMMING ACADEMY
             </span>
           </div>
