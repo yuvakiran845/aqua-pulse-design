@@ -1,19 +1,11 @@
-import { useEffect, useMemo, useState, type ComponentType, type TouchEvent } from "react";
+import { useEffect, useMemo, useState, type TouchEvent } from "react";
 import {
-  Baby,
   Dumbbell,
-  HeartHandshake,
   ShieldCheck,
   Timer,
   TrendingUp,
   UserCheck2,
-  Users,
-  Waves,
-  Zap,
   Trophy,
-  SunMedium,
-  HeartPulse,
-  PersonStanding,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -61,57 +53,67 @@ const existingPrograms = [
 
 const programMeta: Record<
   (typeof existingPrograms)[number],
-  { icon: ComponentType<{ className?: string }>; desc: string; points: string[] }
+  { emoji: string; color: string; desc: string; points: string[] }
 > = {
   "Summer Camp": {
-    icon: SunMedium,
+    emoji: "☀️",
+    color: "from-amber-500/20 to-orange-500/10 border-amber-500/30",
     desc: "Seasonal aquatic training for children and beginners focused on confidence, breathing, and water safety.",
     points: ["🌊 Water confidence", "🫁 Breath control", "🛟 Water safety"],
   },
   "Beginners Program": {
-    icon: Waves,
+    emoji: "🏊",
+    color: "from-cyan-500/20 to-blue-500/10 border-cyan-500/30",
     desc: "First-step coaching that builds water comfort, basic movement control, and strong swimming foundations.",
-    points: ["💧 Pool entry basics", "🏊 Floating skills", "🧭 Guided progression"],
+    points: ["💧 Pool entry basics", "🤽 Floating skills", "🧭 Guided progression"],
   },
   "Intermediate Program": {
-    icon: Zap,
+    emoji: "⚡",
+    color: "from-yellow-500/20 to-lime-500/10 border-yellow-500/30",
     desc: "Skill-up training for swimmers improving stroke technique, endurance, and overall aquatic efficiency.",
-    points: ["⚡ Stroke refinement", "⏱️ Endurance building", "🎯 Turn technique"],
+    points: ["🔄 Stroke refinement", "⏱️ Endurance building", "🎯 Turn technique"],
   },
   "Advanced Program": {
-    icon: Trophy,
+    emoji: "🏆",
+    color: "from-purple-500/20 to-violet-500/10 border-purple-500/30",
     desc: "Performance-focused sessions tailored for swimmers preparing for higher-level competitive milestones.",
     points: ["🏁 Race strategy", "📈 Performance tracking", "🥇 Competitive readiness"],
   },
   "Aqua Sprouts (Toddlers)": {
-    icon: Baby,
+    emoji: "👶",
+    color: "from-pink-500/20 to-rose-500/10 border-pink-500/30",
     desc: "Gentle toddler sessions that nurture early water confidence through safe, guided aquatic activities.",
-    points: ["🧸 Play-based learning", "👶 Parent support", "💙 Safe acclimatization"],
+    points: ["🧸 Play-based learning", "🤗 Parent support", "💙 Safe acclimatization"],
   },
   "Ladies Exclusive Program": {
-    icon: Users,
+    emoji: "👩",
+    color: "from-fuchsia-500/20 to-pink-500/10 border-fuchsia-500/30",
     desc: "Dedicated women-only batches offering comfortable, focused training with personalized progression.",
-    points: ["👩 Women-only batches", "🤝 Supportive environment", "🏊 Flexible pace"],
+    points: ["🚺 Women-only batches", "🤝 Supportive environment", "🏊 Flexible pace"],
   },
   "Special Kids Aquatic Program": {
-    icon: HeartHandshake,
+    emoji: "❤️",
+    color: "from-red-500/20 to-orange-500/10 border-red-500/30",
     desc: "Adaptive aquatic sessions with personalized support that improve confidence, mobility, and comfort in water.",
-    points: ["❤️ Adaptive coaching", "🫶 Sensory-friendly support", "📊 Progress guidance"],
+    points: ["🫶 Adaptive coaching", "🌈 Sensory-friendly", "📊 Progress guidance"],
   },
   "Senior Citizen Swimming": {
-    icon: PersonStanding,
+    emoji: "🧘",
+    color: "from-teal-500/20 to-emerald-500/10 border-teal-500/30",
     desc: "Low-impact swimming and aquatic fitness routines designed for seniors with health-focused supervision.",
-    points: ["🦴 Joint-friendly movement", "💓 Cardio wellness", "🧘 Relaxed pace"],
+    points: ["🦴 Joint-friendly", "💓 Cardio wellness", "😌 Relaxed pace"],
   },
   "Aqua Rehabilitation": {
-    icon: HeartPulse,
+    emoji: "🩺",
+    color: "from-green-500/20 to-cyan-500/10 border-green-500/30",
     desc: "Therapeutic water-based recovery sessions that support post-injury rehabilitation and controlled mobility.",
-    points: ["💪 Recovery support", "🌡️ Controlled intensity", "🩺 Guided sessions"],
+    points: ["💪 Recovery support", "🌡️ Controlled intensity", "🩹 Guided sessions"],
   },
   "1-1 Personal Training": {
-    icon: UserCheck2,
+    emoji: "🎯",
+    color: "from-blue-500/20 to-indigo-500/10 border-blue-500/30",
     desc: "One-on-one coaching designed around individual goals for faster corrections and measurable growth.",
-    points: ["🎯 Goal-based plan", "🧠 Technique feedback", "🚀 Rapid improvement"],
+    points: ["📋 Goal-based plan", "🧠 Technique feedback", "🚀 Rapid improvement"],
   },
 };
 
@@ -124,24 +126,7 @@ const benefits = [
   { label: "Certified trainers", icon: Trophy },
 ];
 
-const landingGallery = [
-  {
-    src: "https://images.unsplash.com/photo-1622629798327-5f392ff35f56?auto=format&fit=crop&w=1800&q=80",
-    alt: "Swim coach training lane movement",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1604442999455-7da6b6197d3d?auto=format&fit=crop&w=1800&q=80",
-    alt: "Kids swim training session in pool",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1800&q=80",
-    alt: "Competitive swimmer underwater motion",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=1800&q=80",
-    alt: "Swimming instructor assisting student",
-  },
-];
+
 
 const SwimmingAcademy = () => {
   const [active, setActive] = useState(0);
@@ -242,48 +227,41 @@ const SwimmingAcademy = () => {
         </section>
 
         <section className="section-padding">
-          <div className="container-main mb-10">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-              {landingGallery.map((image) => (
-                <div key={image.src} className="rounded-2xl overflow-hidden border border-border/60 bg-card">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    loading="lazy"
-                    className="w-full h-28 md:h-36 object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="container-main">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-[2rem] font-heading font-bold">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold">
                 Our <span className="gradient-aqua-text">Programs</span>
               </h2>
+              <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
+                Expert-designed programs for every swimmer — from toddlers to competitive athletes.
+              </p>
             </div>
 
-            <div className="space-y-4 md:space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
               {existingPrograms.map((title) => {
                 const item = programMeta[title];
                 return (
                   <article
                     key={title}
-                    className="bg-card rounded-2xl border border-border/60 p-5 md:p-6 transition-all duration-300 ease-in-out hover:scale-[1.01] hover:border-primary/50 hover:shadow-[0_0_24px_hsl(192_82%_50%/0.2)]"
+                    className={`relative bg-gradient-to-br ${item.color} rounded-2xl border p-5 md:p-6 transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-[0_0_32px_hsl(192_82%_50%/0.25)] overflow-hidden`}
                   >
+                    {/* decorative blur blob */}
+                    <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/5 blur-2xl" />
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                        <item.icon className="w-6 h-6" aria-hidden="true" />
+                      <div className="w-14 h-14 rounded-2xl bg-black/20 backdrop-blur-sm flex items-center justify-center shrink-0 text-3xl shadow-inner">
+                        {item.emoji}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-xl md:text-2xl font-heading font-semibold text-foreground mb-2">{title}</h3>
-                        <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-4">{item.desc}</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                        <h3 className="text-lg md:text-xl font-heading font-bold text-foreground mb-1">{title}</h3>
+                        <p className="text-xs md:text-sm text-foreground/70 leading-relaxed mb-4">{item.desc}</p>
+                        <div className="flex flex-wrap gap-2">
                           {item.points.map((point) => (
-                            <p key={point} className="text-xs md:text-sm text-foreground/90">
+                            <span
+                              key={point}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/25 backdrop-blur-sm text-[11px] md:text-xs text-foreground/90 font-medium border border-white/10"
+                            >
                               {point}
-                            </p>
+                            </span>
                           ))}
                         </div>
                       </div>
