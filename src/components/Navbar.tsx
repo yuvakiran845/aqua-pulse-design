@@ -5,10 +5,10 @@ import logoImg from "@/assets/aqua-pulse-logo.png";
 
 const navLinks = [
   { label: "Home", href: "/#home" },
+  { label: "Founder", href: "/#founder" },
   { label: "Swimming Academy", href: "/swimming-academy" },
   { label: "Sports Arena", href: "/#divisions" },
   { label: "Facility Management", href: "/#divisions" },
-  { label: "Founder", href: "/#founder" },
 ];
 
 const Navbar = () => {

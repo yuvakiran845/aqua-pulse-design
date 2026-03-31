@@ -17,8 +17,8 @@ const Index = () => {
       <FounderSection />
       <BenefitsSection />
       <MedicalSection />
-      <EnquirySection />
       <AboutSection />
+      <EnquirySection />
       <Footer />
     </div>
   );

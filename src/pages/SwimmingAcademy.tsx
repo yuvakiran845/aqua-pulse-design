@@ -12,28 +12,20 @@ import Footer from "@/components/Footer";
 
 const heroSlides = [
   {
-    src: "https://images.unsplash.com/photo-1600965962361-9035dbfd1c50?auto=format&fit=crop&w=2400&q=80",
-    alt: "Professional swimming pool with competition lanes",
+    src: "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=2400&q=80",
+    alt: "Swimmer in competitive pool lane with clear blue water",
   },
   {
-    src: "https://images.unsplash.com/photo-1622629797619-c100e3e67e2b?auto=format&fit=crop&w=2400&q=80",
-    alt: "Kids learning swimming with coach supervision",
+    src: "https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=2400&q=80",
+    alt: "Olympic swimming pool with lane dividers",
   },
   {
-    src: "https://images.unsplash.com/photo-1622629798327-5f392ff35f56?auto=format&fit=crop&w=2400&q=80",
-    alt: "Swimming coaching technique session",
+    src: "https://images.unsplash.com/photo-1560090995-01632a28895b?auto=format&fit=crop&w=2400&q=80",
+    alt: "Swimming training session in indoor pool",
   },
   {
-    src: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=2400&q=80",
-    alt: "Competitive swimmer in training",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1604442999455-7da6b6197d3d?auto=format&fit=crop&w=2400&q=80",
-    alt: "Young swimmers practicing in a training lane",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=2400&q=80",
-    alt: "Coach guiding swimmer technique in pool",
+    src: "https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?auto=format&fit=crop&w=2400&q=80",
+    alt: "Competitive swimmer doing butterfly stroke",
   },
 ];
 
