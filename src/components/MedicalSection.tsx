@@ -12,13 +12,13 @@ const MedicalSection = () => {
   return (
     <section className="section-padding relative">
       <div className="container-main">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
             Medical <span className="gradient-aqua-text">Support Team</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Doctor image */}
           <div className="flex justify-center">
             <div className="relative">

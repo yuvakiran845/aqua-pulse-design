@@ -16,15 +16,15 @@ const HeroSection = () => {
       <div className="absolute top-1/4 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
 
-      <div className="relative container-main text-center pt-20 pb-16">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold leading-tight tracking-tight">
+      <div className="relative container-main text-center pt-20 pb-12">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <h1 className="text-4xl sm:text-5xl md:text-[3.4rem] lg:text-6xl font-heading font-bold leading-tight tracking-tight">
             <span className="gradient-aqua-text">AQUA PULSE</span>
             <br />
             <span className="text-foreground">SWIMMING ACADEMY</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Professional Swimming Training & Aquatic Programs
           </p>
 
@@ -38,7 +38,7 @@ const HeroSection = () => {
             <span>Stay Safe</span>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Button variant="aqua" size="lg" className="min-w-[200px] text-base" asChild>
               <a href="#enquiry">Register Now</a>
             </Button>

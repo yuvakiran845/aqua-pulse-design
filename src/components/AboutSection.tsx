@@ -4,9 +4,9 @@ const AboutSection = () => {
   return (
     <section id="about" className="section-padding relative">
       <div className="container-main">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold">
+            <h2 className="text-3xl md:text-[2rem] font-heading font-bold">
               About <span className="gradient-aqua-text">Aqua Pulse</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed">

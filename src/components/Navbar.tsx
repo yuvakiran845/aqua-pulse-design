@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Waves } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logoImg from "@/assets/aqua-pulse-logo-blue.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -27,14 +28,26 @@ const Navbar = () => {
 
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
-      <div className="container-main flex items-center justify-between h-16 md:h-18">
-        <a href="#home" className="flex items-center gap-2 group">
-          <Waves className="w-7 h-7 text-primary group-hover:scale-110 transition-transform" />
-          <span className="text-lg font-heading font-bold gradient-aqua-text">Aqua Pulse</span>
+      <div className="container-main flex items-center justify-between min-h-[80px] py-2.5">
+        <a href="#home" className="flex items-center gap-3 md:gap-4 shrink-0 min-w-0">
+          <img
+            src={logoImg}
+            alt="Aqua Pulse Swimming Academy"
+            className="h-[46px] md:h-[64px] w-auto object-contain shrink-0"
+            style={{ imageRendering: "auto", WebkitImageRendering: "optimize-contrast" } as CSSProperties}
+          />
+          <div className="flex flex-col justify-center leading-[1.1] whitespace-nowrap min-w-0">
+            <span className="text-[20px] sm:text-[22px] md:text-[24px] lg:text-[26px] font-bold text-[#22D3EE]">
+              AQUA PULSE
+            </span>
+            <span className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15px] tracking-[1px] text-[#94A3B8]">
+              SWIMMING ACADEMY
+            </span>
+          </div>
         </a>
 
         {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8 flex-1 justify-end">
           {navLinks.map((l) => (
             <a
               key={l.label}

@@ -41,7 +41,7 @@ const EnquirySection = () => {
     return (
       <section id="enquiry" className="section-padding relative">
         <div className="container-main">
-          <div className="max-w-lg mx-auto bg-card rounded-2xl p-10 border border-primary/30 text-center shadow-[0_0_40px_hsl(192_82%_50%/0.15)]">
+          <div className="max-w-lg mx-auto bg-card rounded-2xl p-8 border border-primary/30 text-center shadow-[0_0_40px_hsl(192_82%_50%/0.15)]">
             <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
             <h3 className="text-2xl font-heading font-bold text-foreground mb-2">Thank You!</h3>
             <p className="text-muted-foreground">We have received your enquiry and will contact you shortly.</p>
@@ -63,14 +63,14 @@ const EnquirySection = () => {
 
       <div className="container-main relative">
         <div className="max-w-lg mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
               <span className="gradient-aqua-text">Get In Touch</span>
             </h2>
             <p className="text-muted-foreground text-sm">We will contact you shortly after receiving your enquiry.</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 border border-primary/20 shadow-[0_0_40px_hsl(192_82%_50%/0.1)] space-y-5">
+          <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 md:p-8 border border-primary/20 shadow-[0_0_40px_hsl(192_82%_50%/0.1)] space-y-5">
             <div>
               <input
                 type="text"

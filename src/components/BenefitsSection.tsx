@@ -14,7 +14,7 @@ const BenefitsSection = () => {
     <section className="py-12 md:py-16 relative">
       <div className="container-main">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+          <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
             Why Choose <span className="gradient-aqua-text">Aqua Pulse</span>
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
@@ -22,13 +22,36 @@ const BenefitsSection = () => {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto space-y-3">
+        {/* Mobile / small screens: compact list */}
+        <div className="max-w-2xl mx-auto space-y-3 md:hidden">
           {benefits.map((b) => (
             <div key={b.title} className="flex items-start gap-3">
               <b.icon className="w-5 h-5 text-primary mt-0.5 shrink-0" />
               <p className="text-sm text-foreground">
                 <span className="font-semibold">{b.title}</span>
                 <span className="text-muted-foreground"> – {b.desc}</span>
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Tablet / desktop: card-based grid layout */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {benefits.map((b) => (
+            <div
+              key={b.title}
+              className="card-glow rounded-xl border border-border/60 bg-gradient-to-b from-navy-mid/60 to-navy-light/40 p-5 lg:p-6 flex flex-col gap-3"
+            >
+              <div className="flex items-center gap-3">
+                <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <b.icon className="w-5 h-5" />
+                </div>
+                <h3 className="text-base lg:text-lg font-semibold text-foreground">
+                  {b.title}
+                </h3>
+              </div>
+              <p className="text-sm lg:text-base text-muted-foreground">
+                {b.desc}
               </p>
             </div>
           ))}

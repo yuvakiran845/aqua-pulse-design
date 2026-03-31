@@ -26,8 +26,8 @@ const DivisionsSection = () => {
   return (
     <section id="divisions" className="section-padding relative">
       <div className="container-main">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
             Our <span className="gradient-aqua-text">Core Divisions</span>
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
@@ -39,7 +39,7 @@ const DivisionsSection = () => {
           {divisions.map((d) => (
             <div
               key={d.title}
-              className="group bg-card rounded-2xl p-8 border border-border/50 card-glow cursor-pointer"
+              className="group bg-card rounded-2xl p-6 border border-border/50 card-glow cursor-pointer"
             >
               <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${d.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                 <d.icon className="w-7 h-7 text-primary-foreground" />

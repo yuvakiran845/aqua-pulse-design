@@ -1,33 +1,31 @@
-import { Quote } from "lucide-react";
-import founderImg from "@/assets/founder.jpg";
+import { Button } from "@/components/ui/button";
+import founderImg from "@/assets/founder-real.png";
 
 const FounderSection = () => {
   return (
     <section id="founder" className="section-padding relative">
       <div className="container-main">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
             Meet the <span className="gradient-aqua-text">Founder</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
           {/* Image */}
-          <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-64 h-80 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-lg">
-                <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
-              </div>
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Quote className="w-8 h-8 text-primary-foreground" />
-              </div>
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-[280px] md:w-[300px] lg:w-[320px] aspect-[4/5] rounded-2xl overflow-hidden border-2 border-primary/30 shadow-lg">
+              <img src={founderImg} alt="Founder" className="w-full h-full object-cover" />
             </div>
+            <Button variant="aqua" size="sm" asChild>
+              <a href="#founder-details">Founder Details</a>
+            </Button>
           </div>
 
           {/* Info */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div>
-              <h3 className="text-2xl font-heading font-bold text-foreground">Venkata Ramana</h3>
+              <h3 className="text-2xl font-heading font-bold text-foreground">Mr. Venkata Ramana</h3>
               <p className="text-primary font-medium">Founder & Managing Director</p>
             </div>
 
@@ -47,6 +45,33 @@ const FounderSection = () => {
             <div className="inline-block bg-gradient-to-r from-primary to-accent text-primary-foreground text-xs font-semibold px-4 py-2 rounded-full">
               🏆 Visionary Leader in Aquatic Sports
             </div>
+          </div>
+        </div>
+
+        <div id="founder-details" className="max-w-4xl mx-auto mt-10 grid md:grid-cols-3 gap-6">
+          <div className="bg-card border border-border/60 rounded-xl p-5 space-y-3">
+            <h4 className="font-heading font-semibold text-foreground">Qualifications</h4>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li>• Certified Aquatic Facility Operator</li>
+              <li>• 15+ years in sports management</li>
+              <li>• Former competitive swimmer</li>
+            </ul>
+          </div>
+          <div className="bg-card border border-border/60 rounded-xl p-5 space-y-3">
+            <h4 className="font-heading font-semibold text-foreground">Certificates</h4>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li>• Aquatic Safety and Operations Certification</li>
+              <li>• Sports Management Professional Certification</li>
+              <li>• Water Safety Education Instructor Certification</li>
+            </ul>
+          </div>
+          <div className="bg-card border border-border/60 rounded-xl p-5 space-y-3">
+            <h4 className="font-heading font-semibold text-foreground">Achievements</h4>
+            <ul className="text-sm text-muted-foreground space-y-2">
+              <li>• Built a structured aquatic training ecosystem</li>
+              <li>• Guided swimmer development across age groups</li>
+              <li>• Promoted community-focused water safety programs</li>
+            </ul>
           </div>
         </div>
       </div>
