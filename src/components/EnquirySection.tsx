@@ -97,10 +97,17 @@ const EnquirySection = () => {
                 value={form.program}
                 onChange={(e) => setForm({ ...form, program: e.target.value })}
               >
-                <option value="">Select Program</option>
-                <option value="Swimming">Swimming</option>
-                <option value="Sports">Sports</option>
-                <option value="Other">Other</option>
+                <option value="">Select a Program</option>
+                <option value="Summer Camp">Summer Camp</option>
+                <option value="Beginners Program">Beginners Program</option>
+                <option value="Intermediate Program">Intermediate Program</option>
+                <option value="Advanced Program">Advanced Program</option>
+                <option value="Aqua Sprouts (Toddlers Program)">Aqua Sprouts (Toddlers Program)</option>
+                <option value="Ladies Exclusive Program">Ladies Exclusive Program</option>
+                <option value="Special Kids Aquatic Program">Special Kids Aquatic Program</option>
+                <option value="Senior Citizen Swimming">Senior Citizen Swimming</option>
+                <option value="Aqua Rehabilitation">Aqua Rehabilitation</option>
+                <option value="1-1 Personal Training">1-1 Personal Training</option>
               </select>
               {errors.program && <p className="text-destructive text-xs mt-1">{errors.program}</p>}
             </div>
