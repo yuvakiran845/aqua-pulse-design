@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import SwimmingAcademy from "./pages/SwimmingAcademy.tsx";
 import FounderPage from "./pages/FounderPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import FloatingElements from "./components/FloatingElements.tsx";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <FloatingElements />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/swimming-academy" element={<SwimmingAcademy />} />

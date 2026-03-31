@@ -1,4 +1,5 @@
 import { Waves, Globe, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import logoImg from "@/assets/aqua-pulse-logo.png";
 
 const quickLinks = [
   { label: "Home", href: "/#home" },
@@ -15,9 +16,16 @@ const Footer = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Waves className="w-6 h-6 text-primary" />
-              <span className="font-heading font-bold gradient-aqua-text text-lg">Aqua Pulse</span>
+            <div className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+              <img src={logoImg} alt="Aqua Pulse Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]" />
+              <div className="flex flex-col">
+                <span className="font-heading font-bold text-xl tracking-wide text-white leading-none">
+                  AQUA PULSE
+                </span>
+                <span className="text-xs tracking-[0.2em] text-[#cbd5e1] font-medium leading-tight mt-1">
+                  SWIMMING ACADEMY
+                </span>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Professional swimming training & aquatic programs for all ages and skill levels.
@@ -49,7 +57,7 @@ const Footer = () => {
 
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <span>Hyderabad, Telangana, India</span>
+                <span>Vinayak Sagar, Tirupati</span>
               </div>
             </div>
           </div>
