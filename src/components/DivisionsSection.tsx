@@ -40,15 +40,24 @@ const DivisionsSection = () => {
             <div
               key={d.title}
               className="group bg-card rounded-2xl p-6 border border-border/50 card-glow cursor-pointer"
+              onClick={() => {
+                if (d.title === "Swimming Academy") window.location.href = "/swimming-academy";
+              }}
             >
               <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${d.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                 <d.icon className="w-7 h-7 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-heading font-semibold mb-3 text-foreground">{d.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed mb-6">{d.description}</p>
-              <Button variant="ghost" className="text-primary hover:text-accent p-0 h-auto font-medium text-sm">
-                Explore More →
-              </Button>
+              {d.title === "Swimming Academy" ? (
+                <Button variant="ghost" className="text-primary hover:text-accent p-0 h-auto font-medium text-sm" asChild>
+                  <a href="/swimming-academy">Explore More →</a>
+                </Button>
+              ) : (
+                <Button variant="ghost" className="text-primary hover:text-accent p-0 h-auto font-medium text-sm">
+                  Explore More →
+                </Button>
+              )}
             </div>
           ))}
         </div>
