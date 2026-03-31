@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, type CSSProperties } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import logoImg from "@/assets/aqua-pulse-logo.png";
@@ -29,13 +29,15 @@ const Navbar = () => {
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
       <div className="container-main flex items-center justify-between min-h-[80px] py-2.5">
-        <a href="/" className="flex items-center gap-3 md:gap-4 shrink-0 min-w-0">
-          <img
-            src={logoImg}
-            alt="Aqua Pulse Swimming Academy"
-            className="w-[45px] h-[45px] md:w-[60px] md:h-[60px] rounded-full bg-transparent object-contain shrink-0 mix-blend-screen antialiased p-[10%]"
-            style={{ transform: "translateZ(0)", willChange: "transform" }}
-          />
+        <a href="/" className="flex items-center gap-3 md:gap-3 shrink-0 min-w-0">
+          <div className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] rounded-full overflow-hidden shrink-0 shadow-[0_0_14px_rgba(34,211,238,0.22)]">
+            <img
+              src={logoImg}
+              alt="Aqua Pulse Swimming Academy"
+              className="w-full h-full object-cover object-center block"
+              style={{ mixBlendMode: "normal", filter: "none", imageRendering: "-webkit-optimize-contrast", transform: "scale(1.12)", transformOrigin: "center center" }}
+            />
+          </div>
           <div 
             className="flex flex-col justify-center gap-[2px] leading-[1.1] whitespace-nowrap min-w-0 antialiased"
             style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textRendering: "optimizeLegibility" }}
