@@ -1,4 +1,12 @@
-import { Waves, Phone, MapPin, Mail, Facebook, Instagram, Youtube } from "lucide-react";
+import { Waves, Globe, Mail, MapPin, Instagram } from "lucide-react";
+
+const quickLinks = [
+  { label: "Home", href: "/#home" },
+  { label: "Founder", href: "/#founder" },
+  { label: "Swimming Academy", href: "/swimming-academy" },
+  { label: "Sports Arena", href: "/#divisions" },
+  { label: "Contact", href: "/#enquiry" },
+];
 
 const Footer = () => {
   return (
@@ -20,8 +28,8 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-heading font-semibold text-foreground">Quick Links</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              {["Home", "Swimming Academy", "Sports Arena", "Founder", "Contact"].map((l) => (
-                <a key={l} href={`#${l.toLowerCase().replace(/ /g, "-")}`} className="hover:text-primary transition-colors">{l}</a>
+              {quickLinks.map((l) => (
+                <a key={l.label} href={l.href} className="hover:text-primary transition-colors">{l.label}</a>
               ))}
             </div>
           </div>
@@ -30,14 +38,18 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-heading font-semibold text-foreground">Contact Us</h4>
             <div className="flex flex-col gap-3 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-primary shrink-0" />
-                <span>+91 99999 99999</span>
-              </div>
-              <div className="flex items-center gap-2">
+              <a href="https://aquapulsehub.in" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                <Globe className="w-4 h-4 text-primary shrink-0" />
+                <span>aquapulsehub.in</span>
+              </a>
+              <a href="mailto:aquapulseswimmingacademy@gmail.com" className="flex items-center gap-2 hover:text-primary transition-colors">
                 <Mail className="w-4 h-4 text-primary shrink-0" />
-                <span>info@aquapulse.in</span>
-              </div>
+                <span className="break-all">aquapulseswimmingacademy@gmail.com</span>
+              </a>
+              <a href="https://instagram.com/aquapulse.swimmingacademy" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                <Instagram className="w-4 h-4 text-primary shrink-0" />
+                <span>@aquapulse.swimmingacademy</span>
+              </a>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span>Hyderabad, Telangana, India</span>
@@ -49,15 +61,14 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-heading font-semibold text-foreground">Follow Us</h4>
             <div className="flex gap-3">
-              {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-10 h-10 rounded-xl bg-secondary/50 border border-border/50 flex items-center justify-center hover:bg-primary/20 hover:border-primary/50 transition-all"
-                >
-                  <Icon className="w-4 h-4 text-muted-foreground" />
-                </a>
-              ))}
+              <a
+                href="https://instagram.com/aquapulse.swimmingacademy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-xl bg-secondary/50 border border-border/50 flex items-center justify-center hover:bg-primary/20 hover:border-primary/50 transition-all"
+              >
+                <Instagram className="w-4 h-4 text-muted-foreground" />
+              </a>
             </div>
           </div>
         </div>
