@@ -31,7 +31,7 @@ const divisions = [
     bgGlow: "bg-purple-500/20",
     borderColor: "border-purple-500/40",
     hoverShadow: "hover:shadow-[0_0_40px_hsl(270_70%_50%/0.35)]",
-    link: null,
+    link: "/facility-management",
     features: ["🛡️ Safety First", "✨ Hygiene Standards", "⚙️ Operations"],
   },
 ];
