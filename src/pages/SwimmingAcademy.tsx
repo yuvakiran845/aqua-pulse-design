@@ -35,7 +35,7 @@ const existingPrograms = [
   "Beginners Program",
   "Intermediate Program",
   "Advanced Program",
-  "Aqua Sprouts (Toddlers)",
+  "Aqua Sprouts (Toddlers Program)",
   "Ladies Exclusive Program",
   "Special Kids Aquatic Program",
   "Senior Citizen Swimming",
@@ -71,7 +71,7 @@ const programMeta: Record<
     desc: "Performance-focused sessions tailored for swimmers preparing for higher-level competitive milestones.",
     points: ["🏁 Race strategy", "📈 Performance tracking", "🥇 Competitive readiness"],
   },
-  "Aqua Sprouts (Toddlers)": {
+  "Aqua Sprouts (Toddlers Program)": {
     emoji: "👶",
     color: "from-pink-500/20 to-rose-500/10 border-pink-500/30",
     desc: "Gentle toddler sessions that nurture early water confidence through safe, guided aquatic activities.",
