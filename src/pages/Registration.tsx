@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import html2canvas from "html2canvas";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -140,7 +139,17 @@ const Registration = () => {
 
   const downloadIdCard = async () => {
     if (!idCardRef.current) return;
-    const canvas = await html2canvas(idCardRef.current, { scale: 2, backgroundColor: "#0f172a" });
+    
+    // Dynamically import html2canvas only when needed to keep the initial page bundle small
+    const html2canvas = (await import("html2canvas")).default;
+    
+    const canvas = await html2canvas(idCardRef.current, { 
+      scale: 2, 
+      backgroundColor: "#0f172a",
+      logging: false,
+      useCORS: true
+    });
+    
     const link = document.createElement("a");
     link.download = `${studentId}-id-card.jpg`;
     link.href = canvas.toDataURL("image/jpeg", 0.95);

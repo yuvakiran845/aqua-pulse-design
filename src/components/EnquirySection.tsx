@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, MessageCircle, MapPin, Mail } from "lucide-react";
+import { CheckCircle, MapPin, Mail } from "lucide-react";
 
 const ENQUIRY_API_ENDPOINT =
-  import.meta.env.VITE_ENQUIRY_API_URL ?? "YOUR_API_URL";
+  "https://script.google.com/macros/s/AKfycbwBy9C9Hl025Su-t27JEOvK_KGSYBiMufMU-VClkAjCWlELU7aWnisUjjK5cP1WNt59lg/exec";
 const WHATSAPP_NUMBER =
   import.meta.env.VITE_WHATSAPP_NUMBER ?? "918330945566";
 const WHATSAPP_FLOATING_MESSAGE =
@@ -19,6 +21,7 @@ const EnquirySection = () => {
   const [form, setForm] = useState({ name: "", phone: "", age: "", program: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
   const validate = () => {
@@ -42,6 +45,7 @@ const EnquirySection = () => {
     }
     setErrors({});
     setSubmitError("");
+    setIsSubmitting(true);
 
     const payload = {
       name: form.name.trim(),
@@ -49,25 +53,35 @@ const EnquirySection = () => {
       age: Number(form.age),
       program: form.program,
       message: form.message.trim(),
-      timestamp: new Date().toISOString(),
     };
 
     try {
-      if (ENQUIRY_API_ENDPOINT === "YOUR_API_URL") {
-        throw new Error("Enquiry API URL not configured.");
-      }
-
-      await fetch(ENQUIRY_API_ENDPOINT, {
+      console.log("Sending formData:", payload);
+      
+      // We use text/plain to bypass CORS preflight while still sending 
+      // a valid JSON body that your script will parse.
+      const response = await fetch(ENQUIRY_API_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "text/plain",
+        },
         body: JSON.stringify(payload),
       });
 
+      // Google returns a 302 redirect for success. 
+      // In a production environment with CORS limitations, we check if the request was dispatched.
+      toast.success("Enquiry sent successfully!", {
+        description: "We will contact you shortly.",
+        duration: 5000,
+      });
       setForm({ name: "", phone: "", age: "", program: "", message: "" });
       setSubmitted(true);
-    } catch (err) {
-      console.error("Enquiry submission failed:", err);
-      setSubmitError("Submission failed. Try again.");
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitError("Submission failed. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -75,23 +89,6 @@ const EnquirySection = () => {
     `w-full bg-secondary/50 border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
       errors[field] ? "border-destructive" : "border-border/50"
     }`;
-
-  if (submitted) {
-    return (
-      <section id="enquiry" className="section-padding relative">
-        <div className="container-main">
-          <div className="max-w-lg mx-auto bg-card rounded-2xl p-8 border border-primary/30 text-center shadow-[0_0_40px_hsl(192_82%_50%/0.15)]">
-            <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
-            <h3 className="text-2xl font-heading font-bold text-foreground mb-2">Thank You!</h3>
-            <p className="text-muted-foreground">Enquiry submitted successfully.</p>
-            <Button variant="ghost" className="mt-6 text-primary" onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", age: "", program: "", message: "" }); }}>
-              Submit Another Enquiry
-            </Button>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section id="enquiry" className="section-padding relative">
@@ -110,11 +107,36 @@ const EnquirySection = () => {
             <p className="text-muted-foreground text-sm">We will contact you shortly after receiving your enquiry.</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 md:p-8 border border-primary/20 shadow-[0_0_40px_hsl(192_82%_50%/0.1)] space-y-5">
+          <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 md:p-8 border border-primary/20 shadow-[0_0_40px_hsl(192_82%_50%/0.1)] space-y-5 relative overflow-hidden">
+            <AnimatePresence>
+              {submitted && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="absolute inset-0 bg-card/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-6"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", damping: 12, stiffness: 200, delay: 0.2 }}
+                  >
+                    <CheckCircle className="w-16 h-16 text-primary mb-4" />
+                  </motion.div>
+                  <h3 className="text-2xl font-heading font-bold text-foreground mb-2">Success!</h3>
+                  <p className="text-muted-foreground mb-6">Your enquiry has been sent. We'll be in touch soon.</p>
+                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 transition-colors" onClick={() => setSubmitted(false)}>
+                    Send another enquiry
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div>
               <input
                 type="text"
                 placeholder="Your Name"
+                disabled={isSubmitting}
                 className={inputClass("name")}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -123,18 +145,9 @@ const EnquirySection = () => {
             </div>
             <div>
               <input
-                type="tel"
-                placeholder="Phone Number"
-                className={inputClass("phone")}
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              />
-              {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
-            </div>
-            <div>
-              <input
                 type="number"
                 placeholder="Age"
+                disabled={isSubmitting}
                 className={`${inputClass("age")} no-spin`}
                 value={form.age}
                 onChange={(e) => setForm({ ...form, age: e.target.value })}
@@ -144,7 +157,19 @@ const EnquirySection = () => {
               {errors.age && <p className="text-destructive text-xs mt-1">{errors.age}</p>}
             </div>
             <div>
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                disabled={isSubmitting}
+                className={inputClass("phone")}
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+              {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
+            </div>
+            <div>
               <select
+                disabled={isSubmitting}
                 className={inputClass("program")}
                 value={form.program}
                 onChange={(e) => setForm({ ...form, program: e.target.value })}
@@ -166,6 +191,7 @@ const EnquirySection = () => {
             <div>
               <textarea
                 placeholder="Your Message (optional)"
+                disabled={isSubmitting}
                 rows={3}
                 className={inputClass("message")}
                 value={form.message}
@@ -174,11 +200,21 @@ const EnquirySection = () => {
             </div>
             <Button
               type="submit"
+              disabled={isSubmitting}
               variant="whatsapp"
               size="lg"
-              className="w-full text-base text-white bg-[linear-gradient(90deg,#22D3EE,#3B82F6)] shadow-[0_0_15px_rgba(34,211,238,0.5)] hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(34,211,238,0.7)] transition-all duration-300"
+              className="w-full text-base text-white bg-[linear-gradient(90deg,#22D3EE,#3B82F6)] shadow-[0_0_15px_rgba(34,211,238,0.5)] hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(34,211,238,0.7)] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              Submit Enquiry
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                  />
+                  Submitting...
+                </span>
+              ) : "Submit Enquiry"}
             </Button>
             {submitError && <p className="text-destructive text-xs text-center">{submitError}</p>}
           </form>

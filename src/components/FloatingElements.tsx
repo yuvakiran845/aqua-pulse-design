@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle, ArrowLeft } from "lucide-react";
+import { MapPin, ArrowLeft } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const WHATSAPP_FLOATING_MESSAGE =
