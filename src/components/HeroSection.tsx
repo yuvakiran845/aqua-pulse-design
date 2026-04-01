@@ -51,12 +51,12 @@ const HeroSection = () => {
       />
 
       {/* Hero Content - z-20 */}
-      <div className="relative z-20 container-main text-center pt-16 pb-12">
+      <div className="relative z-20 container-main text-center pt-[100px] sm:pt-28 md:pt-32 pb-24 sm:pb-16 md:pb-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto space-y-6 md:space-y-8"
+          className="max-w-4xl mx-auto space-y-5 sm:space-y-6 md:space-y-8"
         >
           {/* Main Title Section */}
           <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
@@ -101,7 +101,7 @@ const HeroSection = () => {
       </div>
 
       {/* Navigation Dots - Matching Academy Pattern */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2.5 z-30">
+      <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex gap-2.5 z-30">
         {images.map((_, i) => (
           <button
             key={i}
