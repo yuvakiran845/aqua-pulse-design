@@ -59,22 +59,22 @@ const HeroSection = () => {
           className="max-w-4xl mx-auto space-y-6 md:space-y-8"
         >
           {/* Main Title Section */}
-          <div className="flex flex-col items-center justify-center space-y-3">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-black tracking-tight leading-tight">
+          <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
+            <h1 className="text-[clamp(2rem,10vw,4rem)] font-heading font-black tracking-tight leading-[1.1] md:leading-tight px-2">
               <span className="gradient-aqua-text">AQUA PULSE</span>
               <br />
               <span className="text-foreground">SWIMMING ACADEMY</span>
             </h1>
-            <p className="text-xl md:text-2xl font-medium tracking-[0.2em] text-white/90 uppercase drop-shadow-md">
+            <p className="text-[clamp(1rem,3vw,1.5rem)] font-medium tracking-[0.2em] text-white/90 uppercase drop-shadow-md">
               Train. Transform. Triumph in Water.
             </p>
           </div>
 
-          <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-medium">
+          <p className="text-[clamp(0.875rem,2vw,1.125rem)] text-white/80 max-w-2xl mx-auto font-medium px-4 leading-relaxed">
             Expert-led aquatic training designed for all age groups, focusing on safety, confidence, and performance excellence.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-cyan-400 text-[11px] md:text-sm font-bold tracking-widest uppercase">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-cyan-400 text-[clamp(0.65rem,1.5vw,0.875rem)] font-bold tracking-widest uppercase">
             <span>Learn</span>
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
             <span>Train</span>

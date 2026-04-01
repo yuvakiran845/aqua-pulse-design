@@ -31,13 +31,13 @@ const FloatingElements = () => {
       )}
 
       {/* Social Floating Icons - Bottom Right */}
-      <div className="fixed bottom-6 right-4 sm:right-6 z-50 flex flex-col gap-4">
+      <div className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-50 flex flex-col gap-2.5 sm:gap-4">
         <a
           href="https://www.google.com/maps?q=Vinayak+Sagar+Tirupati"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="View on Google Maps"
-          className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] hover:bg-primary/90 hover:scale-[1.05] transition-all duration-300"
+          className="inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] hover:bg-primary/90 hover:scale-[1.05] transition-all duration-300"
         >
           <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />
         </a>
@@ -46,7 +46,7 @@ const FloatingElements = () => {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat on WhatsApp"
-          className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-[0_0_15px_rgba(37,211,102,0.5)] hover:bg-[#20bd5a] hover:scale-[1.05] transition-all duration-300"
+          className="inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-[0_0_15px_rgba(37,211,102,0.5)] hover:bg-[#20bd5a] hover:scale-[1.05] transition-all duration-300"
         >
           <WhatsAppIcon className="w-6 h-6 sm:w-7 sm:h-7" />
         </a>

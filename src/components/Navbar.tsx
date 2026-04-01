@@ -29,8 +29,8 @@ const Navbar = () => {
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
       <div className="container-main flex items-center justify-between min-h-[80px] py-2.5">
-        <a href="/" className="flex items-center gap-3 md:gap-3 shrink-0 min-w-0">
-          <div className="w-[58px] h-[58px] md:w-[68px] md:h-[68px] rounded-full overflow-hidden shrink-0 shadow-[0_0_14px_rgba(34,211,238,0.22)]">
+        <a href="/" className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+          <div className="w-[48px] h-[48px] sm:w-[58px] sm:h-[58px] md:w-[68px] md:h-[68px] rounded-full overflow-hidden shrink-0 shadow-[0_0_14px_rgba(34,211,238,0.22)] border border-cyan-500/20">
             <img
               src={logoImg}
               alt="Aqua Pulse Swimming Academy"
@@ -39,13 +39,13 @@ const Navbar = () => {
             />
           </div>
           <div 
-            className="flex flex-col justify-center gap-[2px] leading-[1.1] whitespace-nowrap min-w-0 antialiased"
+            className="flex flex-col justify-center gap-[1px] leading-[1.1] whitespace-nowrap min-w-0 antialiased"
             style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textRendering: "optimizeLegibility" }}
           >
-            <span className="text-xl md:text-2xl font-[700] tracking-[1px] text-[#22D3EE] uppercase">
+            <span className="text-base sm:text-xl md:text-2xl font-[700] tracking-[1px] text-[#22D3EE] uppercase leading-none">
               AQUA PULSE
             </span>
-            <span className="text-[11px] md:text-xs font-[500] tracking-[2px] text-[#94A3B8] uppercase">
+            <span className="text-[9px] sm:text-[11px] md:text-xs font-[500] tracking-[2px] text-[#94A3B8] uppercase">
               SWIMMING ACADEMY
             </span>
           </div>
