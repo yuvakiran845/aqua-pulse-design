@@ -58,16 +58,49 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto space-y-5 sm:space-y-6 md:space-y-8"
         >
-          {/* Main Title Section */}
-          <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
-            <h1 className="text-[clamp(2rem,10vw,4rem)] font-heading font-black tracking-tight leading-[1.1] md:leading-tight px-2">
-              <span className="gradient-aqua-text">AQUA PULSE</span>
-              <br />
-              <span className="text-foreground">SWIMMING ACADEMY</span>
-            </h1>
-            <p className="text-[clamp(1rem,3vw,1.5rem)] font-medium tracking-[0.2em] text-white/90 uppercase drop-shadow-md">
-              Train. Transform. Triumph in Water.
-            </p>
+          {/* Premium Glass Title Container */}
+          <div className="relative inline-block mx-auto mb-2 group">
+            {/* Soft Outer Glow */}
+            <div className="absolute -inset-4 bg-cyan-500/10 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            
+            <div className="relative flex flex-col items-center px-6 py-8 sm:px-10 sm:py-10 bg-black/30 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.4)] overflow-hidden">
+              {/* Internal Accent Glows */}
+              <div className="absolute top-0 left-1/4 w-1/2 h-1 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent" />
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl" />
+              
+              {/* Logo Section */}
+              <div className="mb-6 relative">
+                <div className="absolute -inset-2 bg-cyan-400/20 rounded-full blur-md animate-pulse" />
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-cyan-400/30 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    className="w-full h-full object-cover scale-110"
+                  />
+                </div>
+              </div>
+
+              {/* Text Content */}
+              <div className="space-y-4 text-center">
+                <h1 className="flex flex-col items-center">
+                  <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-[0.15em] gradient-aqua-text uppercase leading-none antialiased">
+                    AQUA PULSE
+                  </span>
+                  <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent my-3 opacity-60" />
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.05em] text-white uppercase leading-none opacity-90">
+                    SWIMMING ACADEMY
+                  </span>
+                </h1>
+                
+                <div className="flex items-center justify-center gap-3 mt-4">
+                  <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-cyan-500/40" />
+                  <p className="text-[10px] sm:text-xs font-bold tracking-[0.3em] text-cyan-400 uppercase drop-shadow-sm whitespace-nowrap">
+                    Train • Transform • Triumph
+                  </p>
+                  <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-cyan-500/40" />
+                </div>
+              </div>
+            </div>
           </div>
 
           <p className="text-[clamp(0.875rem,2vw,1.125rem)] text-white/80 max-w-2xl mx-auto font-medium px-4 leading-relaxed">
