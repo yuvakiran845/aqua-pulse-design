@@ -125,7 +125,14 @@ const EnquirySection = () => {
                   </motion.div>
                   <h3 className="text-2xl font-heading font-bold text-foreground mb-2">Success!</h3>
                   <p className="text-muted-foreground mb-6">Your enquiry has been sent. We'll be in touch soon.</p>
-                  <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 transition-colors" onClick={() => setSubmitted(false)}>
+                  <Button 
+                    className="mt-2 px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:scale-[1.03] active:scale-[0.98]" 
+                    onClick={() => {
+                      setSubmitted(false);
+                      setErrors({});
+                      setForm({ name: "", phone: "", age: "", program: "", message: "" });
+                    }}
+                  >
                     Send another enquiry
                   </Button>
                 </motion.div>

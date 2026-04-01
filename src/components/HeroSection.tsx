@@ -1,21 +1,75 @@
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import heroImg from "@/assets/hero-pool.jpg";
+import { motion, AnimatePresence } from "framer-motion";
+
+const images = [
+  { src: "/images/swim1.webp", alt: "Freestyle swimmer underwater", position: "center bottom" },
+  { src: "/images/swim2.webp", alt: "Butterfly stroke action", position: "center center" },
+  { src: "/images/swim3.webp", alt: "Luxury swimming pool", position: "center bottom" },
+  { src: "/images/swim4.webp", alt: "Swimming training session", position: "center center" }
+];
 
 const HeroSection = () => {
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const nextSlide = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % images.length);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, [nextSlide, isPaused]);
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
-        <img src={heroImg} alt="Swimming pool" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10" />
+    <section 
+      id="home" 
+      className="relative min-h-[60vh] sm:min-h-[75vh] lg:min-h-screen flex items-center justify-center overflow-hidden"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      role="region"
+      aria-label="Welcome section with background carousel"
+    >
+      {/* Background image Carousel - z-0 */}
+      <div className="absolute inset-0 z-0 bg-navy">
+        <AnimatePresence>
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ opacity: 1, scale: 1.02 }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+              opacity: { duration: 1.5, ease: "easeInOut" },
+              scale: { duration: 6, ease: "linear" }
+            }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <img
+              src={images[current].src}
+              alt={images[current].alt}
+              className="w-full h-full object-cover"
+              style={{ objectPosition: images[current].position }}
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute top-1/4 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+      {/* Specific Gradient Overlay - z-10 */}
+      <div 
+        className="absolute inset-0 z-10" 
+        style={{
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.4), rgba(0,0,0,0.7))"
+        }}
+      />
 
-      <div className="relative container-main text-center pt-16 pb-12 -mt-5 md:-mt-8">
+      {/* Decorative elements (Keeping them) - z-15 (between overlay and content) */}
+      <div className="absolute top-1/4 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl z-15 pointer-events-none" />
+      <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl z-15 pointer-events-none" />
+
+      {/* Existing content - z-20 */}
+      <div className="relative z-20 container-main text-center pt-16 pb-12 -mt-5 md:-mt-8">
         <div className="max-w-4xl mx-auto space-y-5 md:space-y-6">
           <h1 className="text-4xl sm:text-5xl md:text-[3.4rem] lg:text-6xl font-heading font-bold leading-tight tracking-tight">
             <span className="gradient-aqua-text">AQUA PULSE</span>
@@ -51,6 +105,20 @@ const HeroSection = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Navigation Dots */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              i === current ? "bg-primary w-6" : "bg-white/40 hover:bg-white/60"
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
