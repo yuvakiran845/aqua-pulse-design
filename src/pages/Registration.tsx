@@ -14,13 +14,41 @@ const STEPS = [
 
 // Data
 const CENTERS = ["R&R Swimming Pool", "Slim Life Gym Sports Complex"];
+const PROGRAM_OPTIONS: Record<string, string[]> = {
+  "R&R Swimming Pool": [
+    "Summer Camp",
+    "Beginners Program",
+    "Intermediate Program",
+    "Advanced Program",
+    "Aqua Sprouts (Toddlers Program)",
+    "Ladies Exclusive Program",
+    "Special Kids Aquatic Program",
+    "Senior Citizen Swimming",
+    "Aqua Rehabilitation",
+    "1-1 Personal Training"
+  ],
+  "Slim Life Gym Sports Complex": [
+    "Summer Camp",
+    "Beginners Program",
+    "Intermediate Program",
+    "1-1 Personal Training"
+  ]
+};
 const BATCH_TYPES = ["Weekday Batch", "Weekend Batch"];
 const TIME_SLOTS = {
-  "🌅 Morning Batches": [
-    "6:00 AM - 7:00 AM", "7:00 AM - 8:00 AM", "8:00 AM - 9:00 AM", "9:00 AM - 10:00 AM", "10:00 AM - 11:00 AM"
+  "🌅 Morning": [
+    "6:00 AM – 7:00 AM",
+    "7:00 AM – 8:00 AM",
+    "8:00 AM – 9:00 AM",
+    "9:00 AM – 10:00 AM",
+    "10:00 AM – 11:00 AM"
   ],
-  "🌆 Evening Batches": [
-    "4:00 PM - 5:00 PM", "5:00 PM - 6:00 PM", "6:00 PM - 7:00 PM", "7:00 PM - 8:00 PM", "8:00 PM - 9:00 PM"
+  "🌆 Evening": [
+    "4:00 PM – 5:00 PM",
+    "5:00 PM – 6:00 PM",
+    "6:00 PM – 7:00 PM",
+    "7:00 PM – 8:00 PM",
+    "8:00 PM – 9:00 PM"
   ]
 };
 
@@ -53,36 +81,26 @@ const Registration = () => {
   const updateField = (field: string, value: any) => {
     setFormData((prev: any) => {
       const newData = { ...prev, [field]: value };
+      
+      // Deep Reset logic for dependent fields
       if (field === "center") {
         newData.program = "";
+        newData.batchType = "";
+        newData.timeSlot = "";
+      } else if (field === "program") {
+        newData.batchType = "";
+        newData.timeSlot = "";
+      } else if (field === "batchType") {
+        newData.timeSlot = "";
       }
+      
       return newData;
     });
   };
 
   const getAvailablePrograms = () => {
-    if (formData.center === "Slim Life Gym Sports Complex") {
-      return [
-        "Summer Camp",
-        "Beginners Program",
-        "Intermediate Program",
-        "1-1 Personal Training"
-      ];
-    } else if (formData.center === "R&R Swimming Pool") {
-      return [
-        "Summer Camp",
-        "Beginners Program",
-        "Intermediate Program",
-        "Advanced Program",
-        "Aqua Sprouts (Toddlers Program)",
-        "Ladies Exclusive Program",
-        "Special Kids Aquatic Program",
-        "Senior Citizen Swimming",
-        "Aqua Rehabilitation",
-        "1-1 Personal Training"
-      ];
-    }
-    return [];
+    if (!formData.center) return [];
+    return PROGRAM_OPTIONS[formData.center] || [];
   };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,75 +293,96 @@ const Registration = () => {
                         className={inputClass}
                         style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' } as any}
                       >
-                        <option value="" disabled hidden className="hidden">Select Training Center</option>
+                        <option value="" disabled>Select Training Center</option>
                         {CENTERS.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
 
-                    <div>
-                      <label className={`${labelClass} text-cyan-400 uppercase tracking-widest text-xs font-bold mb-3 block`}>PROGRAM <span className="text-red-400">*</span></label>
-                      <select 
-                        value={formData.program} 
-                        onChange={(e) => updateField("program", e.target.value)}
-                        className={inputClass}
-                        disabled={!formData.center}
-                        style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' } as any}
-                      >
-                        <option value="" disabled hidden className="hidden">Select Program</option>
-                        {getAvailablePrograms().map(p => <option key={p} value={p}>{p}</option>)}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className={`${labelClass} text-cyan-400 uppercase tracking-widest text-xs font-bold mb-3 block`}>BATCH TYPE <span className="text-red-400">*</span></label>
-                      <div className="flex gap-4">
-                        {BATCH_TYPES.map(b => (
-                          <button
-                            key={b}
-                            onClick={() => updateField("batchType", b)}
-                            className={`px-6 py-3 rounded-xl border font-medium transition-all ${
-                              formData.batchType === b 
-                              ? "border-cyan-500 bg-cyan-500/10 text-cyan-400" 
-                              : "border-white/10 bg-card hover:bg-white/5 text-foreground"
-                            }`}
+                    <AnimatePresence>
+                      {formData.center && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginTop: 32 }}
+                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <label className={`${labelClass} text-cyan-400 uppercase tracking-widest text-xs font-bold mb-3 block`}>PROGRAM <span className="text-red-400">*</span></label>
+                          <select 
+                            value={formData.program} 
+                            onChange={(e) => updateField("program", e.target.value)}
+                            className={inputClass}
+                            style={{ WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none' } as any}
                           >
-                            {b}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                            <option value="" disabled>Select Program</option>
+                            {getAvailablePrograms().map(p => <option key={p} value={p}>{p}</option>)}
+                          </select>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
-                    {formData.batchType && (
-                      <motion.div 
-                        initial={{ opacity: 0, y: -10 }} 
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        <label className={`${labelClass} text-cyan-400 uppercase tracking-widest text-xs font-bold mb-4 block`}>PREFERRED TIME SLOT <span className="text-red-400">*</span></label>
-                        <div className="space-y-8">
-                          {Object.entries(TIME_SLOTS).map(([category, slots]) => (
-                            <div key={category}>
-                              <h4 className="text-base font-semibold text-cyan-400 mb-4 flex items-center gap-2">{category}</h4>
-                              <div className="flex flex-wrap gap-4">
-                                {slots.map(slot => (
-                                  <button
-                                    key={slot}
-                                    onClick={() => updateField("timeSlot", slot)}
-                                    className={`w-[200px] text-left px-5 py-4 rounded-xl border transition-all ${
-                                      formData.timeSlot === slot 
-                                      ? "border-cyan-500 bg-cyan-500/10 text-cyan-400" 
-                                      : "border-white/10 bg-card hover:bg-white/5 text-foreground"
-                                    }`}
-                                  >
-                                    <p className="font-semibold text-[15px]">{slot}</p>
-                                    <span className="block text-[11px] text-green-400/90 mt-1 font-medium">Limited seats</span>
-                                  </button>
-                                ))}
+                    <AnimatePresence>
+                      {formData.program && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginTop: 32 }}
+                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <label className={`${labelClass} text-cyan-400 uppercase tracking-widest text-xs font-bold mb-3 block`}>BATCH TYPE <span className="text-red-400">*</span></label>
+                          <div className="flex gap-4">
+                            {BATCH_TYPES.map(b => (
+                              <button
+                                key={b}
+                                onClick={() => updateField("batchType", b)}
+                                className={`px-6 py-3 rounded-xl border font-medium transition-all ${
+                                  formData.batchType === b 
+                                  ? "border-cyan-500 bg-cyan-500/10 text-cyan-400" 
+                                  : "border-white/10 bg-card hover:bg-white/5 text-foreground"
+                                }`}
+                              >
+                                {b}
+                              </button>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                      {formData.batchType && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginTop: 32 }}
+                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <label className={`${labelClass} text-cyan-400 uppercase tracking-widest text-xs font-bold mb-4 block`}>PREFERRED TIME SLOT <span className="text-red-400">*</span></label>
+                          <div className="space-y-8">
+                            {Object.entries(TIME_SLOTS).map(([category, slots]) => (
+                              <div key={category}>
+                                <h4 className="text-base font-semibold text-cyan-400 mb-4 flex items-center gap-2">{category}</h4>
+                                <div className="flex flex-wrap gap-4">
+                                  {slots.map(slot => (
+                                    <button
+                                      key={slot}
+                                      onClick={() => updateField("timeSlot", slot)}
+                                      className={`w-[200px] text-left px-5 py-4 rounded-xl border transition-all ${
+                                        formData.timeSlot === slot 
+                                        ? "border-cyan-500 bg-cyan-500/10 text-cyan-400" 
+                                        : "border-white/10 bg-card hover:bg-white/5 text-foreground"
+                                      }`}
+                                    >
+                                      <p className="font-semibold text-[15px]">{slot}</p>
+                                      <span className="block text-[11px] text-green-400/90 mt-1 font-medium">Limited seats</span>
+                                    </button>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 )}
 
