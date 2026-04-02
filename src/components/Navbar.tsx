@@ -62,9 +62,6 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <Button variant="navCta" size="sm" asChild>
-            <a href="/register">Student Registration</a>
-          </Button>
         </div>
 
         {/* Mobile toggle */}
@@ -87,9 +84,6 @@ const Navbar = () => {
                 {l.label}
               </a>
             ))}
-            <Button variant="navCta" size="sm" asChild>
-              <a href="/register" onClick={() => setOpen(false)}>Student Registration</a>
-            </Button>
           </div>
         </div>
       )}

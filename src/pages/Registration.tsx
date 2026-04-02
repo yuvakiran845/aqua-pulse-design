@@ -6,9 +6,9 @@ import logoImg from "@/assets/aqua-pulse-logo.png";
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 
 const STEPS = [
-  "Training Details",
   "Student Info",
   "Contact Info",
+  "Training Details",
   "Medical & Experience",
   "Terms & Submit",
 ];
@@ -159,55 +159,58 @@ const drawIdCard = async (
   ctx.fillRect(0, 0, W, 4);
 
   // Logo
+  const logoSize = 70;
+  const logoX = (W - logoSize) / 2;
+  const logoY = 40;
+
+  ctx.save();
+  // Outer glow circle
+  ctx.beginPath();
+  ctx.arc(W / 2, logoY + logoSize / 2, logoSize / 2 + 6, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(0,200,224,0.08)";
+  ctx.fill();
+
+  // Draw logo with circular clipping
   await new Promise<void>((resolve) => {
     const logo = new Image();
     logo.crossOrigin = "anonymous";
     logo.onload = () => {
-      const lSize = 72;
-      const lX = (W - lSize) / 2;
       ctx.save();
       ctx.beginPath();
-      ctx.arc(lX + lSize / 2, 60, lSize / 2, 0, Math.PI * 2);
-      ctx.closePath();
+      ctx.arc(W / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
       ctx.clip();
-      ctx.drawImage(logo, lX, 60 - lSize / 2, lSize, lSize);
+      ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
       ctx.restore();
-
-      // Logo ring
-      ctx.strokeStyle = "rgba(34,211,238,0.6)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(lX + lSize / 2, 60, lSize / 2 + 3, 0, Math.PI * 2);
-      ctx.stroke();
-
       resolve();
     };
     logo.onerror = () => resolve();
     logo.src = logoImg;
   });
+  ctx.restore();
 
   // Academy title
   ctx.fillStyle = "#22D3EE";
   ctx.font = "bold 18px 'Arial', sans-serif";
   ctx.textAlign = "center";
   ctx.letterSpacing = "2px";
-  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", W / 2, 110);
+  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", W / 2, logoY + logoSize + 16);
 
   ctx.fillStyle = "rgba(148,163,184,0.8)";
   ctx.font = "11px 'Arial', sans-serif";
+  ctx.textAlign = "center";
   ctx.letterSpacing = "3px";
-  ctx.fillText("STUDENT IDENTITY CARD  •  2026", W / 2, 130);
+  ctx.fillText("STUDENT IDENTITY CARD  •  2026", W / 2, logoY + logoSize + 36);
 
   // Divider line
   ctx.strokeStyle = "rgba(34,211,238,0.3)";
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(40, 145);
-  ctx.lineTo(W - 40, 145);
+  ctx.moveTo(40, logoY + logoSize + 52);
+  ctx.lineTo(W - 40, logoY + logoSize + 52);
   ctx.stroke();
 
   // Student photo
-  const photoY = 160;
+  const photoY = 180;
   const photoR = 68;
   const photoCX = W / 2;
   const photoCY = photoY + photoR;
@@ -540,11 +543,11 @@ const Registration = () => {
   const canProceed = (): boolean => {
     switch (step) {
       case 0:
-        return !!(form.center && form.program && form.batchType && form.slot);
+        return !!(form.studentName && form.dob && form.gender && form.billId);
       case 1:
-        return !!(form.studentName && form.dob && form.gender);
-      case 2:
         return !!(form.parentName && form.mobile && form.email);
+      case 2:
+        return !!(form.center && form.program && form.batchType && form.slot);
       case 3:
         return !!(form.experience);
       case 4:
@@ -845,18 +848,50 @@ const Registration = () => {
       <main className="pt-28 pb-16">
         <div className="max-w-3xl mx-auto px-4">
 
-          {/* ── PAGE TITLE ── */}
-          <div className="mb-8 text-center">
-            <p className="text-[11px] font-bold tracking-[4px] text-slate-500 uppercase mb-1">
-              Aqua Pulse Swimming Academy
-            </p>
-            <h1
-              className="text-3xl md:text-4xl font-black tracking-wider"
-              style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-            >
-              STUDENT REGISTRATION FORM
-            </h1>
-            <div className="mt-3 mx-auto w-16 h-[2px] rounded-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+          {/* ── LOGO & TITLE HEADER ── */}
+          <div className="mb-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "14px"
+            }}>
+              <img 
+                src={logoImg} 
+                alt="Aqua Pulse Logo"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  objectFit: "contain",
+                  borderRadius: "50%"
+                }}
+              />
+              
+              <div>
+                <div style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "22px",
+                  letterSpacing: "2px",
+                  color: "#22D3EE"
+                }}>
+                  AQUA PULSE
+                </div>
+
+                <div style={{
+                  fontSize: "12px",
+                  color: "#7ab8cc",
+                  letterSpacing: "1px"
+                }}>
+                  SWIMMING ACADEMY
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center md:text-right">
+              <h2 className="text-xl font-bold text-slate-400 tracking-[3px] uppercase">
+                Student Registration
+              </h2>
+              <div className="h-0.5 w-12 bg-cyan-500/50 ml-auto mr-auto md:mr-0 mt-1" />
+            </div>
           </div>
 
           {/* ── STEPPER ── */}
@@ -898,13 +933,244 @@ const Registration = () => {
             ))}
           </div>
 
-          {/* ── STEP 0: TRAINING DETAILS ── */}
+          {/* ── STEP 0: STUDENT INFO ── */}
           {step === 0 && (
             <div>
-              {/* Page title */}
-              <p className="text-xs font-bold tracking-[3px] text-slate-500 uppercase mb-2">
-                Student Registration Form
-              </p>
+              <h2
+                className="text-2xl font-black tracking-wider mb-1"
+                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
+              >
+                STUDENT INFORMATION
+              </h2>
+              <div className="h-px bg-cyan-500/30 mb-8" />
+
+              <div className="space-y-6">
+                {/* Student Name */}
+                <div>
+                  <label className={labelCls}>
+                    STUDENT FULL NAME <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.studentName}
+                    onChange={(e) => updateForm("studentName", e.target.value)}
+                    className={inputCls}
+                    placeholder="Enter full name"
+                  />
+                </div>
+
+                {/* Bill ID notice */}
+                <div className="flex items-start gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/5">
+                  <span className="text-lg shrink-0 mt-0.5">🧾</span>
+                  <div>
+                    <p className="text-[11px] font-bold tracking-wider text-amber-400 uppercase mb-1">
+                      OFFLINE PAYMENT BILL NUMBER
+                    </p>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      After paying fees at the academy, enter your bill / receipt
+                      number here. This links your payment to your registration.
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelCls}>
+                    BILL / RECEIPT NUMBER <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.billId}
+                    onChange={(e) => updateForm("billId", e.target.value)}
+                    className={inputCls}
+                    placeholder="e.g. APSA-BILL-0001"
+                  />
+                </div>
+
+                {/* DOB + Age */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelCls}>
+                      DATE OF BIRTH <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={form.dob}
+                      onChange={(e) => updateForm("dob", e.target.value)}
+                      className={inputCls}
+                    />
+                  </div>
+                  <div>
+                    <label className={labelCls}>AGE</label>
+                    <input
+                      type="text"
+                      value={form.age}
+                      readOnly
+                      className={`${inputCls} opacity-50 cursor-not-allowed`}
+                      placeholder="Auto calculated"
+                    />
+                  </div>
+                </div>
+
+                {/* Gender + Photo */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelCls}>
+                      GENDER <span className="text-red-400">*</span>
+                    </label>
+                    <select
+                      value={form.gender}
+                      onChange={(e) => updateForm("gender", e.target.value)}
+                      className={inputCls}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelCls}>UPLOAD STUDENT PHOTO</label>
+                    <label
+                      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/10 bg-[#071222] text-slate-400 text-sm cursor-pointer hover:border-cyan-500/40 transition-all"
+                    >
+                      <span>🖼</span>
+                      <span>
+                        {form.photoUrl ? "Photo selected ✓" : "Click to upload photo"}
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="hidden"
+                      />
+                    </label>
+                    {form.photoUrl && (
+                      <img
+                        src={form.photoUrl}
+                        alt="Preview"
+                        className="mt-3 w-16 h-16 object-cover rounded-full border-2 border-cyan-500/40"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 1: CONTACT INFO ── */}
+          {step === 1 && (
+            <div>
+              <h2
+                className="text-2xl font-black tracking-wider mb-1"
+                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
+              >
+                PARENT / CONTACT DETAILS
+              </h2>
+              <div className="h-px bg-cyan-500/30 mb-8" />
+
+              <div className="space-y-5">
+                <div>
+                  <label className={labelCls}>
+                    PARENT / GUARDIAN NAME <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.parentName}
+                    onChange={(e) => updateForm("parentName", e.target.value)}
+                    className={inputCls}
+                    placeholder="Enter parent/guardian name"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelCls}>
+                      MOBILE NUMBER <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      value={form.mobile}
+                      onChange={(e) => updateForm("mobile", e.target.value)}
+                      className={inputCls}
+                      placeholder="10-digit mobile number"
+                    />
+                  </div>
+                  <div>
+                    <label className={labelCls}>WHATSAPP NUMBER</label>
+                    <input
+                      type="tel"
+                      value={form.whatsapp}
+                      onChange={(e) => updateForm("whatsapp", e.target.value)}
+                      className={inputCls}
+                      placeholder="If different from mobile"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelCls}>
+                    EMAIL ADDRESS <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => updateForm("email", e.target.value)}
+                    className={inputCls}
+                    placeholder="Enter email address"
+                  />
+                </div>
+
+                <div>
+                  <label className={labelCls}>FULL ADDRESS</label>
+                  <textarea
+                    value={form.address}
+                    onChange={(e) => updateForm("address", e.target.value)}
+                    className={`${inputCls} min-h-[80px] resize-none`}
+                    placeholder="Door no., Street, Area"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelCls}>CITY</label>
+                    <input
+                      type="text"
+                      value={form.city}
+                      onChange={(e) => updateForm("city", e.target.value)}
+                      className={inputCls}
+                      placeholder="City"
+                    />
+                  </div>
+                  <div>
+                    <label className={labelCls}>STATE</label>
+                    <input
+                      type="text"
+                      value={form.state}
+                      onChange={(e) => updateForm("state", e.target.value)}
+                      className={inputCls}
+                      placeholder="State"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelCls}>POSTAL CODE</label>
+                  <input
+                    type="text"
+                    value={form.postal}
+                    onChange={(e) => updateForm("postal", e.target.value)}
+                    className={`${inputCls} w-full sm:w-48`}
+                    placeholder="6-digit postal code"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 2: TRAINING DETAILS ── */}
+          {step === 2 && (
+            <div>
+              {/* Added consistent terminology */}
               <h2
                 className="text-2xl font-black tracking-wider mb-1"
                 style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
@@ -1043,256 +1309,6 @@ const Registration = () => {
             </div>
           )}
 
-          {/* ── STEP 1: STUDENT INFO ── */}
-          {step === 1 && (
-            <div>
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                STUDENT INFORMATION
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
-
-              {/* Student ID Preview */}
-              <div className="flex items-center gap-4 p-4 rounded-xl border border-cyan-500/40 bg-cyan-500/5 mb-7">
-                <div className="w-10 h-10 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center shrink-0">
-                  <span className="text-cyan-400 text-lg">🪪</span>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold tracking-[2px] text-slate-400 uppercase mb-0.5">
-                    YOUR STUDENT ID (PREVIEW)
-                  </p>
-                  <p className="text-xl font-black text-cyan-400 tracking-wider font-mono">
-                    {previewId}
-                  </p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    This ID will be printed on your Academy ID Card after registration
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                {/* Student Name */}
-                <div>
-                  <label className={labelCls}>
-                    STUDENT FULL NAME <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.studentName}
-                    onChange={(e) => updateForm("studentName", e.target.value)}
-                    className={inputCls}
-                    placeholder="Enter full name"
-                  />
-                </div>
-
-                {/* Bill ID notice */}
-                <div className="flex items-start gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/5">
-                  <span className="text-lg shrink-0 mt-0.5">🧾</span>
-                  <div>
-                    <p className="text-[11px] font-bold tracking-wider text-amber-400 uppercase mb-1">
-                      OFFLINE PAYMENT BILL NUMBER
-                    </p>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      After paying fees at the academy, enter your bill / receipt
-                      number here. This links your payment to your registration.
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <label className={labelCls}>BILL / RECEIPT NUMBER</label>
-                  <input
-                    type="text"
-                    value={form.billId}
-                    onChange={(e) => updateForm("billId", e.target.value)}
-                    className={inputCls}
-                    placeholder="e.g. APSA-BILL-0001  (leave blank if not yet paid)"
-                  />
-                </div>
-
-                {/* DOB + Age */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>
-                      DATE OF BIRTH <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={form.dob}
-                      onChange={(e) => updateForm("dob", e.target.value)}
-                      className={inputCls}
-                    />
-                  </div>
-                  <div>
-                    <label className={labelCls}>AGE</label>
-                    <input
-                      type="text"
-                      value={form.age}
-                      readOnly
-                      className={`${inputCls} opacity-50 cursor-not-allowed`}
-                      placeholder="Auto calculated"
-                    />
-                  </div>
-                </div>
-
-                {/* Gender + Photo */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>
-                      GENDER <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      value={form.gender}
-                      onChange={(e) => updateForm("gender", e.target.value)}
-                      className={inputCls}
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className={labelCls}>UPLOAD STUDENT PHOTO</label>
-                    <label
-                      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/10 bg-[#071222] text-slate-400 text-sm cursor-pointer hover:border-cyan-500/40 transition-all"
-                    >
-                      <span>🖼</span>
-                      <span>
-                        {form.photoUrl ? "Photo selected ✓" : "Click to upload photo"}
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handlePhotoUpload}
-                        className="hidden"
-                      />
-                    </label>
-                    {form.photoUrl && (
-                      <img
-                        src={form.photoUrl}
-                        alt="Preview"
-                        className="mt-3 w-16 h-16 object-cover rounded-full border-2 border-cyan-500/40"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 2: CONTACT INFO ── */}
-          {step === 2 && (
-            <div>
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                PARENT / CONTACT DETAILS
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
-
-              <div className="space-y-5">
-                <div>
-                  <label className={labelCls}>
-                    PARENT / GUARDIAN NAME <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.parentName}
-                    onChange={(e) => updateForm("parentName", e.target.value)}
-                    className={inputCls}
-                    placeholder="Enter parent/guardian name"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>
-                      MOBILE NUMBER <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      value={form.mobile}
-                      onChange={(e) => updateForm("mobile", e.target.value)}
-                      className={inputCls}
-                      placeholder="10-digit mobile number"
-                    />
-                  </div>
-                  <div>
-                    <label className={labelCls}>WHATSAPP NUMBER</label>
-                    <input
-                      type="tel"
-                      value={form.whatsapp}
-                      onChange={(e) => updateForm("whatsapp", e.target.value)}
-                      className={inputCls}
-                      placeholder="If different from mobile"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className={labelCls}>
-                    EMAIL ADDRESS <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => updateForm("email", e.target.value)}
-                    className={inputCls}
-                    placeholder="Enter email address"
-                  />
-                </div>
-
-                <div>
-                  <label className={labelCls}>FULL ADDRESS</label>
-                  <textarea
-                    value={form.address}
-                    onChange={(e) => updateForm("address", e.target.value)}
-                    className={`${inputCls} min-h-[80px] resize-none`}
-                    placeholder="Door no., Street, Area"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>CITY</label>
-                    <input
-                      type="text"
-                      value={form.city}
-                      onChange={(e) => updateForm("city", e.target.value)}
-                      className={inputCls}
-                      placeholder="City"
-                    />
-                  </div>
-                  <div>
-                    <label className={labelCls}>STATE</label>
-                    <input
-                      type="text"
-                      value={form.state}
-                      onChange={(e) => updateForm("state", e.target.value)}
-                      className={inputCls}
-                      placeholder="State"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className={labelCls}>POSTAL CODE</label>
-                  <input
-                    type="text"
-                    value={form.postal}
-                    onChange={(e) => updateForm("postal", e.target.value)}
-                    className={`${inputCls} w-full sm:w-48`}
-                    placeholder="6-digit postal code"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* ── STEP 3: MEDICAL & EXPERIENCE ── */}
           {step === 3 && (
             <div>
@@ -1303,6 +1319,26 @@ const Registration = () => {
                 MEDICAL &amp; EXPERIENCE
               </h2>
               <div className="h-px bg-cyan-500/30 mb-8" />
+
+              {/* Student ID Preview */}
+              {form.center && form.program && form.slot && (
+                <div className="flex items-center gap-4 p-4 rounded-xl border border-cyan-500/40 bg-cyan-500/5 mb-7">
+                  <div className="w-10 h-10 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center shrink-0">
+                    <span className="text-cyan-400 text-lg">🪪</span>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold tracking-[2px] text-slate-400 uppercase mb-0.5">
+                      YOUR STUDENT ID (PREVIEW)
+                    </p>
+                    <p className="text-xl font-black text-cyan-400 tracking-wider font-mono">
+                      {previewId}
+                    </p>
+                    <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                      This ID is generated based on your selected training center and will be finalized after submission.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-6">
                 <div>

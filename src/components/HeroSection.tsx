@@ -58,16 +58,21 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto space-y-5 sm:space-y-6 md:space-y-8"
         >
-          {/* Main Title Section */}
-          <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
-            <h1 className="text-[clamp(2rem,10vw,4rem)] font-heading font-black tracking-tight leading-[1.1] md:leading-tight px-2">
-              <span className="gradient-aqua-text">AQUA PULSE</span>
+          {/* Heading Section */}
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <h1 className="text-[clamp(2.5rem,10vw,4.5rem)] font-heading font-black tracking-tight leading-[1.05] md:leading-tight px-2 drop-shadow-2xl">
+              <span className="gradient-aqua-text whitespace-nowrap">AQUA PULSE</span>
               <br />
-              <span className="text-foreground">SWIMMING ACADEMY</span>
+              <span className="text-white">SWIMMING ACADEMY</span>
             </h1>
-            <p className="text-[clamp(1rem,3vw,1.5rem)] font-medium tracking-[0.2em] text-white/90 uppercase drop-shadow-md">
-              Train. Transform. Triumph in Water.
-            </p>
+            
+            <div className="flex items-center justify-center gap-4 py-2">
+              <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-cyan-500/50" />
+              <p className="text-[clamp(0.875rem,2.5vw,1.25rem)] font-bold tracking-[0.3em] text-cyan-400 uppercase drop-shadow-md">
+                Train • Transform • Triumph
+              </p>
+              <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-cyan-500/50" />
+            </div>
           </div>
 
           <p className="text-[clamp(0.875rem,2vw,1.125rem)] text-white/80 max-w-2xl mx-auto font-medium px-4 leading-relaxed">
