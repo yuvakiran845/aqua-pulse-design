@@ -60,12 +60,17 @@ const EnquirySection = () => {
       
       // We use text/plain to bypass CORS preflight while still sending 
       // a valid JSON body that your script will parse.
+      const params = new URLSearchParams();
+      params.append("name", form.name.trim());
+      params.append("phone", form.phone.trim());
+      params.append("age", form.age.trim());
+      params.append("program", form.program);
+      params.append("message", form.message.trim());
+
       const response = await fetch(ENQUIRY_API_ENDPOINT, {
         method: "POST",
-        headers: {
-          "Content-Type": "text/plain",
-        },
-        body: JSON.stringify(payload),
+        mode: "no-cors",
+        body: params,
       });
 
       // Google returns a 302 redirect for success. 

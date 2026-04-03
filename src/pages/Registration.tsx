@@ -516,53 +516,51 @@ const Registration = () => {
     }
   };
 
-  // Google Sheets POST
-  const postToGoogleSheets = async (studentId: string) => {
-    console.log("Submitting Data:", form);
+  // Google Sheets SUBMISSION
+  const postToGoogleSheets = async (stId: string) => {
+    console.log("Submitting Data to Sheets:", form);
+    
     try {
-      // Date only (no time)
       const registeredAt = new Date().toISOString().split("T")[0];
+
+      // We use URLSearchParams to ensure data is sent as form-encoded fields.
+      // This is the most robust way to interact with Google Apps Script doPost(e)
+      // because it populates e.parameter with the keys we define here.
+      const data = new URLSearchParams();
+      
+      // REQUIRED MAPPING (Order matches the common spreadsheet structure to prevent accidental shifts)
+      data.append("studentId", stId);
+      data.append("registeredAt", registeredAt);
+      data.append("studentName", form.studentName || "");
+      data.append("billNumber", form.billId || ""); // Using both billNumber and billId for compatibility
+      data.append("billId", form.billId || "");
+      data.append("dob", form.dob || "");
+      data.append("age", form.age || "");
+      data.append("gender", form.gender || "");
+      data.append("parentName", form.parentName || "");
+      data.append("mobile", form.mobile || "");
+      data.append("whatsapp", form.whatsapp || ""); // Included to prevent shifting if script expects it
+      data.append("email", form.email || "");
+      data.append("address", form.address || "");
+      data.append("city", form.city || "");
+      data.append("state", form.state || "");
+      data.append("postal", form.postal || "");
+      data.append("center", form.center || "");
+      data.append("program", form.program || "");
+      data.append("batchType", form.batchType || "");
+      data.append("slot", form.slot || "");
+      data.append("medical", form.medical || "");
+      data.append("allergies", form.allergies || "");
+      data.append("experience", form.experience || "");
 
       await fetch(GOOGLE_SHEET_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          studentId: studentId,
-          registeredAt: registeredAt,
-
-          studentName: form.studentName,
-          billId: form.billId,
-
-          dob: form.dob,
-          age: form.age,
-          gender: form.gender,
-
-          parentName: form.parentName,
-          mobile: form.mobile,
-
-          email: form.email,
-
-          address: form.address,
-          city: form.city,
-          state: form.state,
-          postal: form.postal,
-
-          center: form.center,
-          program: form.program,
-          batchType: form.batchType,
-          slot: form.slot,
-
-          medical: form.medical,
-          allergies: form.allergies,
-          experience: form.experience,
-        }),
+        body: data,
       });
     } catch (err) {
       console.warn("Google Sheets POST failed:", err);
-      setSheetError("Data saved locally. Sheet sync may have failed.");
+      setSheetError("Local submission successful. Cloud sync might be delayed.");
     }
   };
 
@@ -967,10 +965,11 @@ const Registration = () => {
                     BILL / RECEIPT NUMBER <span className="text-red-400">*</span>
                   </label>
                   <input
-                    className="input-field"
-                    value={form.billId || ""}
-                    onChange={(e) => upd("billId", e.target.value)}
-                    placeholder="Enter Bill Number"
+                    type="text"
+                    className={inputCls}
+                    value={form.billId}
+                    onChange={(e) => updateForm("billId", e.target.value)}
+                    placeholder="Enter Bill/Receipt Number"
                   />
                 </div>
 
