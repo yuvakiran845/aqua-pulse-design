@@ -58,8 +58,8 @@ const TIME_SLOTS: Record<string, string[]> = {
 const SLOT_LIMIT = 10;
 
 // Google Sheets Web App URL
-const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbzulb5JT0D_rYMqvHYiCJXDXaJNq5tKDGlN0NhkIKSvCOBhqD6-3GWxe8_NU5sWHyQ/exec";
+const GOOGLE_SHEET_URL =
+  "https://script.google.com/macros/s/AKfycbyVVNzW7lb36rMbFLRR6Nn5Vw8pQTyaallQKtmo-QqNJw-cEIjQfUCso8bHY87qdY2U/exec";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 
@@ -458,6 +458,8 @@ const Registration = () => {
     });
   };
 
+  const upd = updateForm;
+
   // Photo upload via FileReader → base64
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -488,38 +490,48 @@ const Registration = () => {
   };
 
   // Google Sheets POST
-  const postToGoogleSheets = async (id: string) => {
-    const payload = {
-      studentId: id,
-      center: form.center,
-      program: form.program,
-      batchType: form.batchType,
-      slot: form.slot,
-      studentName: form.studentName,
-      dob: form.dob,
-      age: form.age,
-      gender: form.gender,
-      billId: form.billId,
-      parentName: form.parentName,
-      mobile: form.mobile,
-      whatsapp: form.whatsapp || form.mobile,
-      email: form.email,
-      address: form.address,
-      city: form.city,
-      state: form.state,
-      postal: form.postal,
-      medical: form.medical,
-      allergies: form.allergies,
-      experience: form.experience,
-      submittedAt: new Date().toISOString(),
-    };
-
+  const postToGoogleSheets = async (studentId: string) => {
+    console.log("Submitting Data:", form);
     try {
-      await fetch(SHEET_URL, {
+      // Date only (no time)
+      const registeredAt = new Date().toISOString().split("T")[0];
+
+      await fetch(GOOGLE_SHEET_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          registeredAt: registeredAt,
+
+          studentName: form.studentName,
+          billId: form.billId,
+
+          dob: form.dob,
+          age: form.age,
+          gender: form.gender,
+
+          parentName: form.parentName,
+          mobile: form.mobile,
+
+          email: form.email,
+
+          address: form.address,
+          city: form.city,
+          state: form.state,
+          postal: form.postal,
+
+          center: form.center,
+          program: form.program,
+          batchType: form.batchType,
+          slot: form.slot,
+
+          medical: form.medical,
+          allergies: form.allergies,
+          experience: form.experience,
+        }),
       });
     } catch (err) {
       console.warn("Google Sheets POST failed:", err);
@@ -530,6 +542,12 @@ const Registration = () => {
   // Submit handler
   const handleSubmit = async () => {
     if (!form.agreed || isSubmitting) return;
+
+    if (!form.billId) {
+      alert("Please enter Bill Number");
+      return;
+    }
+
     setIsSubmitting(true);
     setSheetError(null);
 
@@ -922,11 +940,10 @@ const Registration = () => {
                     BILL / RECEIPT NUMBER <span className="text-red-400">*</span>
                   </label>
                   <input
-                    type="text"
-                    value={form.billId}
-                    onChange={(e) => updateForm("billId", e.target.value)}
-                    className={inputCls}
-                    placeholder="e.g. APSA-BILL-0001"
+                    className="input-field"
+                    value={form.billId || ""}
+                    onChange={(e) => upd("billId", e.target.value)}
+                    placeholder="Enter Bill Number"
                   />
                 </div>
 
@@ -1026,7 +1043,6 @@ const Registration = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={labelCls}>
                       MOBILE NUMBER <span className="text-red-400">*</span>
@@ -1039,17 +1055,6 @@ const Registration = () => {
                       placeholder="10-digit mobile number"
                     />
                   </div>
-                  <div>
-                    <label className={labelCls}>WHATSAPP NUMBER</label>
-                    <input
-                      type="tel"
-                      value={form.whatsapp}
-                      onChange={(e) => updateForm("whatsapp", e.target.value)}
-                      className={inputCls}
-                      placeholder="If different from mobile"
-                    />
-                  </div>
-                </div>
 
                 <div>
                   <label className={labelCls}>

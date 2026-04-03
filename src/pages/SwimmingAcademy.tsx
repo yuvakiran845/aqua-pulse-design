@@ -289,13 +289,25 @@ const SwimmingAcademy = () => {
               ))}
             </div>
 
-            <div className="flex justify-center mt-10">
-              <a
-                href="/register"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-lg transition-all shadow-[0_0_25px_rgba(34,211,238,0.3)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] hover:-translate-y-0.5"
-              >
-                🏊 Student Registration
-              </a>
+            <div className="max-w-xl mx-auto mt-12 space-y-6">
+              <div className="bg-cyan-950/30 border border-cyan-500/20 rounded-2xl p-6 text-center backdrop-blur-sm">
+                <p className="gradient-aqua-text font-bold uppercase tracking-[2px] mb-2 text-xs md:text-sm">
+                  Already Enrolled?
+                </p>
+                <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
+                  If you have already enrolled for a program and received your <strong>Bill / Receipt Number</strong>, please click below to complete your final registration.
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <a
+                  href="/register"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-bold text-lg transition-all shadow-[0_0_25px_rgba(34,211,238,0.3)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] hover:-translate-y-0.5 group"
+                >
+                  <span className="group-hover:scale-110 transition-transform">🏊</span> 
+                  Student Registration
+                </a>
+              </div>
             </div>
           </div>
         </section>
