@@ -120,66 +120,66 @@ const drawIdCard = async (
   form: FormState,
   studentId: string
 ): Promise<void> => {
-  const W = 560;
-  const H = 820;  // keeps A4-portrait aspect ratio → fits 1 PDF page
+  const SCALE = 2; 
+  const W = 560 * SCALE;
+  const H = 820 * SCALE;
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d")!;
+  ctx.scale(SCALE, SCALE);
 
-  // Background gradient
-  const bgGrad = ctx.createLinearGradient(0, 0, W, H);
-  bgGrad.addColorStop(0, "#020c1b");
-  bgGrad.addColorStop(0.5, "#041426");
-  bgGrad.addColorStop(1, "#020c1b");
+  const w = 560;
+  const h = 820;
+
+  // 1. Background & Border
+  const bgGrad = ctx.createLinearGradient(0, 0, w, h);
+  bgGrad.addColorStop(0, "#010813");
+  bgGrad.addColorStop(0.5, "#021226");
+  bgGrad.addColorStop(1, "#010813");
   ctx.fillStyle = bgGrad;
   ctx.beginPath();
-  roundRect(ctx, 0, 0, W, H, 24);
+  roundRect(ctx, 0, 0, w, h, 24);
   ctx.fill();
 
-  // Outer cyan border
-  ctx.strokeStyle = "rgba(34,211,238,0.7)";
-  ctx.lineWidth = 2;
+  ctx.globalAlpha = 0.03;
+  for (let i = 0; i < w; i += 4) {
+    ctx.fillStyle = i % 8 === 0 ? "#ffffff" : "#000000";
+    ctx.fillRect(i, 0, 1, h);
+  }
+  ctx.globalAlpha = 1.0;
+
+  ctx.strokeStyle = "rgba(34,211,238,0.8)";
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
-  roundRect(ctx, 1, 1, W - 2, H - 2, 23);
+  roundRect(ctx, 1, 1, w - 2, h - 2, 23);
   ctx.stroke();
 
-  // Inner subtle border
-  ctx.strokeStyle = "rgba(34,211,238,0.15)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  roundRect(ctx, 8, 8, W - 16, H - 16, 18);
-  ctx.stroke();
-
-  // Top accent bar
-  const barGrad = ctx.createLinearGradient(0, 0, W, 0);
-  barGrad.addColorStop(0, "rgba(34,211,238,0.9)");
-  barGrad.addColorStop(0.5, "rgba(56,189,248,0.6)");
-  barGrad.addColorStop(1, "rgba(34,211,238,0.1)");
-  ctx.fillStyle = barGrad;
-  ctx.fillRect(0, 0, W, 4);
-
-  // Logo
-  const logoSize = 70;
-  const logoX = (W - logoSize) / 2;
-  const logoY = 40;
+  // 2. Logo - FULL WIDTH OF ROUND LAYOUT
+  const logoSize = 135; // Increased to fill out the circle more aggressively
+  const logoCircleR = 64; 
+  const logoX = (w - logoSize) / 2;
+  const logoY = 28; 
 
   ctx.save();
-  // Outer glow circle
   ctx.beginPath();
-  ctx.arc(W / 2, logoY + logoSize / 2, logoSize / 2 + 6, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(0,200,224,0.08)";
+  ctx.arc(w / 2, logoY + logoSize / 2, logoCircleR, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(34,211,238,0.22)";
+  ctx.shadowBlur = 30;
+  ctx.shadowColor = "rgba(34,211,238,0.6)";
   ctx.fill();
 
-  // Draw logo with circular clipping
   await new Promise<void>((resolve) => {
     const logo = new Image();
     logo.crossOrigin = "anonymous";
     logo.onload = () => {
       ctx.save();
       ctx.beginPath();
-      ctx.arc(W / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2);
+      ctx.arc(w / 2, logoY + logoSize / 2, logoCircleR - 1, 0, Math.PI * 2);
       ctx.clip();
-      ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fill();
+      // Draw slightly larger to ensure full coverage
+      ctx.drawImage(logo, logoX - 2, logoY - 2, logoSize + 4, logoSize + 4);
       ctx.restore();
       resolve();
     };
@@ -188,31 +188,28 @@ const drawIdCard = async (
   });
   ctx.restore();
 
-  // Academy title
+  // 3. Titles
   ctx.fillStyle = "#22D3EE";
-  ctx.font = "bold 18px 'Arial', sans-serif";
+  ctx.font = "bold 20px 'Arial', sans-serif";
   ctx.textAlign = "center";
   ctx.letterSpacing = "2px";
-  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", W / 2, logoY + logoSize + 16);
+  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, logoY + logoSize + 20);
 
-  ctx.fillStyle = "rgba(148,163,184,0.8)";
-  ctx.font = "11px 'Arial', sans-serif";
-  ctx.textAlign = "center";
-  ctx.letterSpacing = "3px";
-  ctx.fillText("STUDENT IDENTITY CARD  •  2026", W / 2, logoY + logoSize + 36);
+  ctx.fillStyle = "rgba(148,163,184,0.9)";
+  ctx.font = "bold 12px 'Arial', sans-serif";
+  ctx.fillText("STUDENT IDENTITY CARD  •  2026", w / 2, logoY + logoSize + 40);
 
-  // Divider line
-  ctx.strokeStyle = "rgba(34,211,238,0.3)";
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(34,211,238,0.4)";
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(40, logoY + logoSize + 52);
-  ctx.lineTo(W - 40, logoY + logoSize + 52);
+  ctx.moveTo(60, logoY + logoSize + 55);
+  ctx.lineTo(w - 60, logoY + logoSize + 55);
   ctx.stroke();
 
-  // Student photo
-  const photoY = 180;
-  const photoR = 68;
-  const photoCX = W / 2;
+  // 4. Student Photo - REDUCED SIZE TO SAVE VERTICAL SPACE
+  const photoY = 215; 
+  const photoR = 60; // Reduced from 75
+  const photoCX = w / 2;
   const photoCY = photoY + photoR;
 
   if (form.photoUrl) {
@@ -222,7 +219,6 @@ const drawIdCard = async (
         ctx.save();
         ctx.beginPath();
         ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
-        ctx.closePath();
         ctx.clip();
         ctx.drawImage(img, photoCX - photoR, photoCY - photoR, photoR * 2, photoR * 2);
         ctx.restore();
@@ -232,185 +228,119 @@ const drawIdCard = async (
       img.src = form.photoUrl;
     });
   } else {
-    // Placeholder circle
     ctx.fillStyle = "rgba(34,211,238,0.1)";
     ctx.beginPath();
     ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "rgba(148,163,184,0.5)";
-    ctx.font = "14px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("NO PHOTO", photoCX, photoCY + 5);
   }
 
-  // Photo ring
-  ctx.strokeStyle = "rgba(34,211,238,0.8)";
-  ctx.lineWidth = 3;
+  const ringGrad = ctx.createLinearGradient(photoCX - photoR, photoCY - photoR, photoCX + photoR, photoCY + photoR);
+  ringGrad.addColorStop(0, "rgba(34,211,238,1)");
+  ringGrad.addColorStop(1, "rgba(34,211,238,1)");
+  ctx.strokeStyle = ringGrad;
+  ctx.lineWidth = 4;
   ctx.beginPath();
   ctx.arc(photoCX, photoCY, photoR + 5, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Student name
+  // 5. Name & ID - COMPACT
   const nameY = photoCY + photoR + 30;
   ctx.fillStyle = "#FFFFFF";
   ctx.font = "bold 26px 'Arial', sans-serif";
-  ctx.letterSpacing = "2px";
-  ctx.textAlign = "center";
-  ctx.fillText(
-    (form.studentName || "STUDENT NAME").toUpperCase(),
-    W / 2,
-    nameY
-  );
+  ctx.fillText((form.studentName || "STUDENT NAME").toUpperCase(), w / 2, nameY);
 
-  // Student ID badge
-  const idY = nameY + 28;
   const idText = studentId;
-  ctx.font = "bold 14px 'Courier New', monospace";
-  const idW = ctx.measureText(idText).width + 40;
-  const idX = (W - idW) / 2;
-
-  ctx.fillStyle = "rgba(34,211,238,0.12)";
-  ctx.strokeStyle = "rgba(34,211,238,0.5)";
+  ctx.font = "bold 15px 'Courier New', monospace";
+  const idW = ctx.measureText(idText).width + 50;
+  const idX = (w - idW) / 2;
+  ctx.fillStyle = "rgba(34,211,238,0.15)";
+  ctx.strokeStyle = "rgba(34,211,238,0.7)";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  roundRect(ctx, idX, idY - 18, idW, 32, 8);
+  roundRect(ctx, idX, nameY + 12, idW, 32, 8);
   ctx.fill();
   ctx.stroke();
-
-  ctx.fillStyle = "#22D3EE";
-  ctx.font = "bold 14px 'Courier New', monospace";
-  ctx.letterSpacing = "1px";
-  ctx.fillText(idText, W / 2, idY + 7);
-
-  // Divider below ID badge
-  ctx.strokeStyle = "rgba(34,211,238,0.2)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(40, idY + 26);
-  ctx.lineTo(W - 40, idY + 26);
-  ctx.stroke();
-
-  // ── BOTTOM ZONE: signature block pinned to bottom of card ──
-  // Heights (bottom-up): accentBar=4, footer=28, divider+gap=16, sig block=90
-  const FOOTER_H   = 28;  // contact line
-  const SIG_H      = 90;  // label + wave + name + subtitle
-  const BOT_PAD    = 8;   // breathing room from accent bar
-  const sigBlockTop = H - 4 - BOT_PAD - FOOTER_H - 14 - SIG_H;
-
-  // Divider above signature block
-  ctx.strokeStyle = "rgba(34,211,238,0.3)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(40, sigBlockTop);
-  ctx.lineTo(W - 40, sigBlockTop);
-  ctx.stroke();
-
-  // Label
-  ctx.fillStyle = "rgba(148,163,184,0.5)";
-  ctx.font = "9px 'Arial', sans-serif";
-  ctx.letterSpacing = "3px";
-  ctx.textAlign = "center";
-  ctx.fillText("AUTHORISED SIGNATURE", W / 2, sigBlockTop + 14);
-
-  // Wave
-  ctx.strokeStyle = "#22D3EE";
-  ctx.lineWidth = 2;
-  ctx.lineJoin = "round";
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  const sx = W / 2 - 70;
-  const sy = sigBlockTop + 32;
-  ctx.moveTo(sx, sy);
-  ctx.bezierCurveTo(sx + 20, sy - 12, sx + 30, sy + 12, sx + 50, sy);
-  ctx.bezierCurveTo(sx + 70, sy - 12, sx + 80, sy + 12, sx + 100, sy);
-  ctx.bezierCurveTo(sx + 120, sy - 12, sx + 130, sy + 12, sx + 140, sy);
-  ctx.stroke();
-
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 12px 'Arial', sans-serif";
-  ctx.letterSpacing = "0px";
-  ctx.textAlign = "center";
-  ctx.fillText("Founder & Program Director", W / 2, sigBlockTop + 54);
+  ctx.fillText(idText, w / 2, nameY + 33);
 
-  ctx.fillStyle = "rgba(148,163,184,0.6)";
-  ctx.font = "10px 'Arial', sans-serif";
-  ctx.fillText("Aqua Pulse Swimming Academy", W / 2, sigBlockTop + 70);
+  // 6. ZONE CALCULATIONS
+  const sigH = 150;
+  const sigBlockTop = h - sigH - 20;
 
-  // Footer / contact line
-  const footerY = H - 4 - BOT_PAD - FOOTER_H + 4;
-  ctx.strokeStyle = "rgba(34,211,238,0.2)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(40, footerY - 6);
-  ctx.lineTo(W - 40, footerY - 6);
-  ctx.stroke();
-
-  ctx.fillStyle = "rgba(100,116,139,0.7)";
-  ctx.font = "10px 'Arial', sans-serif";
-  ctx.letterSpacing = "0px";
-  ctx.textAlign = "center";
-  ctx.fillText(
-    "aquapulsehub.in  •  aquapulseswimmingacademy@gmail.com",
-    W / 2,
-    footerY + 8
-  );
-
-  // ── MIDDLE ZONE: info fields filling space between ID badge and sig block ──
+  // 7. Middle Zone Info Fields - EQUAL SPACING, NO OVERLAP
   const fields = [
     { label: "TRAINING CENTER", value: form.center || "—" },
     { label: "BATCH TIME",      value: form.slot    || "—" },
     { label: "BATCH TYPE",      value: form.batchType || "—" },
+    { label: "EXPERIENCE",      value: form.experience || "—" },
     { label: "ACADEMIC YEAR",   value: "2026" },
   ];
 
-  const middleTop  = idY + 36;
-  const middleBot  = sigBlockTop - 8;
+  const middleTop  = nameY + 65; 
+  const middleBot  = sigBlockTop - 15;
   const fieldCount = fields.length;
-  // Total height each row gets (evenly distributed)
   const rowH       = (middleBot - middleTop) / fieldCount;
 
   ctx.textAlign = "left";
-  ctx.letterSpacing = "0px";
-
   fields.forEach((f, idx) => {
     const rowTop = middleTop + idx * rowH;
 
-    // Subtle row bg on alternating rows
     if (idx % 2 === 0) {
-      ctx.fillStyle = "rgba(255,255,255,0.02)";
-      ctx.fillRect(36, rowTop + 2, W - 72, rowH - 4);
-    }
-
-    // Label
-    ctx.fillStyle = "rgba(148,163,184,0.65)";
-    ctx.font = "10px 'Arial', sans-serif";
-    ctx.letterSpacing = "2px";
-    ctx.fillText(f.label, 44, rowTop + rowH * 0.32);
-
-    // Value
-    ctx.fillStyle = "#E2E8F0";
-    ctx.font = "bold 15px 'Arial', sans-serif";
-    ctx.letterSpacing = "0px";
-    ctx.fillText(f.value, 44, rowTop + rowH * 0.68);
-
-    // Separator (skip last)
-    if (idx < fieldCount - 1) {
-      ctx.strokeStyle = "rgba(255,255,255,0.07)";
-      ctx.lineWidth = 1;
+      ctx.fillStyle = "rgba(34,211,238,0.06)";
       ctx.beginPath();
-      ctx.moveTo(44, rowTop + rowH);
-      ctx.lineTo(W - 44, rowTop + rowH);
-      ctx.stroke();
+      roundRect(ctx, 45, rowTop, w - 90, rowH - 6, 8);
+      ctx.fill();
     }
+
+    ctx.fillStyle = "rgba(34,211,238,0.85)";
+    ctx.font = "bold 10px 'Arial', sans-serif";
+    ctx.letterSpacing = "1.5px";
+    ctx.fillText(f.label, 60, rowTop + rowH * 0.35);
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "bold 16px 'Arial', sans-serif"; 
+    ctx.letterSpacing = "0px";
+    ctx.fillText(f.value, 60, rowTop + rowH * 0.75);
   });
 
-  // Bottom accent bar
-  const botBarGrad = ctx.createLinearGradient(0, 0, W, 0);
-  botBarGrad.addColorStop(0, "rgba(34,211,238,0.1)");
-  botBarGrad.addColorStop(0.5, "rgba(56,189,248,0.6)");
-  botBarGrad.addColorStop(1, "rgba(34,211,238,0.9)");
-  ctx.fillStyle = botBarGrad;
-  ctx.fillRect(0, H - 4, W, 4);
+  // 8. Signature Block
+  ctx.strokeStyle = "rgba(34,211,238,0.3)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(60, sigBlockTop);
+  ctx.lineTo(w - 60, sigBlockTop);
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(148,163,184,0.8)";
+  ctx.font = "bold 9px 'Arial', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("AUTHORISED SIGNATURE", w / 2, sigBlockTop + 15);
+
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  const sx = w / 2 - 80;
+  const sy = sigBlockTop + 35;
+  ctx.moveTo(sx, sy);
+  ctx.bezierCurveTo(sx + 30, sy - 10, sx + 50, sy + 10, sx + 80, sy);
+  ctx.bezierCurveTo(sx + 110, sy - 10, sx + 130, sy + 10, sx + 160, sy);
+  ctx.stroke();
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.font = "bold 13px 'Arial', sans-serif";
+  ctx.fillText("Founder & Program Director", w / 2, sigBlockTop + 58);
+
+  ctx.fillStyle = "#22D3EE";
+  ctx.font = "bold 10px 'Arial', sans-serif";
+  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, sigBlockTop + 72);
+
+  const footerY = h - 35;
+  ctx.fillStyle = "rgba(148,163,184,0.7)";
+  ctx.font = "bold 10px 'Arial', sans-serif";
+  ctx.fillText("aquapulsehub.in  •  aquapulseswimmingacademy@gmail.com", w / 2, footerY);
+
+  ctx.fillStyle = "rgba(34,211,238,1)";
+  ctx.fillRect(0, h - 5, w, 5);
 };
 
 // Canvas helper: rounded rect
@@ -720,14 +650,28 @@ const Registration = () => {
         <Navbar />
         <main className="pt-28 pb-16">
           <div className="max-w-2xl mx-auto px-4 text-center">
-            {/* Header */}
+            {/* Pro-Level Sucess Badge */}
+            <div className="mb-8 relative inline-block">
+              <div className="w-24 h-24 rounded-full bg-cyan-500/20 border-2 border-cyan-500/50 flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(34,211,238,0.4)] animate-pulse">
+                <div className="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center shadow-lg">
+                  <span className="text-white text-3xl font-black italic">PRO</span>
+                </div>
+              </div>
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-900 border border-cyan-500/50 rounded-full text-[10px] font-black text-cyan-400 tracking-[3px] uppercase shadow-xl">
+                Identity Verified
+              </div>
+            </div>
+
             <div className="mb-8">
-              <div className="text-5xl mb-4">🎉</div>
               <h1
-                className="text-3xl md:text-4xl font-black tracking-wider mb-2"
-                style={{ color: "#22D3EE", fontFamily: "'Arial', sans-serif" }}
+                className="text-3xl md:text-5xl font-black tracking-tighter mb-2"
+                style={{ 
+                  color: "#FFFFFF", 
+                  fontFamily: "'Inter', sans-serif",
+                  textShadow: "0 0 20px rgba(34,211,238,0.4)"
+                }}
               >
-                REGISTRATION SUCCESSFUL!
+                REGISTRATION <span className="text-cyan-400">SUCCESSFUL!</span>
               </h1>
               <p className="text-slate-300 text-base">
                 Welcome to Aqua Pulse Swimming Academy,{" "}
@@ -1232,10 +1176,10 @@ const Registration = () => {
                           key={b}
                           type="button"
                           onClick={() => updateForm("batchType", b)}
-                          className={`px-5 py-2.5 rounded-xl border font-semibold text-sm transition-all ${
+                          className={`px-5 py-2.5 rounded-xl border font-bold text-sm transition-all ${
                             form.batchType === b
-                              ? "border-cyan-500 bg-cyan-500/15 text-cyan-400"
-                              : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40"
+                              ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+                              : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
                           }`}
                         >
                           {b}
@@ -1278,18 +1222,18 @@ const Registration = () => {
                                     isFull
                                       ? "border-slate-700/50 bg-transparent opacity-50 cursor-not-allowed"
                                       : isSelected
-                                      ? "border-cyan-500 bg-cyan-500/15 text-white"
-                                      : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50"
+                                      ? "border-cyan-500 bg-cyan-500 text-white font-bold shadow-[0_0_25px_rgba(34,211,238,0.6)] scale-[1.02]"
+                                      : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50 hover:bg-white/5"
                                   }`}
                                 >
-                                  <p className="font-semibold text-[14px]">
+                                  <p className={`font-bold text-[14px] ${isSelected ? "text-white" : ""}`}>
                                     {slot}
                                   </p>
                                   <span
-                                    className={`block text-[11px] mt-1 font-medium ${
+                                    className={`block text-[11px] mt-1 font-bold ${
                                       isFull
                                         ? "text-red-400"
-                                        : "text-green-400"
+                                        : isSelected ? "text-white/90" : "text-green-400"
                                     }`}
                                   >
                                     {isFull
@@ -1372,10 +1316,10 @@ const Registration = () => {
                         key={lvl}
                         type="button"
                         onClick={() => updateForm("experience", lvl)}
-                        className={`px-5 py-2.5 rounded-full border font-semibold text-sm transition-all ${
+                        className={`px-6 py-3 rounded-full border font-bold text-sm transition-all ${
                           form.experience === lvl
-                            ? "border-cyan-500 bg-cyan-500/15 text-cyan-400"
-                            : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40"
+                            ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+                            : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
                         }`}
                       >
                         {lvl}
