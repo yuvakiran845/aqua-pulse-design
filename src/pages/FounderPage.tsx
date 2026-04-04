@@ -1,4 +1,4 @@
-import { Award, BadgeCheck, Medal, MessageCircle, ChevronRight } from "lucide-react";
+import { Award, BadgeCheck, Medal, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import founderImg from "@/assets/founder-real.png";
@@ -11,10 +11,7 @@ const experiencesData = [
   "Certified in sports physiology and injury prevention"
 ];
 
-const WHATSAPP_NUMBER =
-  import.meta.env.VITE_WHATSAPP_NUMBER ?? "918330945566";
-const WHATSAPP_FOUNDER_MESSAGE =
-  import.meta.env.VITE_WHATSAPP_FOUNDER_MESSAGE ?? "Hello, I want to enquire about swimming programs.";
+
 
 const certificationsData = [
   {

@@ -6,10 +6,7 @@ import { CheckCircle, MapPin, Mail } from "lucide-react";
 
 const ENQUIRY_API_ENDPOINT =
   "https://script.google.com/macros/s/AKfycbwBy9C9Hl025Su-t27JEOvK_KGSYBiMufMU-VClkAjCWlELU7aWnisUjjK5cP1WNt59lg/exec";
-const WHATSAPP_NUMBER =
-  import.meta.env.VITE_WHATSAPP_NUMBER ?? "918330945566";
-const WHATSAPP_FLOATING_MESSAGE =
-  import.meta.env.VITE_WHATSAPP_FLOATING_MESSAGE ?? "Hello, I want to enquire about swimming programs.";
+
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -67,7 +64,7 @@ const EnquirySection = () => {
       params.append("program", form.program);
       params.append("message", form.message.trim());
 
-      const response = await fetch(ENQUIRY_API_ENDPOINT, {
+      await fetch(ENQUIRY_API_ENDPOINT, {
         method: "POST",
         mode: "no-cors",
         body: params,

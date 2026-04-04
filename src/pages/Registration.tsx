@@ -486,7 +486,7 @@ const Registration = () => {
     });
   };
 
-  const upd = updateForm;
+
 
   // Photo upload via FileReader → base64
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

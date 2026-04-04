@@ -1,5 +1,5 @@
 import { Droplets, Trophy, Building2, ShieldCheck, Zap, Target, Star, Users, Briefcase } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 
 const divisions = [
   {
