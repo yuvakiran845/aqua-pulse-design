@@ -23,21 +23,23 @@ const BenefitsSection = () => {
         </div>
 
         {/* All screens: card-based grid layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
           {benefits.map((b) => (
             <div
               key={b.title}
-              className="card-glow rounded-xl border border-border/60 bg-gradient-to-b from-navy-mid/60 to-navy-light/40 p-5 lg:p-6 flex flex-col gap-3"
+              className="group relative rounded-[2rem] border border-white/5 bg-[#0F172A]/30 backdrop-blur-md p-8 lg:p-10 flex flex-col gap-6 hover:scale-[1.03] hover:border-primary/20 hover:bg-[#0F172A]/50 hover:shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-all duration-500 overflow-hidden"
             >
-              <div className="flex items-center gap-3">
-                <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <b.icon className="w-5 h-5 text-primary" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="relative z-10 flex items-center gap-5">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-transparent text-primary border border-primary/10 group-hover:scale-110 group-hover:border-primary/30 group-hover:bg-primary/20 transition-all duration-500 shadow-inner">
+                  <b.icon className="w-7 h-7 stroke-[1.5]" />
                 </div>
-                <h3 className="text-base lg:text-lg font-semibold text-foreground">
+                <h3 className="text-lg lg:text-xl font-heading font-black text-white tracking-tight leading-tight">
                   {b.title}
                 </h3>
               </div>
-              <p className="text-sm lg:text-base text-muted-foreground">
+              <p className="relative z-10 text-[15px] lg:text-[16px] text-[#94A3B8] font-medium leading-relaxed group-hover:text-slate-200 transition-colors duration-500">
                 {b.desc}
               </p>
             </div>

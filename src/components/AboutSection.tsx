@@ -1,8 +1,10 @@
+import { Users, Award, Calendar, Layers } from "lucide-react";
+
 const stats = [
-  { value: "3000+", label: "Students Trained", emoji: "🏊" },
-  { value: "10+", label: "Certified Coaches", emoji: "🎓" },
-  { value: "5+", label: "Years Experience", emoji: "⭐" },
-  { value: "10", label: "Programs Offered", emoji: "📋" },
+  { value: "3000+", label: "Students Trained", icon: Users },
+  { value: "10+", label: "Certified Coaches", icon: Award },
+  { value: "5+", label: "Years Experience", icon: Calendar },
+  { value: "10", label: "Programs Offered", icon: Layers },
 ];
 
 const AboutSection = () => {
@@ -25,17 +27,22 @@ const AboutSection = () => {
           </p>
         </div>
 
+
         {/* Stats row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="relative bg-gradient-to-br from-primary/10 via-card to-accent/5 rounded-2xl border border-primary/20 p-5 md:p-6 text-center group hover:scale-[1.03] hover:border-primary/40 hover:shadow-[0_0_30px_hsl(192_82%_50%/0.15)] transition-all duration-300 overflow-hidden"
+              className="relative bg-[#0F172A]/40 backdrop-blur-md rounded-[2rem] border border-white/5 p-6 md:p-10 text-center group hover:scale-[1.05] hover:border-primary/30 hover:shadow-[0_0_40px_rgba(34,211,238,0.15)] transition-all duration-500 overflow-hidden"
             >
-              <div className="pointer-events-none absolute -top-4 -right-4 w-16 h-16 rounded-full bg-white/5 blur-xl" />
-              <div className="text-2xl mb-2">{stat.emoji}</div>
-              <div className="text-3xl md:text-4xl font-heading font-bold gradient-aqua-text mb-1">{stat.value}</div>
-              <p className="text-xs md:text-sm text-muted-foreground font-medium">{stat.label}</p>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent flex items-center justify-center mb-6 text-primary border border-primary/10 group-hover:scale-110 group-hover:bg-primary group-hover:text-black transition-all duration-500 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+                   <stat.icon className="w-6 h-6 stroke-[1.5]" />
+                </div>
+                <div className="text-3xl md:text-5xl font-heading font-black tracking-tighter text-white mb-2 group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-primary group-hover:bg-clip-text group-hover:text-transparent transition-all duration-500">{stat.value}</div>
+                <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">{stat.label}</p>
+              </div>
             </div>
           ))}
         </div>

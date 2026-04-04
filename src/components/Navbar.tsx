@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import logoImg from "@/assets/aqua-pulse-logo.png";
@@ -13,7 +15,21 @@ const navLinks = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
+  const location = useLocation();
   const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Initialize active tab based on path, but respect "no default blue for Home"
+    const currentPath = location.pathname;
+    if (currentPath === "/" || currentPath.includes("index.html")) {
+      // Don't set Home as active by default to satisfy user request
+      setActiveNavItem(null);
+    } else {
+      const active = navLinks.find(l => l.href !== "/" && !l.href.startsWith("/#") && currentPath.startsWith(l.href.split('#')[0]));
+      setActiveNavItem(active?.label || null);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -52,16 +68,26 @@ const Navbar = () => {
         </a>
 
         {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-8 flex-1 justify-end">
-          {navLinks.map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              className="text-[15px] font-bold text-foreground/80 hover:text-[#22D3EE] transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#22D3EE] after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-300"
-            >
-              {l.label}
-            </a>
-          ))}
+        <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">
+          {navLinks.map((l) => {
+            const isHighlighted = activeNavItem === l.label;
+
+            return (
+              <Link
+                key={l.label}
+                to={l.href}
+                onClick={() => setActiveNavItem(l.label)}
+                className={cn(
+                  "px-4 py-2.5 text-[14px] font-bold tracking-wide rounded-xl transition-all duration-300 whitespace-nowrap border flex items-center justify-center active:scale-95",
+                  isHighlighted 
+                    ? "bg-[#22D3EE] text-[#0F172A] border-[#22D3EE] shadow-[0_0_20px_rgba(34,211,238,0.35)]" 
+                    : "bg-[#0F172A]/30 text-[#CBD5E1] border-white/5 hover:border-[#22D3EE]/30 hover:bg-[#22D3EE]/10 hover:text-[#22D3EE] hover:shadow-[0_0_15px_rgba(34,211,238,0.15)]"
+                )}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Mobile toggle */}
@@ -72,18 +98,29 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden glass-effect border-t border-border/50 py-4">
-          <div className="container-main flex flex-col gap-4">
-            {navLinks.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="text-base font-bold text-foreground/90 hover:text-[#22D3EE] transition-colors py-2 border-b border-white/5"
-              >
-                {l.label}
-              </a>
-            ))}
+        <div className="lg:hidden glass-effect border-t border-border/50 py-6 animate-fade-in">
+          <div className="container-main flex flex-col gap-3">
+            {navLinks.map((l) => {
+              const isHighlighted = activeNavItem === l.label;
+              return (
+                <Link
+                  key={l.label}
+                  to={l.href}
+                  onClick={() => {
+                    setActiveNavItem(l.label);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "text-base font-bold px-5 py-3.5 rounded-2xl transition-all duration-200 border flex items-center",
+                    isHighlighted 
+                      ? "bg-[#22D3EE] text-[#0F172A] border-[#22D3EE] shadow-[0_0_15px_rgba(34,211,238,0.25)]" 
+                      : "bg-white/5 text-foreground/90 border-white/5 hover:bg-white/10 hover:text-[#22D3EE]"
+                  )}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}

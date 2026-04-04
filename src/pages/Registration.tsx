@@ -157,9 +157,9 @@ const drawIdCard = async (
   roundRect(ctx, 1.5, 1.5, w - 3, h - 3, 23);
   ctx.stroke();
 
-  // 2. Logo - COVER FIT CIRCULAR CONTAINER
-  const logoCircleR = 70; 
-  const logoCenterY = 100;
+  // 2. Logo - FULL FIT CIRCULAR CONTAINER
+  const logoCircleR = 85; 
+  const logoCenterY = 115;
   const logoX = w / 2;
   const logoY = logoCenterY;
 
@@ -182,8 +182,9 @@ const drawIdCard = async (
       ctx.arc(logoX, logoY, logoCircleR - 1, 0, Math.PI * 2);
       ctx.clip();
       
-      // zoom=1.8 ensures the graphic touches the edges (cover fit)
-      const zoom = 1.8; 
+      // Fit the logo inside the circle with maximum scale to remove gaps
+      // zoom=1.0 with a larger circle ensures full width without crop
+      const zoom = 1.0; 
       const drawSize = logoCircleR * 2 * zoom;
       ctx.drawImage(logo, logoX - drawSize/2, logoY - drawSize/2, drawSize, drawSize);
       ctx.restore();
@@ -254,9 +255,9 @@ const drawIdCard = async (
   ctx.stroke();
 
   // 5. Name (Prominent)
-  const nameY = photoCY + photoR + 36;
+  const nameY = photoCY + photoR + 38;
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 30px 'Arial', sans-serif";
+  ctx.font = "bold 32px 'Arial', sans-serif";
   ctx.letterSpacing = "1px";
   ctx.fillText((form.studentName || "STUDENT NAME").toUpperCase(), w / 2, nameY);
 
@@ -292,8 +293,8 @@ const drawIdCard = async (
   ];
 
   const rowCount = fields.length;
-  const rowH = infoHAvailable / rowCount;
-  const labelColW = 160; // Fixed width for labels
+  const rowH = (infoHAvailable / rowCount) + 4; // Tighter but bigger fonts
+  const labelColW = 185; // Increased for bigger heading fonts
   const gutter = 15;
 
   fields.forEach((f, idx) => {
@@ -310,17 +311,17 @@ const drawIdCard = async (
 
     // LABEL (Right-aligned to column edge)
     ctx.textAlign = "right";
-    ctx.fillStyle = "rgba(34, 211, 238, 0.9)";
-    ctx.font = "bold 11px 'Arial', sans-serif";
-    ctx.letterSpacing = "1.5px";
-    ctx.fillText(f.label + "  :", PAD + labelColW, centerY + 4);
+    ctx.fillStyle = "rgba(34, 211, 238, 1)"; // Fully visible cyan
+    ctx.font = "bold 17px 'Arial', sans-serif";
+    ctx.letterSpacing = "0.5px";
+    ctx.fillText(f.label + "  :", PAD + labelColW, centerY + 6);
 
     // VALUE (Left-aligned)
     ctx.textAlign = "left";
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "bold 17px 'Arial', sans-serif";
     ctx.letterSpacing = "0px";
-    ctx.fillText(f.value, PAD + labelColW + gutter, centerY + 4);
+    ctx.fillText(f.value, PAD + labelColW + gutter, centerY + 6);
   });
 
   // 7. Signature & Footer Block
