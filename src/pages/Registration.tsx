@@ -648,7 +648,7 @@ const Registration = () => {
         </head>
         <body>
           <img src="${dataUrl}" />
-          <script>window.onload=()=>{window.print();}<\/script>
+          <script>window.onload=()=>{window.print();}</script>
         </body>
       </html>
     `);
