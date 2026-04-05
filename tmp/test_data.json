@@ -1,0 +1,22 @@
+{
+  "studentId": "TEST-123",
+  "studentName": "Test",
+  "billNumber": "B-001",
+  "dob": "2020-01-01",
+  "age": "6",
+  "gender": "Male",
+  "parentName": "Parent",
+  "mobile": "1234567890",
+  "email": "t@t.com",
+  "address": "Addr",
+  "city": "City",
+  "state": "State",
+  "postalCode": "123456",
+  "trainingCenter": "R&R",
+  "program": "Summer",
+  "batchType": "Weekday",
+  "slotTiming": "6am",
+  "medicalConditions": "None",
+  "allergies": "None",
+  "experience": "Beginner"
+}

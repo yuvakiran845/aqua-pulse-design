@@ -58,8 +58,7 @@ const TIME_SLOTS: Record<string, string[]> = {
 const SLOT_LIMIT = 10;
 
 // Google Sheets Web App URL
-const GOOGLE_SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbyVVNzW7lb36rMbFLRR6Nn5Vw8pQTyaallQKtmo-QqNJw-cEIjQfUCso8bHY87qdY2U/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyt-2B1yPLyAZSQZQ3nocBWg7wnBSZL0Z779hABsAjtWoBWoMxQ1YWljtpLokjAQq3mKA/exec";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 
@@ -96,17 +95,25 @@ interface Registration {
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
-const getCenterCode = (center: string): string =>
-  center.includes("R&R") ? "R&R" : "NSL";
-
-const calculateAge = (dob: string): string => {
-  if (!dob) return "";
-  const birth = new Date(dob);
+const calculateAge = (dobValue: string): string => {
+  if (!dobValue) return "";
+  const dob = new Date(dobValue);
   const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+
+  let age = today.getFullYear() - dob.getFullYear();
+  const m = today.getMonth() - dob.getMonth();
+
+  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
   return String(age);
+};
+
+const generateStudentId = (center: string = "R&R", billId: string = "") => {
+  const centerCode = center.includes("R&R") ? "R&R" : "SLG";
+  const idSuffix = billId.trim() || "XXXX";
+  return `APSA-2026-${centerCode}-${idSuffix}`;
 };
 
 // ─── CANVAS ID CARD RENDERER ──────────────────────────────────────────────────
@@ -397,7 +404,7 @@ function roundRect(
 const Registration = () => {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const [studentId, setStudentId] = useState("");
+  const [studentId, setStudentId] = useState("APSA-2026-R&R-XXXX");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sheetError, setSheetError] = useState<string | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
@@ -454,19 +461,12 @@ const Registration = () => {
       (r) => r.center === center && r.program === program && r.slot === slot
     ).length;
 
-  // Student ID generator
-  const generateStudentId = useCallback(
-    (centerForId: string): string => {
-      const centerCode = getCenterCode(centerForId);
-      const centerCount =
-        registrations.filter((r) => r.center === centerForId).length + 1;
-      return `APSA-2026-${centerCode}-${String(centerCount).padStart(4, "0")}`;
-    },
-    [registrations]
-  );
+  // Update Student ID preview when center or bill number changes
+  useEffect(() => {
+    setStudentId(generateStudentId(form.center, form.billId));
+  }, [form.center, form.billId]);
 
-  // Preview ID (for Step 2 display)
-  const previewId = form.center ? generateStudentId(form.center) : "APSA-2026-???-0001";
+  const previewId = studentId;
 
   // Field updater with cascade reset
   const updateForm = (field: keyof FormState, value: string | boolean) => {
@@ -519,49 +519,46 @@ const Registration = () => {
 
   // Google Sheets SUBMISSION
   const postToGoogleSheets = async (stId: string) => {
-    console.log("Submitting Data to Sheets:", form);
-    
+    const data = {
+      studentId: stId,
+      studentName: form.studentName,
+      billNumber: form.billId,
+      dob: form.dob,
+      age: form.age,
+      gender: form.gender,
+      parentName: form.parentName,
+      mobile: form.mobile,
+      email: form.email,
+      address: form.address,
+      city: form.city,
+      state: form.state,
+      postalCode: form.postal,
+      trainingCenter: form.center,
+      program: form.program,
+      batchType: form.batchType,
+      slotTiming: form.slot,
+      medicalConditions: form.medical,
+      allergies: form.allergies,
+      experience: form.experience
+    };
+
     try {
-      const registeredAt = new Date().toISOString().split("T")[0];
-
-      // We use URLSearchParams to ensure data is sent as form-encoded fields.
-      // This is the most robust way to interact with Google Apps Script doPost(e)
-      // because it populates e.parameter with the keys we define here.
-      const data = new URLSearchParams();
+      console.log("Submitting Data to Sheets:", data);
       
-      // REQUIRED MAPPING (Order matches the common spreadsheet structure to prevent accidental shifts)
-      data.append("studentId", stId);
-      data.append("registeredAt", registeredAt);
-      data.append("studentName", form.studentName || "");
-      data.append("billNumber", form.billId || ""); // Using both billNumber and billId for compatibility
-      data.append("billId", form.billId || "");
-      data.append("dob", form.dob || "");
-      data.append("age", form.age || "");
-      data.append("gender", form.gender || "");
-      data.append("parentName", form.parentName || "");
-      data.append("mobile", form.mobile || "");
-      data.append("whatsapp", form.whatsapp || ""); // Included to prevent shifting if script expects it
-      data.append("email", form.email || "");
-      data.append("address", form.address || "");
-      data.append("city", form.city || "");
-      data.append("state", form.state || "");
-      data.append("postal", form.postal || "");
-      data.append("center", form.center || "");
-      data.append("program", form.program || "");
-      data.append("batchType", form.batchType || "");
-      data.append("slot", form.slot || "");
-      data.append("medical", form.medical || "");
-      data.append("allergies", form.allergies || "");
-      data.append("experience", form.experience || "");
-
-      await fetch(GOOGLE_SHEET_URL, {
+      await fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
-        body: data,
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(data),
       });
+
+      // With no-cors, we can't read the result JSON, so we assume success if fetch didn't throw
+      return { status: "success" };
     } catch (err) {
-      console.warn("Google Sheets POST failed:", err);
-      setSheetError("Local submission successful. Cloud sync might be delayed.");
+      console.error("Google Sheets POST failed:", err);
+      throw err;
     }
   };
 
@@ -577,34 +574,37 @@ const Registration = () => {
     setIsSubmitting(true);
     setSheetError(null);
 
-    const id = generateStudentId(form.center);
-    setStudentId(id);
-
-    // Persist registration locally for slot counting
-    const newReg: Registration = {
-      center: form.center,
-      program: form.program,
-      slot: form.slot,
-    };
-    const updated = [...registrations, newReg];
-    setRegistrations(updated);
     try {
-      localStorage.setItem("apsa_registrations", JSON.stringify(updated));
-    } catch {
-      console.warn("localStorage quota exceeded");
-    }
-
-    await postToGoogleSheets(id);
-    setIsSubmitting(false);
-    setSubmitted(true);
-
-    // Render canvas after state settles
-    setTimeout(async () => {
-      if (canvasRef.current) {
-        await drawIdCard(canvasRef.current, form, id);
-        setCardReady(true);
+      await postToGoogleSheets(studentId);
+      
+      const newReg: Registration = {
+        center: form.center,
+        program: form.program,
+        slot: form.slot,
+      };
+      const updated = [...registrations, newReg];
+      setRegistrations(updated);
+      try {
+        localStorage.setItem("apsa_registrations", JSON.stringify(updated));
+      } catch {
+        console.warn("localStorage quota exceeded");
       }
-    }, 300);
+      
+      setIsSubmitting(false);
+      setSubmitted(true);
+      alert("✅ Registration Successful");
+
+      // Render canvas after state settles
+      setTimeout(async () => {
+        if (canvasRef.current) {
+          await drawIdCard(canvasRef.current, form, studentId);
+          setCardReady(true);
+        }
+      }, 300);
+    } catch (error) {
+      setIsSubmitting(false);
+      alert("❌ Submission Failed. Please check your network and try again.");
+    }
   };
 
   // ── Ensure canvas is rendered before any save operation ──
@@ -812,6 +812,8 @@ const Registration = () => {
                     medical: "", allergies: "", experience: "",
                     agreed: false, photoUrl: "",
                   });
+                  const newId = generateStudentId("", "");
+                  setStudentId(newId);
                 }}
                 className="flex items-center gap-2 px-7 py-3 rounded-full font-bold text-white border border-cyan-500/50 hover:bg-cyan-500/10 transition-all"
               >
@@ -939,6 +941,7 @@ const Registration = () => {
                     STUDENT FULL NAME <span className="text-red-400">*</span>
                   </label>
                   <input
+                    id="studentName"
                     type="text"
                     value={form.studentName}
                     onChange={(e) => updateForm("studentName", e.target.value)}
@@ -966,6 +969,7 @@ const Registration = () => {
                     BILL / RECEIPT NUMBER <span className="text-red-400">*</span>
                   </label>
                   <input
+                    id="billNumber"
                     type="text"
                     className={inputCls}
                     value={form.billId}
@@ -981,6 +985,7 @@ const Registration = () => {
                       DATE OF BIRTH <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="dob"
                       type="date"
                       value={form.dob}
                       onChange={(e) => updateForm("dob", e.target.value)}
@@ -990,6 +995,7 @@ const Registration = () => {
                   <div>
                     <label className={labelCls}>AGE</label>
                     <input
+                      id="age"
                       type="text"
                       value={form.age}
                       readOnly
@@ -1006,6 +1012,7 @@ const Registration = () => {
                       GENDER <span className="text-red-400">*</span>
                     </label>
                     <select
+                      id="gender"
                       value={form.gender}
                       onChange={(e) => updateForm("gender", e.target.value)}
                       className={inputCls}
@@ -1062,6 +1069,7 @@ const Registration = () => {
                     PARENT / GUARDIAN NAME <span className="text-red-400">*</span>
                   </label>
                   <input
+                    id="parentName"
                     type="text"
                     value={form.parentName}
                     onChange={(e) => updateForm("parentName", e.target.value)}
@@ -1075,6 +1083,7 @@ const Registration = () => {
                       MOBILE NUMBER <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="mobile"
                       type="tel"
                       value={form.mobile}
                       onChange={(e) => updateForm("mobile", e.target.value)}
@@ -1088,6 +1097,7 @@ const Registration = () => {
                     EMAIL ADDRESS <span className="text-red-400">*</span>
                   </label>
                   <input
+                    id="email"
                     type="email"
                     value={form.email}
                     onChange={(e) => updateForm("email", e.target.value)}
@@ -1099,6 +1109,7 @@ const Registration = () => {
                 <div>
                   <label className={labelCls}>FULL ADDRESS</label>
                   <textarea
+                    id="address"
                     value={form.address}
                     onChange={(e) => updateForm("address", e.target.value)}
                     className={`${inputCls} min-h-[80px] resize-none`}
@@ -1110,6 +1121,7 @@ const Registration = () => {
                   <div>
                     <label className={labelCls}>CITY</label>
                     <input
+                      id="city"
                       type="text"
                       value={form.city}
                       onChange={(e) => updateForm("city", e.target.value)}
@@ -1120,6 +1132,7 @@ const Registration = () => {
                   <div>
                     <label className={labelCls}>STATE</label>
                     <input
+                      id="state"
                       type="text"
                       value={form.state}
                       onChange={(e) => updateForm("state", e.target.value)}
@@ -1132,6 +1145,7 @@ const Registration = () => {
                 <div>
                   <label className={labelCls}>POSTAL CODE</label>
                   <input
+                    id="postalCode"
                     type="text"
                     value={form.postal}
                     onChange={(e) => updateForm("postal", e.target.value)}
@@ -1162,6 +1176,7 @@ const Registration = () => {
                     TRAINING CENTER <span className="text-red-400">*</span>
                   </label>
                   <select
+                    id="trainingCenter"
                     value={form.center}
                     onChange={(e) => updateForm("center", e.target.value)}
                     className={inputCls}
@@ -1182,6 +1197,7 @@ const Registration = () => {
                       PROGRAM <span className="text-red-400">*</span>
                     </label>
                     <select
+                      id="program"
                       value={form.program}
                       onChange={(e) => updateForm("program", e.target.value)}
                       className={inputCls}
@@ -1320,6 +1336,7 @@ const Registration = () => {
                 <div>
                   <label className={labelCls}>MEDICAL CONDITIONS (IF ANY)</label>
                   <textarea
+                    id="medicalConditions"
                     value={form.medical}
                     onChange={(e) => updateForm("medical", e.target.value)}
                     className={`${inputCls} min-h-[100px] resize-none`}
@@ -1330,6 +1347,7 @@ const Registration = () => {
                 <div>
                   <label className={labelCls}>ALLERGIES (IF ANY)</label>
                   <input
+                    id="allergies"
                     type="text"
                     value={form.allergies}
                     onChange={(e) => updateForm("allergies", e.target.value)}
