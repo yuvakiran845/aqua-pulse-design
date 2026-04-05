@@ -130,14 +130,14 @@ const drawIdCard = async (
 ): Promise<void> => {
   const SCALE = 3; // Higher scale for better print quality
   const W = 420 * SCALE;
-  const H = 640 * SCALE;
+  const H = 600 * SCALE;
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d")!;
   ctx.scale(SCALE, SCALE);
 
   const w = 420;
-  const h = 640;
+  const h = 600;
 
   // 1. Background & Border (Premium Gradient)
   const bgGrad = ctx.createLinearGradient(0, 0, w, h);
@@ -145,12 +145,12 @@ const drawIdCard = async (
   bgGrad.addColorStop(1, "#020d18");
   ctx.fillStyle = bgGrad;
   ctx.beginPath();
-  roundRect(ctx, 0, 0, w, h, 20);
+  roundRect(ctx, 0, 0, w, h, 18);
   ctx.fill();
 
   // Cyan Glow Effect (Internal)
   const radialGrad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w);
-  radialGrad.addColorStop(0, "rgba(0, 234, 255, 0.05)");
+  radialGrad.addColorStop(0, "rgba(0, 234, 255, 0.04)");
   radialGrad.addColorStop(1, "transparent");
   ctx.fillStyle = radialGrad;
   ctx.fillRect(0, 0, w, h);
@@ -161,14 +161,14 @@ const drawIdCard = async (
   ctx.stroke();
 
   // 2. Header: Logo (Full-Bleed Circular Badge)
-  const logoW = 120;
+  const logoW = 110;
   const logoX = (w - logoW) / 2;
-  const logoY = 22;
+  const logoY = 20;
 
   // Subtle Atmospheric Glow
   ctx.save();
   ctx.shadowColor = "rgba(0, 234, 255, 0.5)"; // Intensified glow
-  ctx.shadowBlur = 15;
+  ctx.shadowBlur = 12;
   ctx.beginPath();
   ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
   ctx.fillStyle = "rgba(2, 13, 24, 0.01)"; // Trigger shadow without showing fill
@@ -212,28 +212,28 @@ const drawIdCard = async (
   ctx.textAlign = "center";
   ctx.fillStyle = "#00eaff";
   ctx.font = "900 21px 'Inter', Arial, sans-serif";
-  ctx.shadowColor = "rgba(0, 234, 255, 0.3)";
-  ctx.shadowBlur = 10;
-  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, 158);
+  ctx.shadowColor = "rgba(0, 234, 255, 0.15)";
+  ctx.shadowBlur = 8;
+  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, 150);
   ctx.shadowBlur = 0;
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-  ctx.font = "700 10px 'Inter', Arial, sans-serif";
-  ctx.letterSpacing = "2px";
-  ctx.fillText("STUDENT IDENTITY CARD • 2026", w / 2, 172);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+  ctx.font = "700 9.5px 'Inter', Arial, sans-serif";
+  ctx.letterSpacing = "1.8px";
+  ctx.fillText("STUDENT IDENTITY CARD • 2026", w / 2, 162);
   ctx.letterSpacing = "0px";
 
   // 3. Center Section: Identity (Photo, Name, Badge)
-  const photoR = 62;
+  const photoR = 57.5;
   const photoCX = w / 2;
-  const photoCY = 245;
+  const photoCY = 230;
 
   // Photo Glow Ring
   const photoGrad = ctx.createLinearGradient(photoCX - photoR, photoCY - photoR, photoCX + photoR, photoCY + photoR);
   photoGrad.addColorStop(0, "#00eaff");
   photoGrad.addColorStop(1, "#0077ff");
   ctx.strokeStyle = photoGrad;
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 3.5;
   ctx.beginPath();
   ctx.arc(photoCX, photoCY, photoR + 4, 0, Math.PI * 2);
   ctx.stroke();
@@ -268,31 +268,31 @@ const drawIdCard = async (
 
   // Name
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "900 26px 'Inter', Arial, sans-serif";
-  ctx.fillText((form.studentName || "SRNYMJDSTU").toUpperCase(), w / 2, 332);
+  ctx.font = "900 25px 'Inter', Arial, sans-serif";
+  ctx.fillText((form.studentName || "SRNYMJDSTU").toUpperCase(), w / 2, 312);
 
   // ID Badge (Courier style)
   const idText = studentId || "APSA-2026-R&R-0001";
-  ctx.font = "bold 14px 'Courier New', monospace";
-  ctx.letterSpacing = "2px";
-  const idW = ctx.measureText(idText).width + 36;
+  ctx.font = "bold 13px 'Courier New', monospace";
+  ctx.letterSpacing = "1.5px";
+  const idW = ctx.measureText(idText).width + 32;
   const idX = (w - idW) / 2;
 
-  ctx.fillStyle = "rgba(0, 234, 255, 0.08)";
-  ctx.strokeStyle = "rgba(0, 234, 255, 0.2)";
+  ctx.fillStyle = "rgba(0, 234, 255, 0.06)";
+  ctx.strokeStyle = "rgba(0, 234, 255, 0.15)";
   ctx.beginPath();
-  roundRect(ctx, idX, 345, idW, 30, 10);
+  roundRect(ctx, idX, 325, idW, 28, 8);
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = "#00eaff";
-  ctx.fillText(idText, w / 2, 365);
+  ctx.fillText(idText, w / 2, 343);
   ctx.letterSpacing = "0px";
 
   // 4. Boxed Details Section
-  const detailsY = 392;
-  const detailsW = w - 50;
-  const detailsX = 25;
+  const detailsY = 370;
+  const detailsW = w - 40;
+  const detailsX = 20;
   
   const infoFields = [
     { label: "PROGRAM",         value: form.experience || "Beginners Program" }, 
@@ -303,58 +303,57 @@ const drawIdCard = async (
   ];
 
   infoFields.forEach((item, i) => {
-    const boxY = detailsY + i * 44;
+    const boxY = detailsY + i * 42;
     
     // Draw Box
-    ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.015)";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.01)";
     ctx.beginPath();
-    roundRect(ctx, detailsX, boxY, detailsW, 38, 8);
+    roundRect(ctx, detailsX, boxY, detailsW, 36, 8);
     ctx.fill();
     ctx.stroke();
 
     // Label
     ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(0, 234, 255, 0.55)";
-    ctx.font = "800 8px 'Inter', Arial, sans-serif";
-    ctx.letterSpacing = "1px";
-    ctx.fillText(item.label, detailsX + 16, boxY + 14);
+    ctx.fillStyle = "rgba(0, 234, 255, 0.5)";
+    ctx.font = "800 7.5px 'Inter', Arial, sans-serif";
+    ctx.letterSpacing = "0.8px";
+    ctx.fillText(item.label, detailsX + 16, boxY + 12);
     
     // Value
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "800 15px 'Inter', Arial, sans-serif";
-    ctx.letterSpacing = "0.1px";
-    ctx.fillText(item.value, detailsX + 16, boxY + 29);
+    ctx.font = "800 14.5px 'Inter', Arial, sans-serif";
     ctx.letterSpacing = "0px";
+    ctx.fillText(item.value, detailsX + 16, boxY + 27);
   });
 
   // 5. Footer: Signature & Contact (Firmly at the bottom)
-  const footerY = 630;
+  const footerY = 590;
   ctx.textAlign = "center";
   
-  ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-  ctx.font = "bold 9px 'Inter', Arial, sans-serif";
-  ctx.letterSpacing = "2.2px";
-  ctx.fillText("AUTHORISED SIGNATURE", w / 2, footerY - 40);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+  ctx.font = "bold 8.5px 'Inter', Arial, sans-serif";
+  ctx.letterSpacing = "2px";
+  ctx.fillText("AUTHORISED SIGNATURE", w / 2, footerY - 35);
 
   // Cyan Signature Wave Path
   ctx.strokeStyle = "#00eaff";
-  ctx.lineWidth = 1.2;
-  ctx.shadowColor = "rgba(0, 234, 255, 0.4)";
-  ctx.shadowBlur = 4;
+  ctx.lineWidth = 1;
+  ctx.shadowColor = "rgba(0, 234, 255, 0.3)";
+  ctx.shadowBlur = 3;
   ctx.beginPath();
-  ctx.moveTo(w / 2 - 42, footerY - 25);
-  ctx.bezierCurveTo(w / 2 - 21, footerY - 38, w / 2 + 21, footerY - 12, w / 2 + 42, footerY - 25);
+  ctx.moveTo(w / 2 - 40, footerY - 22);
+  ctx.bezierCurveTo(w / 2 - 20, footerY - 34, w / 2 + 20, footerY - 10, w / 2 + 40, footerY - 22);
   ctx.stroke();
   ctx.shadowBlur = 0;
 
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "800 14px 'Inter', Arial, sans-serif";
-  ctx.fillText("Founder & Program Director", w / 2, footerY - 8);
+  ctx.font = "800 13.5px 'Inter', Arial, sans-serif";
+  ctx.fillText("Founder & Program Director", w / 2, footerY - 6);
   
-  ctx.fillStyle = "rgba(0, 234, 255, 0.6)";
-  ctx.font = "bold 11px 'Inter', Arial, sans-serif";
-  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, footerY + 5);
+  ctx.fillStyle = "rgba(0, 234, 255, 0.5)";
+  ctx.font = "bold 10.5px 'Inter', Arial, sans-serif";
+  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, footerY + 6);
 
   // Contact Footer Line
   ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";

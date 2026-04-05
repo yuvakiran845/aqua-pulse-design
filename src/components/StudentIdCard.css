@@ -10,14 +10,14 @@
 
 .id-card {
   width: 420px;
-  min-height: 640px; /* Further reduced height for high-density professional structure */
+  min-height: 600px; /* Final super-compact institutional profile */
   background: linear-gradient(165deg, #061826 0%, #020d18 100%);
   border: 1px solid rgba(0, 234, 255, 0.2);
-  border-radius: 20px;
-  padding: 25px 25px; /* Tightened padding */
+  border-radius: 18px;
+  padding: 20px 20px; /* Reduced padding */
   color: white;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 234, 255, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 234, 255, 0.15);
   position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
@@ -34,19 +34,19 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(0, 234, 255, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 234, 255, 0.04) 0%, transparent 70%);
   pointer-events: none;
 }
 
 /* TOP LOGO & HEADER */
 .header {
-  margin-bottom: 2px;
+  margin-bottom: 0px;
 }
 
 .logo-wrapper {
-  width: 120px; /* Slightly smaller for tighter height */
-  height: 120px;
-  margin: 0 auto 8px;
+  width: 110px; /* Scaled down for 600px fit */
+  height: 110px;
+  margin: 0 auto 5px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
@@ -56,7 +56,7 @@
   padding: 0;
   line-height: 0;
   /* Enhanced luminous shining glow */
-  box-shadow: 0 0 15px rgba(0, 234, 255, 0.45); 
+  box-shadow: 0 0 12px rgba(0, 234, 255, 0.4); 
   background: transparent;
   position: relative;
 }
@@ -75,18 +75,18 @@
   font-weight: 900;
   color: #00eaff;
   margin: 0;
-  letter-spacing: 0.1px;
+  letter-spacing: 0.05px;
   text-transform: uppercase;
-  text-shadow: 0 0 12px rgba(0, 234, 255, 0.2);
+  text-shadow: 0 0 10px rgba(0, 234, 255, 0.15);
   white-space: nowrap;
 }
 
 .header p {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.5);
-  margin-top: 2px;
-  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 1px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
 }
 
@@ -95,17 +95,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 5px;
+  margin-top: 5px;
 }
 
 .photo-container {
-  width: 125px; /* Condensed photo for tighter height */
-  height: 125px;
+  width: 115px; /* Compact photo for 600px fit */
+  height: 115px;
   border-radius: 50%;
   padding: 4px;
   background: linear-gradient(135deg, #00eaff, #0077ff);
-  box-shadow: 0 0 15px rgba(0, 234, 255, 0.2);
+  box-shadow: 0 0 12px rgba(0, 234, 255, 0.15);
   margin-bottom: 0px;
 }
 
@@ -118,123 +118,123 @@
 }
 
 .student-name {
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 900;
   margin: 0;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 0.2px;
+  letter-spacing: 0px;
   line-height: 1;
 }
 
 .id-badge {
-  background: rgba(0, 234, 255, 0.08);
-  border: 1px solid rgba(0, 234, 255, 0.2);
-  padding: 5px 18px;
-  border-radius: 10px;
+  background: rgba(0, 234, 255, 0.06);
+  border: 1px solid rgba(0, 234, 255, 0.15);
+  padding: 4px 16px;
+  border-radius: 8px;
   font-family: 'Courier New', monospace;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   color: #00eaff;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
 }
 
 /* BOXED DETAILS LIST */
 .details-list {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .detail-box {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-  padding: 5px 16px;
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: 6px;
+  padding: 4px 14px;
   text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.01);
 }
 
 .detail-box-label {
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 800;
-  color: rgba(0, 234, 255, 0.55);
+  color: rgba(0, 234, 255, 0.5);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 0 0 1px 0;
+  letter-spacing: 0.8px;
+  margin: 0 0 0.5px 0;
 }
 
 .detail-box-value {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 800;
   color: white;
   margin: 0;
-  letter-spacing: 0.1px;
+  letter-spacing: 0px;
 }
 
 /* FOOTER */
 .footer {
   margin-top: auto;
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 2px;
 }
 
 .auth-label {
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
-  letter-spacing: 2.2px;
-  margin-bottom: 8px;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
 }
 
 .signature-box {
-  height: 30px; /* Very tight footer */
+  height: 25px; /* Extremely tight footer */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .signature-wave {
-  width: 85px;
-  filter: drop-shadow(0 0 5px rgba(0, 234, 255, 0.4));
+  width: 80px;
+  filter: drop-shadow(0 0 3px rgba(0, 234, 255, 0.3));
 }
 
 .footer p {
   margin: 0;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .founder-name {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   color: white;
 }
 
 .academy-footer {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  color: rgba(0, 234, 255, 0.6);
-  margin-bottom: 10px !important;
+  color: rgba(0, 234, 255, 0.5);
+  margin-bottom: 8px !important;
 }
 
 .contact-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.1px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0px;
 }
 
 .contact-footer .dot {
-  color: rgba(0, 234, 255, 0.4);
+  color: rgba(0, 234, 255, 0.3);
 }
 
 /* RESPONSIVE */
@@ -242,11 +242,11 @@
   .id-card {
     width: 100%;
     max-width: 400px;
-    padding: 20px 15px;
-    min-height: 600px;
+    padding: 15px 12px;
+    min-height: 560px;
   }
 
   .student-name {
-    font-size: 24px;
+    font-size: 22px;
   }
 }
