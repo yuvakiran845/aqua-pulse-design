@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, MapPin, Mail } from "lucide-react";
 
 const ENQUIRY_API_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbwBy9C9Hl025Su-t27JEOvK_KGSYBiMufMU-VClkAjCWlELU7aWnisUjjK5cP1WNt59lg/exec";
+  "https://script.google.com/macros/s/AKfycbzckFVv86JEhRHt2TenWveb4JkMuz1r-IcO4n0U6ZcFDSDbPoJh8MO3CXs-8PGMzWpE/exec";
 
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -44,34 +44,27 @@ const EnquirySection = () => {
     setSubmitError("");
     setIsSubmitting(true);
 
-    const payload = {
-      name: form.name.trim(),
-      phone: form.phone.trim(),
-      age: Number(form.age),
-      program: form.program,
-      message: form.message.trim(),
-    };
-
     try {
-      console.log("Sending formData:", payload);
+      console.log("Submitting Data:", {
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        age: form.age.trim(),
+        program: form.program,
+        message: form.message.trim(),
+      });
       
-      // We use text/plain to bypass CORS preflight while still sending 
-      // a valid JSON body that your script will parse.
-      const params = new URLSearchParams();
-      params.append("name", form.name.trim());
-      params.append("phone", form.phone.trim());
-      params.append("age", form.age.trim());
-      params.append("program", form.program);
-      params.append("message", form.message.trim());
-
       await fetch(ENQUIRY_API_ENDPOINT, {
         method: "POST",
         mode: "no-cors",
-        body: params,
+        body: JSON.stringify({
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          age: form.age.trim(),
+          program: form.program,
+          message: form.message.trim(),
+        }),
       });
 
-      // Google returns a 302 redirect for success. 
-      // In a production environment with CORS limitations, we check if the request was dispatched.
       toast.success("Enquiry sent successfully!", {
         description: "We will contact you shortly.",
         duration: 5000,
@@ -86,6 +79,8 @@ const EnquirySection = () => {
       setIsSubmitting(false);
     }
   };
+
+
 
   const inputClass = (field: string) =>
     `w-full bg-secondary/50 border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
