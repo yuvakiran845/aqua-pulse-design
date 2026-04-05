@@ -111,10 +111,10 @@ const calculateAge = (dobValue: string): string => {
   return String(age);
 };
 
-const generateStudentId = (center: string = "R&R", billId: string = "") => {
-  const centerCode = center.includes("R&R") ? "R&R" : "SLG";
-  const idSuffix = billId.trim() || "XXXX";
-  return `APSA-2026-${centerCode}-${idSuffix}`;
+const generateStudentId = (center: string, finalizedId?: string) => {
+  if (finalizedId) return finalizedId;
+  const centerCode = center.includes("R&R") ? "R&R" : "SL";
+  return `APSA-2026-${centerCode}-XXXX`;
 };
 
 // ─── CANVAS ID CARD RENDERER ──────────────────────────────────────────────────
@@ -450,10 +450,13 @@ const Registration = () => {
       (r) => r.center === center && r.program === program && r.slot === slot
     ).length;
 
-  // Update Student ID preview when center or bill number changes
+  // Update Student ID preview placeholder when center changes
   useEffect(() => {
-    setStudentId(generateStudentId(form.center, form.billId));
-  }, [form.center, form.billId]);
+    // We only update the preview if we haven't submitted yet
+    if (!submitted) {
+      setStudentId(generateStudentId(form.center));
+    }
+  }, [form.center, submitted]);
 
   const previewId = studentId;
 
@@ -534,17 +537,17 @@ const Registration = () => {
     try {
       console.log("Submitting Data to Sheets:", data);
 
-      await fetch(SCRIPT_URL, {
+      const response = await fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "text/plain;charset=utf-8"
         },
         body: JSON.stringify(data),
       });
 
-      // With no-cors, we can't read the result JSON, so we assume success if fetch didn't throw
-      return { status: "success" };
+      const result = await response.json();
+      console.log("Success Result:", result);
+      return result;
     } catch (err) {
       console.error("Google Sheets POST failed:", err);
       throw err;
@@ -564,7 +567,9 @@ const Registration = () => {
     setSheetError(null);
 
     try {
-      await postToGoogleSheets(studentId);
+      const result = await postToGoogleSheets(studentId);
+      const finalId = result.studentId || studentId;
+      setStudentId(finalId);
 
       const newReg: Registration = {
         center: form.center,
@@ -583,10 +588,10 @@ const Registration = () => {
       setSubmitted(true);
       alert("✅ Registration Successful");
 
-      // Render canvas after state settles
+      // Render canvas after state settles with the FINAL ID
       setTimeout(async () => {
         if (canvasRef.current) {
-          await drawIdCard(canvasRef.current, form, studentId);
+          await drawIdCard(canvasRef.current, form, finalId);
           setCardReady(true);
         }
       }, 300);
