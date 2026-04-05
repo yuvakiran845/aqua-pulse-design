@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import logoImg from "@/assets/aqua-pulse-logo.png";
+import StudentIdCard from "@/components/StudentIdCard";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 
@@ -127,82 +128,76 @@ const drawIdCard = async (
   form: FormState,
   studentId: string
 ): Promise<void> => {
-  const SCALE = 2; 
-  const W = 560 * SCALE;
-  const H = 820 * SCALE;
+  const SCALE = 3; // Higher scale for better print quality
+  const W = 380 * SCALE;
+  const H = 600 * SCALE;
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d")!;
   ctx.scale(SCALE, SCALE);
 
-  const w = 560;
-  const h = 820;
-  const PAD = 45; // Consistent side padding
+  const w = 380;
+  const h = 600;
 
-  // 1. Background & Border
+  // 1. Background & Border (Premium Gradient)
   const bgGrad = ctx.createLinearGradient(0, 0, w, h);
-  bgGrad.addColorStop(0, "#010A1A");
-  bgGrad.addColorStop(0.5, "#04162E");
-  bgGrad.addColorStop(1, "#010A1A");
+  bgGrad.addColorStop(0, "#061826");
+  bgGrad.addColorStop(1, "#020d18");
   ctx.fillStyle = bgGrad;
   ctx.beginPath();
   roundRect(ctx, 0, 0, w, h, 24);
   ctx.fill();
 
-  // Subtle scanlines / texture
-  ctx.globalAlpha = 0.04;
-  for (let i = 0; i < w; i += 4) {
-    ctx.fillStyle = i % 8 === 0 ? "#ffffff" : "#000000";
-    ctx.fillRect(i, 0, 1, h);
-  }
-  ctx.globalAlpha = 1.0;
+  // Cyan Glow Effect (Internal)
+  const radialGrad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w);
+  radialGrad.addColorStop(0, "rgba(0, 234, 255, 0.05)");
+  radialGrad.addColorStop(1, "transparent");
+  ctx.fillStyle = radialGrad;
+  ctx.fillRect(0, 0, w, h);
 
-  // Premium Outer Border
-  ctx.strokeStyle = "rgba(34,211,238,0.8)";
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  roundRect(ctx, 1.5, 1.5, w - 3, h - 3, 23);
+  // Border
+  ctx.strokeStyle = "rgba(0, 234, 255, 0.2)";
+  ctx.lineWidth = 1;
   ctx.stroke();
 
-  // 2. Logo - PREMIUM CIRCULAR RING CONTAINER
-  const logoCircleR = 75; 
-  const logoCenterY = 110;
-  const logoX = w / 2;
-  const logoY = logoCenterY;
+  // 2. Header: Logo (Full-Bleed Circular Badge)
+  const logoW = 130;
+  const logoX = (w - logoW) / 2;
+  const logoY = 30;
+
+  // Atmospheric Glow
+  ctx.save();
+  ctx.shadowColor = "rgba(0, 234, 255, 0.5)";
+  ctx.shadowBlur = 25;
+  ctx.beginPath();
+  ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(2, 13, 24, 0.1)";
+  ctx.fill();
+  ctx.restore();
 
   ctx.save();
-  // Clear ring background
+  // Circular clipping for logo
   ctx.beginPath();
-  ctx.arc(logoX, logoY, logoCircleR, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(1, 10, 26, 0.9)"; // Matches card background
-  ctx.fill();
+  ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
+  ctx.clip();
 
-  // Draw smooth gradient ring border
-  const ringGrad = ctx.createLinearGradient(logoX - logoCircleR, logoY - logoCircleR, logoX + logoCircleR, logoY + logoCircleR);
-  ringGrad.addColorStop(0, "#22D3EE"); // Cyan
-  ringGrad.addColorStop(1, "#0EA5E9"); // Deep Aqua
-  ctx.strokeStyle = ringGrad;
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  // Draw logo with "contain" strategy + padding
-  const PADDING = 14; // Space between logo and ring
-  const maxD = (logoCircleR - PADDING) * 2;
-  
   await new Promise<void>((resolve) => {
     const logo = new Image();
     logo.crossOrigin = "anonymous";
     logo.onload = () => {
+      // Logic for full-bleed cover + SCALE
       const iw = logo.width;
       const ih = logo.height;
-      
-      // Scale to "contain" logo within the padded circle (maxD)
-      const scale = Math.min(maxD / iw, maxD / ih);
+      const scaleBase = Math.max(logoW / iw, logoW / ih);
+      const scale = scaleBase * 1.5; // Final gap-free scaling
       const dw = iw * scale;
       const dh = ih * scale;
-      
-      // Draw centered
-      ctx.drawImage(logo, logoX - dw/2, logoY - dh/2, dw, dh);
+
+      // Offset Y correction (-4%) to remove top/bottom gaps
+      const dx = logoX + logoW / 2 - dw / 2;
+      const dy = (logoY + logoW / 2 - dh / 2) - (dh * 0.04);
+
+      ctx.drawImage(logo, dx, dy, dw, dh);
       resolve();
     };
     logo.onerror = () => resolve();
@@ -210,35 +205,32 @@ const drawIdCard = async (
   });
   ctx.restore();
 
-  // 3. Typography & Hierarchy (Centered Header)
-  const titleY = logoY + logoCircleR + 32;
+  // Header: Text
   ctx.textAlign = "center";
+  ctx.fillStyle = "#00eaff";
+  ctx.font = "bold 19px 'Inter', Arial, sans-serif";
+  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, 175);
 
-  // Academy Name
-  ctx.fillStyle = "#22D3EE";
-  ctx.font = "bold 22px 'Arial', sans-serif";
-  ctx.letterSpacing = "2px";
-  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, titleY);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+  ctx.font = "600 11px 'Inter', Arial, sans-serif";
+  ctx.letterSpacing = "3px";
+  ctx.fillText("STUDENT IDENTITY CARD - 2026", w / 2, 195);
+  ctx.letterSpacing = "0px";
 
-  // Subtitle
-  ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-  ctx.font = "bold 13px 'Arial', sans-serif";
-  ctx.letterSpacing = "4px";
-  ctx.fillText("STUDENT IDENTITY CARD  •  2026", w / 2, titleY + 24);
-
-  // Thin separator line
-  ctx.strokeStyle = "rgba(34, 211, 238, 0.35)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(PAD + 20, titleY + 40);
-  ctx.lineTo(w - PAD - 20, titleY + 40);
-  ctx.stroke();
-
-  // 4. Photo Section
-  const photoY = titleY + 68;
-  const photoR = 66;
+  // 3. Center Info: Photo
+  const photoR = 70;
   const photoCX = w / 2;
-  const photoCY = photoY + photoR;
+  const photoCY = 285;
+
+  // Photo Glow Ring
+  const photoGrad = ctx.createLinearGradient(photoCX - photoR, photoCY - photoR, photoCX + photoR, photoCY + photoR);
+  photoGrad.addColorStop(0, "#00eaff");
+  photoGrad.addColorStop(1, "#0077ff");
+  ctx.strokeStyle = photoGrad;
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.arc(photoCX, photoCY, photoR + 5, 0, Math.PI * 2);
+  ctx.stroke();
 
   if (form.photoUrl) {
     await new Promise<void>((resolve) => {
@@ -248,14 +240,13 @@ const drawIdCard = async (
         ctx.beginPath();
         ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
         ctx.clip();
-        
-        // Center-cover scaling for non-square photos
+
         const iw = img.width;
         const ih = img.height;
         const scale = Math.max((photoR * 2) / iw, (photoR * 2) / ih);
         const dw = iw * scale;
         const dh = ih * scale;
-        ctx.drawImage(img, photoCX - dw/2, photoCY - dh/2, dw, dh);
+        ctx.drawImage(img, photoCX - dw / 2, photoCY - dh / 2, dw, dh);
         ctx.restore();
         resolve();
       };
@@ -263,134 +254,91 @@ const drawIdCard = async (
       img.src = form.photoUrl;
     });
   } else {
-    ctx.fillStyle = "rgba(34,211,238,0.08)";
+    ctx.fillStyle = "#071222";
     ctx.beginPath();
     ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // Stylish Photo Ring
-  ctx.strokeStyle = "#22D3EE";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.arc(photoCX, photoCY, photoR + 6, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // 5. Name (Prominent)
-  const nameY = photoCY + photoR + 38;
+  // Name
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 32px 'Arial', sans-serif";
-  ctx.letterSpacing = "1px";
-  ctx.fillText((form.studentName || "STUDENT NAME").toUpperCase(), w / 2, nameY);
+  ctx.font = "900 28px 'Inter', Arial, sans-serif";
+  ctx.fillText((form.studentName || "AFZAL").toUpperCase(), w / 2, 395);
 
-  // Student ID Badge
+  // ID Badge
   const idText = studentId;
-  const idBadgeY = nameY + 12;
-  ctx.font = "bold 16px 'Courier New', monospace";
-  const idW = ctx.measureText(idText).width + 64;
+  ctx.font = "bold 14px 'Courier New', monospace";
+  const idW = ctx.measureText(idText).width + 32;
   const idX = (w - idW) / 2;
-  
-  ctx.fillStyle = "rgba(34, 211, 238, 0.12)";
-  ctx.strokeStyle = "rgba(34, 211, 238, 1)";
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  roundRect(ctx, idX, idBadgeY, idW, 36, 10);
-  ctx.fill();
-  ctx.stroke();
-  
-  ctx.fillStyle = "#FFFFFF";
-  ctx.fillText(idText, w / 2, idBadgeY + 23);
 
-  // 6. Information Section (Two-Column Grid)
-  const infoYStart = idBadgeY + 75;
-  const sigSectionH = 160;
-  const infoHAvailable = h - infoYStart - sigSectionH - 40;
-  
-  const fields = [
-    { label: "TRAINING CENTER", value: form.center || "No Center" },
-    { label: "BATCH TIME",      value: form.slot    || "No Slot" },
-    { label: "BATCH TYPE",      value: form.batchType || "No Batch" },
-    { label: "EXPERIENCE",      value: form.experience || "Beginner" },
-    { label: "ACADEMIC YEAR",   value: "2026" },
-  ];
-
-  const rowCount = fields.length;
-  const rowH = (infoHAvailable / rowCount) + 4; // Tighter but bigger fonts
-  const labelColW = 185; // Increased for bigger heading fonts
-  const gutter = 15;
-
-  fields.forEach((f, idx) => {
-    const rowTop = infoYStart + idx * rowH;
-    const centerY = rowTop + rowH / 2;
-
-    // Subtle alternate row shading
-    if (idx % 2 === 0) {
-      ctx.fillStyle = "rgba(34, 211, 238, 0.05)";
-      ctx.beginPath();
-      roundRect(ctx, PAD, rowTop + 5, w - PAD * 2, rowH - 10, 8);
-      ctx.fill();
-    }
-
-    // LABEL (Right-aligned to column edge)
-    ctx.textAlign = "right";
-    ctx.fillStyle = "rgba(34, 211, 238, 1)"; // Fully visible cyan
-    ctx.font = "bold 17px 'Arial', sans-serif";
-    ctx.letterSpacing = "0.5px";
-    ctx.fillText(f.label + "  :", PAD + labelColW, centerY + 6);
-
-    // VALUE (Left-aligned)
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "bold 17px 'Arial', sans-serif";
-    ctx.letterSpacing = "0px";
-    ctx.fillText(f.value, PAD + labelColW + gutter, centerY + 6);
-  });
-
-  // 7. Signature & Footer Block
-  const sigBlockTop = h - sigSectionH - 20;
-
-  ctx.strokeStyle = "rgba(34, 211, 238, 0.3)";
+  ctx.fillStyle = "rgba(0, 234, 255, 0.1)";
+  ctx.strokeStyle = "rgba(0, 234, 255, 0.4)";
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(PAD, sigBlockTop);
-  ctx.lineTo(w - PAD, sigBlockTop);
+  roundRect(ctx, idX, 405, idW, 30, 12);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#00eaff";
+  ctx.fillText(idText, w / 2, 425);
+
+  // Details Table (2-column layout in canvas)
+  const fields = [
+    { label: "Training Center", value: form.center || "No Center" },
+    { label: "Batch Time", value: form.slot || "No Slot" },
+    { label: "Batch Type", value: form.batchType || "No Batch" },
+    { label: "Experience", value: form.experience || "Beginner" },
+    { label: "Academic Year", value: "2026" },
+  ];
+
+  const tableY = 460;
+  const colW = w / 2;
+  const rowH = 40;
+
+  fields.forEach((f, idx) => {
+    const col = idx % 2;
+    const row = Math.floor(idx / 2);
+    const x = col === 0 ? 30 : w / 2 + 10;
+    const y = tableY + row * rowH;
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = "rgba(0, 234, 255, 0.8)";
+    ctx.font = "800 9px 'Inter', sans-serif";
+    ctx.fillText(f.label.toUpperCase(), x, y);
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "600 13px 'Inter', sans-serif";
+    ctx.fillText(f.value, x, y + 18);
+  });
+
+  // 4. Footer
+  const footerY = 540;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+  ctx.beginPath();
+  ctx.moveTo(30, footerY);
+  ctx.lineTo(w - 30, footerY);
   ctx.stroke();
 
   ctx.textAlign = "center";
-  ctx.fillStyle = "rgba(148, 163, 184, 0.9)";
-  ctx.font = "9px 'Arial', sans-serif";
-  ctx.letterSpacing = "2px";
-  ctx.fillText("AUTHORISED SIGNATURE", w / 2, sigBlockTop + 18);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+  ctx.font = "10px 'Inter', sans-serif";
+  ctx.fillText("AUTHORISED SIGNATURE", w / 2, footerY + 15);
 
-  // Handwritten wave signature
+  // Handwritten Wave / Placeholder for image
   ctx.strokeStyle = "#FFFFFF";
-  ctx.lineWidth = 2.5;
-  ctx.lineCap = "round";
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  const sx = w / 2 - 80;
-  const sy = sigBlockTop + 42;
-  ctx.moveTo(sx, sy);
-  ctx.bezierCurveTo(sx + 30, sy - 12, sx + 50, sy + 12, sx + 85, sy);
-  ctx.bezierCurveTo(sx + 115, sy - 12, sx + 135, sy + 12, sx + 160, sy);
+  ctx.moveTo(w / 2 - 40, footerY + 30);
+  ctx.bezierCurveTo(w / 2 - 20, footerY + 20, w / 2 + 20, footerY + 40, w / 2 + 40, footerY + 30);
   ctx.stroke();
 
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 15px 'Arial', sans-serif";
-  ctx.fillText("Founder & Program Director", w / 2, sigBlockTop + 68);
+  ctx.font = "bold 14px 'Inter', sans-serif";
+  ctx.fillText("Founder & Program Director", w / 2, footerY + 50);
 
-  ctx.fillStyle = "#22D3EE";
-  ctx.font = "bold 11px 'Arial', sans-serif";
-  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, sigBlockTop + 84);
-
-  // Contact Footer
-  const footerY = h - 38;
-  ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
-  ctx.font = "bold 10px 'Arial', sans-serif";
-  ctx.fillText("aquapulsehub.in  •  aquapulsehub@gmail.com", w / 2, footerY);
-
-  // Bottom Cyan Accent
-  ctx.fillStyle = "#22D3EE";
-  ctx.fillRect(0, h - 6, w, 6);
+  ctx.fillStyle = "#00eaff";
+  ctx.font = "600 11px 'Inter', sans-serif";
+  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, footerY + 65);
 };
 
 // Canvas helper: rounded rect
@@ -559,7 +507,7 @@ const Registration = () => {
 
     try {
       console.log("Submitting Data to Sheets:", data);
-      
+
       await fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
@@ -591,7 +539,7 @@ const Registration = () => {
 
     try {
       await postToGoogleSheets(studentId);
-      
+
       const newReg: Registration = {
         center: form.center,
         program: form.program,
@@ -604,7 +552,7 @@ const Registration = () => {
       } catch {
         console.warn("localStorage quota exceeded");
       }
-      
+
       setIsSubmitting(false);
       setSubmitted(true);
       alert("✅ Registration Successful");
@@ -724,8 +672,8 @@ const Registration = () => {
             <div className="mb-8">
               <h1
                 className="text-3xl md:text-5xl font-black tracking-tighter mb-2"
-                style={{ 
-                  color: "#FFFFFF", 
+                style={{
+                  color: "#FFFFFF",
                   fontFamily: "'Inter', sans-serif",
                   textShadow: "0 0 20px rgba(34,211,238,0.4)"
                 }}
@@ -741,14 +689,27 @@ const Registration = () => {
               )}
             </div>
 
-            {/* Canvas ID Card */}
+            {/* Premium React ID Card Preview */}
+            <div className="mx-auto mb-4 scale-[0.85] sm:scale-100 origin-top">
+              <StudentIdCard
+                studentName={form.studentName}
+                studentId={studentId}
+                trainingCenter={form.center}
+                slotTiming={form.slot}
+                batchType={form.batchType}
+                experience={form.experience}
+                photoUrl={form.photoUrl}
+              />
+            </div>
+
+            {/* Hidden Canvas for High-Resolution Export */}
             <div
-              className="mx-auto rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(34,211,238,0.2)] border border-cyan-500/40"
-              style={{ maxWidth: 420 }}
+              className="fixed -left-[10000px] -top-[10000px]"
+              style={{ width: 380, height: 600 }}
             >
               <canvas
                 ref={canvasRef}
-                style={{ width: "100%", height: "auto", display: "block" }}
+                style={{ width: "380px", height: "600px", display: "block" }}
               />
             </div>
 
@@ -860,8 +821,8 @@ const Registration = () => {
               alignItems: "center",
               gap: "14px"
             }}>
-              <img 
-                src={logoImg} 
+              <img
+                src={logoImg}
                 alt="Aqua Pulse Logo"
                 style={{
                   width: "56px",
@@ -870,7 +831,7 @@ const Registration = () => {
                   borderRadius: "50%"
                 }}
               />
-              
+
               <div>
                 <div style={{
                   fontFamily: "'Bebas Neue', sans-serif",
@@ -905,33 +866,30 @@ const Registration = () => {
               <div key={label} className="flex items-center">
                 <div className="flex flex-col items-center shrink-0">
                   <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${
-                      i < step
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${i < step
                         ? "bg-cyan-500 border-cyan-500 text-white"
                         : i === step
-                        ? "border-cyan-500 text-cyan-400 bg-transparent shadow-[0_0_12px_rgba(34,211,238,0.4)]"
-                        : "border-slate-700 text-slate-500 bg-transparent"
-                    }`}
+                          ? "border-cyan-500 text-cyan-400 bg-transparent shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                          : "border-slate-700 text-slate-500 bg-transparent"
+                      }`}
                   >
                     {i < step ? "✓" : i + 1}
                   </div>
                   <span
-                    className={`text-[10px] mt-1.5 font-medium transition-all duration-300 ${
-                      i === step
+                    className={`text-[10px] mt-1.5 font-medium transition-all duration-300 ${i === step
                         ? "text-cyan-400 opacity-100 scale-100 block"
                         : i < step
-                        ? "text-cyan-500 md:block hidden opacity-60"
-                        : "text-slate-500 md:block hidden opacity-40"
-                    } whitespace-nowrap md:whitespace-normal text-center max-w-[60px] md:max-w-none`}
+                          ? "text-cyan-500 md:block hidden opacity-60"
+                          : "text-slate-500 md:block hidden opacity-40"
+                      } whitespace-nowrap md:whitespace-normal text-center max-w-[60px] md:max-w-none`}
                   >
                     {label}
                   </span>
                 </div>
                 {i < STEPS.length - 1 && (
                   <div
-                    className={`flex-1 h-[2px] mx-1 sm:mx-2 mt-[-18px] transition-all duration-500 sm:block hidden ${
-                      i < step ? "bg-cyan-500" : "bg-slate-700/60"
-                    }`}
+                    className={`flex-1 h-[2px] mx-1 sm:mx-2 mt-[-18px] transition-all duration-500 sm:block hidden ${i < step ? "bg-cyan-500" : "bg-slate-700/60"
+                      }`}
                   />
                 )}
               </div>
@@ -1093,19 +1051,19 @@ const Registration = () => {
                   />
                 </div>
 
-                  <div>
-                    <label className={labelCls}>
-                      MOBILE NUMBER <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      id="mobile"
-                      type="tel"
-                      value={form.mobile}
-                      onChange={(e) => updateForm("mobile", e.target.value)}
-                      className={inputCls}
-                      placeholder="10-digit mobile number"
-                    />
-                  </div>
+                <div>
+                  <label className={labelCls}>
+                    MOBILE NUMBER <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    id="mobile"
+                    type="tel"
+                    value={form.mobile}
+                    onChange={(e) => updateForm("mobile", e.target.value)}
+                    className={inputCls}
+                    placeholder="10-digit mobile number"
+                  />
+                </div>
 
                 <div>
                   <label className={labelCls}>
@@ -1239,11 +1197,10 @@ const Registration = () => {
                           key={b}
                           type="button"
                           onClick={() => updateForm("batchType", b)}
-                          className={`px-5 py-2.5 rounded-xl border font-bold text-sm transition-all ${
-                            form.batchType === b
+                          className={`px-5 py-2.5 rounded-xl border font-bold text-sm transition-all ${form.batchType === b
                               ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
                               : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
-                          }`}
+                            }`}
                         >
                           {b}
                         </button>
@@ -1281,23 +1238,21 @@ const Registration = () => {
                                   onClick={() =>
                                     !isFull && updateForm("slot", slot)
                                   }
-                                  className={`w-[200px] text-left px-4 py-3.5 rounded-xl border transition-all ${
-                                    isFull
+                                  className={`w-[200px] text-left px-4 py-3.5 rounded-xl border transition-all ${isFull
                                       ? "border-slate-700/50 bg-transparent opacity-50 cursor-not-allowed"
                                       : isSelected
-                                      ? "border-cyan-500 bg-cyan-500 text-white font-bold shadow-[0_0_25px_rgba(34,211,238,0.6)] scale-[1.02]"
-                                      : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50 hover:bg-white/5"
-                                  }`}
+                                        ? "border-cyan-500 bg-cyan-500 text-white font-bold shadow-[0_0_25px_rgba(34,211,238,0.6)] scale-[1.02]"
+                                        : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50 hover:bg-white/5"
+                                    }`}
                                 >
                                   <p className={`font-bold text-[14px] ${isSelected ? "text-white" : ""}`}>
                                     {slot}
                                   </p>
                                   <span
-                                    className={`block text-[11px] mt-1 font-bold ${
-                                      isFull
+                                    className={`block text-[11px] mt-1 font-bold ${isFull
                                         ? "text-red-400"
                                         : isSelected ? "text-white/90" : "text-green-400"
-                                    }`}
+                                      }`}
                                   >
                                     {isFull
                                       ? "Batch Full"
@@ -1381,11 +1336,10 @@ const Registration = () => {
                         key={lvl}
                         type="button"
                         onClick={() => updateForm("experience", lvl)}
-                        className={`px-6 py-3 rounded-full border font-bold text-sm transition-all ${
-                          form.experience === lvl
+                        className={`px-6 py-3 rounded-full border font-bold text-sm transition-all ${form.experience === lvl
                             ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
                             : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
-                        }`}
+                          }`}
                       >
                         {lvl}
                       </button>
