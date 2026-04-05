@@ -129,15 +129,15 @@ const drawIdCard = async (
   studentId: string
 ): Promise<void> => {
   const SCALE = 3; // Higher scale for better print quality
-  const W = 380 * SCALE;
-  const H = 600 * SCALE;
+  const W = 420 * SCALE;
+  const H = 640 * SCALE;
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d")!;
   ctx.scale(SCALE, SCALE);
 
-  const w = 380;
-  const h = 600;
+  const w = 420;
+  const h = 640;
 
   // 1. Background & Border (Premium Gradient)
   const bgGrad = ctx.createLinearGradient(0, 0, w, h);
@@ -145,7 +145,7 @@ const drawIdCard = async (
   bgGrad.addColorStop(1, "#020d18");
   ctx.fillStyle = bgGrad;
   ctx.beginPath();
-  roundRect(ctx, 0, 0, w, h, 24);
+  roundRect(ctx, 0, 0, w, h, 20);
   ctx.fill();
 
   // Cyan Glow Effect (Internal)
@@ -156,14 +156,14 @@ const drawIdCard = async (
   ctx.fillRect(0, 0, w, h);
 
   // Border
-  ctx.strokeStyle = "rgba(0, 234, 255, 0.2)";
+  ctx.strokeStyle = "rgba(0, 234, 255, 0.25)";
   ctx.lineWidth = 1;
   ctx.stroke();
 
   // 2. Header: Logo (Full-Bleed Circular Badge)
-  const logoW = 130;
+  const logoW = 120;
   const logoX = (w - logoW) / 2;
-  const logoY = 30;
+  const logoY = 22;
 
   // Subtle Atmospheric Glow
   ctx.save();
@@ -208,31 +208,34 @@ const drawIdCard = async (
   });
   ctx.restore();
 
-  // Header: Text
+  // Header Title
   ctx.textAlign = "center";
   ctx.fillStyle = "#00eaff";
-  ctx.font = "bold 19px 'Inter', Arial, sans-serif";
-  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, 175);
+  ctx.font = "900 21px 'Inter', Arial, sans-serif";
+  ctx.shadowColor = "rgba(0, 234, 255, 0.3)";
+  ctx.shadowBlur = 10;
+  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, 158);
+  ctx.shadowBlur = 0;
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-  ctx.font = "600 11px 'Inter', Arial, sans-serif";
-  ctx.letterSpacing = "3px";
-  ctx.fillText("STUDENT IDENTITY CARD - 2026", w / 2, 195);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+  ctx.font = "700 10px 'Inter', Arial, sans-serif";
+  ctx.letterSpacing = "2px";
+  ctx.fillText("STUDENT IDENTITY CARD • 2026", w / 2, 172);
   ctx.letterSpacing = "0px";
 
-  // 3. Center Info: Photo
-  const photoR = 70;
+  // 3. Center Section: Identity (Photo, Name, Badge)
+  const photoR = 62;
   const photoCX = w / 2;
-  const photoCY = 285;
+  const photoCY = 245;
 
   // Photo Glow Ring
   const photoGrad = ctx.createLinearGradient(photoCX - photoR, photoCY - photoR, photoCX + photoR, photoCY + photoR);
   photoGrad.addColorStop(0, "#00eaff");
   photoGrad.addColorStop(1, "#0077ff");
   ctx.strokeStyle = photoGrad;
-  ctx.lineWidth = 5;
+  ctx.lineWidth = 4;
   ctx.beginPath();
-  ctx.arc(photoCX, photoCY, photoR + 5, 0, Math.PI * 2);
+  ctx.arc(photoCX, photoCY, photoR + 4, 0, Math.PI * 2);
   ctx.stroke();
 
   if (form.photoUrl) {
@@ -257,7 +260,7 @@ const drawIdCard = async (
       img.src = form.photoUrl;
     });
   } else {
-    ctx.fillStyle = "#071222";
+    ctx.fillStyle = "#031424";
     ctx.beginPath();
     ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
     ctx.fill();
@@ -265,83 +268,104 @@ const drawIdCard = async (
 
   // Name
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "900 28px 'Inter', Arial, sans-serif";
-  ctx.fillText((form.studentName || "AFZAL").toUpperCase(), w / 2, 395);
+  ctx.font = "900 26px 'Inter', Arial, sans-serif";
+  ctx.fillText((form.studentName || "SRNYMJDSTU").toUpperCase(), w / 2, 332);
 
-  // ID Badge
-  const idText = studentId;
+  // ID Badge (Courier style)
+  const idText = studentId || "APSA-2026-R&R-0001";
   ctx.font = "bold 14px 'Courier New', monospace";
-  const idW = ctx.measureText(idText).width + 32;
+  ctx.letterSpacing = "2px";
+  const idW = ctx.measureText(idText).width + 36;
   const idX = (w - idW) / 2;
 
-  ctx.fillStyle = "rgba(0, 234, 255, 0.1)";
-  ctx.strokeStyle = "rgba(0, 234, 255, 0.4)";
-  ctx.lineWidth = 1;
+  ctx.fillStyle = "rgba(0, 234, 255, 0.08)";
+  ctx.strokeStyle = "rgba(0, 234, 255, 0.2)";
   ctx.beginPath();
-  roundRect(ctx, idX, 405, idW, 30, 12);
+  roundRect(ctx, idX, 345, idW, 30, 10);
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = "#00eaff";
-  ctx.fillText(idText, w / 2, 425);
+  ctx.fillText(idText, w / 2, 365);
+  ctx.letterSpacing = "0px";
 
-  // Details Table (2-column layout in canvas)
-  const fields = [
-    { label: "Training Center", value: form.center || "No Center" },
-    { label: "Batch Time", value: form.slot || "No Slot" },
-    { label: "Batch Type", value: form.batchType || "No Batch" },
-    { label: "Experience", value: form.experience || "Beginner" },
-    { label: "Academic Year", value: "2026" },
+  // 4. Boxed Details Section
+  const detailsY = 392;
+  const detailsW = w - 50;
+  const detailsX = 25;
+  
+  const infoFields = [
+    { label: "PROGRAM",         value: form.experience || "Beginners Program" }, 
+    { label: "TRAINING CENTER", value: form.center || "R&R Swimming Pool" },
+    { label: "BATCH TIME",      value: form.slot || "6:00 AM - 7:00 AM" },
+    { label: "BATCH TYPE",      value: form.batchType || "Weekday Batch" },
+    { label: "ACADEMIC YEAR",   value: "2026" },
   ];
 
-  const tableY = 460;
-  const colW = w / 2;
-  const rowH = 40;
+  infoFields.forEach((item, i) => {
+    const boxY = detailsY + i * 44;
+    
+    // Draw Box
+    ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.015)";
+    ctx.beginPath();
+    roundRect(ctx, detailsX, boxY, detailsW, 38, 8);
+    ctx.fill();
+    ctx.stroke();
 
-  fields.forEach((f, idx) => {
-    const col = idx % 2;
-    const row = Math.floor(idx / 2);
-    const x = col === 0 ? 30 : w / 2 + 10;
-    const y = tableY + row * rowH;
-
+    // Label
     ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(0, 234, 255, 0.8)";
-    ctx.font = "800 9px 'Inter', sans-serif";
-    ctx.fillText(f.label.toUpperCase(), x, y);
-
+    ctx.fillStyle = "rgba(0, 234, 255, 0.55)";
+    ctx.font = "800 8px 'Inter', Arial, sans-serif";
+    ctx.letterSpacing = "1px";
+    ctx.fillText(item.label, detailsX + 16, boxY + 14);
+    
+    // Value
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "600 13px 'Inter', sans-serif";
-    ctx.fillText(f.value, x, y + 18);
+    ctx.font = "800 15px 'Inter', Arial, sans-serif";
+    ctx.letterSpacing = "0.1px";
+    ctx.fillText(item.value, detailsX + 16, boxY + 29);
+    ctx.letterSpacing = "0px";
   });
 
-  // 4. Footer
-  const footerY = 540;
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-  ctx.beginPath();
-  ctx.moveTo(30, footerY);
-  ctx.lineTo(w - 30, footerY);
-  ctx.stroke();
-
+  // 5. Footer: Signature & Contact (Firmly at the bottom)
+  const footerY = 630;
   ctx.textAlign = "center";
-  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-  ctx.font = "10px 'Inter', sans-serif";
-  ctx.fillText("AUTHORISED SIGNATURE", w / 2, footerY + 15);
+  
+  ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+  ctx.font = "bold 9px 'Inter', Arial, sans-serif";
+  ctx.letterSpacing = "2.2px";
+  ctx.fillText("AUTHORISED SIGNATURE", w / 2, footerY - 40);
 
-  // Handwritten Wave / Placeholder for image
-  ctx.strokeStyle = "#FFFFFF";
-  ctx.lineWidth = 2;
+  // Cyan Signature Wave Path
+  ctx.strokeStyle = "#00eaff";
+  ctx.lineWidth = 1.2;
+  ctx.shadowColor = "rgba(0, 234, 255, 0.4)";
+  ctx.shadowBlur = 4;
   ctx.beginPath();
-  ctx.moveTo(w / 2 - 40, footerY + 30);
-  ctx.bezierCurveTo(w / 2 - 20, footerY + 20, w / 2 + 20, footerY + 40, w / 2 + 40, footerY + 30);
+  ctx.moveTo(w / 2 - 42, footerY - 25);
+  ctx.bezierCurveTo(w / 2 - 21, footerY - 38, w / 2 + 21, footerY - 12, w / 2 + 42, footerY - 25);
   ctx.stroke();
+  ctx.shadowBlur = 0;
 
   ctx.fillStyle = "#FFFFFF";
-  ctx.font = "bold 14px 'Inter', sans-serif";
-  ctx.fillText("Founder & Program Director", w / 2, footerY + 50);
+  ctx.font = "800 14px 'Inter', Arial, sans-serif";
+  ctx.fillText("Founder & Program Director", w / 2, footerY - 8);
+  
+  ctx.fillStyle = "rgba(0, 234, 255, 0.6)";
+  ctx.font = "bold 11px 'Inter', Arial, sans-serif";
+  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, footerY + 5);
 
-  ctx.fillStyle = "#00eaff";
-  ctx.font = "600 11px 'Inter', sans-serif";
-  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, footerY + 65);
+  // Contact Footer Line
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+  ctx.beginPath();
+  ctx.moveTo(30, footerY + 10);
+  ctx.lineTo(w - 30, footerY + 10);
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+  ctx.font = "600 10px 'Inter', Arial, sans-serif";
+  ctx.fillText("aquapulsehub.in  •  aquapulseswimmingacademy@gmail.com", w / 2, footerY + 28);
 };
 
 // Canvas helper: rounded rect
