@@ -165,18 +165,18 @@ const drawIdCard = async (
   const logoX = (w - logoW) / 2;
   const logoY = 30;
 
-  // Atmospheric Glow
+  // Subtle Atmospheric Glow
   ctx.save();
-  ctx.shadowColor = "rgba(0, 234, 255, 0.5)";
-  ctx.shadowBlur = 25;
+  ctx.shadowColor = "rgba(0, 234, 255, 0.5)"; // Intensified glow
+  ctx.shadowBlur = 15;
   ctx.beginPath();
   ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(2, 13, 24, 0.1)";
+  ctx.fillStyle = "rgba(2, 13, 24, 0.01)"; // Trigger shadow without showing fill
   ctx.fill();
   ctx.restore();
 
   ctx.save();
-  // Circular clipping for logo
+  // Circular clipping for absolute edge-to-edge focal fit
   ctx.beginPath();
   ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
   ctx.clip();
@@ -185,19 +185,22 @@ const drawIdCard = async (
     const logo = new Image();
     logo.crossOrigin = "anonymous";
     logo.onload = () => {
-      // Logic for full-bleed cover + SCALE
+      // Logic to maximize logo and minimize silver border
       const iw = logo.width;
       const ih = logo.height;
       const scaleBase = Math.max(logoW / iw, logoW / ih);
-      const scale = scaleBase * 1.5; // Final gap-free scaling
+      const scale = scaleBase * 1.35; // Zoom into the emblem core
       const dw = iw * scale;
       const dh = ih * scale;
 
-      // Offset Y correction (-4%) to remove top/bottom gaps
-      const dx = logoX + logoW / 2 - dw / 2;
-      const dy = (logoY + logoW / 2 - dh / 2) - (dh * 0.04);
+      // Centering with -2% focal correction
+      const dx = logoX + (logoW - dw) / 2;
+      const dy = (logoY + (logoW - dh) / 2) - (dh * 0.02);
 
+      // Enhance colors for more "shine"
+      ctx.filter = "saturate(1.15) brightness(1.1) contrast(1.05)";
       ctx.drawImage(logo, dx, dy, dw, dh);
+      ctx.filter = "none";
       resolve();
     };
     logo.onerror = () => resolve();
@@ -867,20 +870,20 @@ const Registration = () => {
                 <div className="flex flex-col items-center shrink-0">
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${i < step
-                        ? "bg-cyan-500 border-cyan-500 text-white"
-                        : i === step
-                          ? "border-cyan-500 text-cyan-400 bg-transparent shadow-[0_0_12px_rgba(34,211,238,0.4)]"
-                          : "border-slate-700 text-slate-500 bg-transparent"
+                      ? "bg-cyan-500 border-cyan-500 text-white"
+                      : i === step
+                        ? "border-cyan-500 text-cyan-400 bg-transparent shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                        : "border-slate-700 text-slate-500 bg-transparent"
                       }`}
                   >
                     {i < step ? "✓" : i + 1}
                   </div>
                   <span
                     className={`text-[10px] mt-1.5 font-medium transition-all duration-300 ${i === step
-                        ? "text-cyan-400 opacity-100 scale-100 block"
-                        : i < step
-                          ? "text-cyan-500 md:block hidden opacity-60"
-                          : "text-slate-500 md:block hidden opacity-40"
+                      ? "text-cyan-400 opacity-100 scale-100 block"
+                      : i < step
+                        ? "text-cyan-500 md:block hidden opacity-60"
+                        : "text-slate-500 md:block hidden opacity-40"
                       } whitespace-nowrap md:whitespace-normal text-center max-w-[60px] md:max-w-none`}
                   >
                     {label}
@@ -1198,8 +1201,8 @@ const Registration = () => {
                           type="button"
                           onClick={() => updateForm("batchType", b)}
                           className={`px-5 py-2.5 rounded-xl border font-bold text-sm transition-all ${form.batchType === b
-                              ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                              : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
+                            ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+                            : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
                             }`}
                         >
                           {b}
@@ -1239,10 +1242,10 @@ const Registration = () => {
                                     !isFull && updateForm("slot", slot)
                                   }
                                   className={`w-[200px] text-left px-4 py-3.5 rounded-xl border transition-all ${isFull
-                                      ? "border-slate-700/50 bg-transparent opacity-50 cursor-not-allowed"
-                                      : isSelected
-                                        ? "border-cyan-500 bg-cyan-500 text-white font-bold shadow-[0_0_25px_rgba(34,211,238,0.6)] scale-[1.02]"
-                                        : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50 hover:bg-white/5"
+                                    ? "border-slate-700/50 bg-transparent opacity-50 cursor-not-allowed"
+                                    : isSelected
+                                      ? "border-cyan-500 bg-cyan-500 text-white font-bold shadow-[0_0_25px_rgba(34,211,238,0.6)] scale-[1.02]"
+                                      : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50 hover:bg-white/5"
                                     }`}
                                 >
                                   <p className={`font-bold text-[14px] ${isSelected ? "text-white" : ""}`}>
@@ -1250,8 +1253,8 @@ const Registration = () => {
                                   </p>
                                   <span
                                     className={`block text-[11px] mt-1 font-bold ${isFull
-                                        ? "text-red-400"
-                                        : isSelected ? "text-white/90" : "text-green-400"
+                                      ? "text-red-400"
+                                      : isSelected ? "text-white/90" : "text-green-400"
                                       }`}
                                   >
                                     {isFull
@@ -1337,8 +1340,8 @@ const Registration = () => {
                         type="button"
                         onClick={() => updateForm("experience", lvl)}
                         className={`px-6 py-3 rounded-full border font-bold text-sm transition-all ${form.experience === lvl
-                            ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                            : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
+                          ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+                          : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
                           }`}
                       >
                         {lvl}
