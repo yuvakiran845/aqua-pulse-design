@@ -74,11 +74,11 @@ const HubSportsArena = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pt-20">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-20 md:pt-24 md:pb-24 overflow-hidden flex-1">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden flex-1">
         {/* Concentric Rings Background */}
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
           <div className="absolute w-[300px] h-[300px] rounded-full border border-white" />
@@ -88,50 +88,52 @@ const HubSportsArena = () => {
           <div className="absolute w-[1500px] h-[1500px] rounded-full border border-white" />
         </div>
 
-        <div className="container-main relative z-10 max-w-7xl mx-auto">
-          <div className="max-w-3xl">
+        <div className="container-main relative z-10">
+          <div className="max-w-3xl space-y-8">
             {/* Badges */}
-            <div className="flex flex-wrap gap-3 mb-8">
-              <span className="px-4 py-1.5 rounded-full border border-[#FBBF24]/50 bg-[#FBBF24]/10 text-[#FBBF24] text-xs font-semibold tracking-wide">
-                Sports Development
+            <div className="flex flex-wrap gap-2.5">
+              <span className="px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] sm:text-xs font-black tracking-widest uppercase">
+                SPORTS DEVELOPMENT
               </span>
-              <span className="px-4 py-1.5 rounded-full border border-[#22D3EE]/50 bg-[#22D3EE]/10 text-[#22D3EE] text-xs font-semibold tracking-wide">
-                Event Management
+              <span className="px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-[10px] sm:text-xs font-black tracking-widest uppercase">
+                EVENT MANAGEMENT
               </span>
-              <span className="px-4 py-1.5 rounded-full border border-red-500/50 bg-red-500/10 text-red-400 text-xs font-semibold tracking-wide flex items-center gap-1.5">
-                <span>🚀</span> Coming Soon
+              <span className="px-4 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-400 text-[10px] sm:text-xs font-black tracking-widest uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                COMING SOON
               </span>
             </div>
 
             {/* Main Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-black tracking-tight leading-[1.05] mb-6">
-              <span className="block text-white">HUB SPORTS</span>
-              <span className="block text-[#FCD34D]">ARENA</span>
-            </h1>
-
-            {/* Single Accent Line */}
-            <div className="w-16 h-1 bg-gradient-to-r from-[#FBBF24] to-transparent mb-5" />
+            <div className="space-y-4">
+              <h1 className="text-[clamp(2.5rem,10vw,4.5rem)] font-heading font-black tracking-tighter leading-none">
+                <span className="block text-white">HUB SPORTS</span>
+                <span className="block gradient-aqua-text">ARENA</span>
+              </h1>
+              <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-transparent rounded-full" />
+            </div>
 
             {/* Subtitle */}
-            <h2 className="text-xl md:text-2xl text-[#22D3EE] font-medium mb-3">
-              Sports Development & Event Management
-            </h2>
-
-            {/* Description */}
-            <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-xl mb-8">
-              A dedicated platform for building sporting excellence, managing professional
-              events, and developing athletes from grassroots to elite levels.
-            </p>
+            <div className="space-y-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl text-primary font-bold tracking-tight">
+                Nurturing Champions. Hosting Excellence.
+              </h2>
+              <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-medium">
+                A dedicated ecosystem for building sporting excellence and managing professional
+                events, from grassroots development to elite competitive stages.
+              </p>
+            </div>
 
             {/* Coming Soon Card */}
-            <div className="inline-flex flex-col sm:flex-row items-center gap-5 px-6 py-5 bg-[#0F172A]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-              <div className="text-4xl shrink-0 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]">⏳</div>
-              <div className="text-center sm:text-left">
-                <h3 className="text-xl font-heading font-bold text-[#FBBF24] tracking-wider mb-1">
-                  COMING SOON...
+            <div className="inline-flex flex-col sm:flex-row items-center gap-6 px-8 py-6 bg-card/60 backdrop-blur-xl rounded-[2rem] border border-white/5 shadow-2xl relative group">
+               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+               <div className="text-5xl sm:text-6xl shrink-0 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)] animate-pulse">⏳</div>
+               <div className="text-center sm:text-left">
+                <h3 className="text-2xl font-heading font-black text-amber-500 tracking-widest mb-1">
+                  PRE-LAUNCH STATUS
                 </h3>
-                <p className="text-muted-foreground text-sm">
-                  We're building something exciting. Stay tuned!
+                <p className="text-slate-400 text-sm font-medium">
+                  We're crafting a world-class experience. Stay updated!
                 </p>
               </div>
             </div>

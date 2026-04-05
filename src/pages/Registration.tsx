@@ -295,7 +295,7 @@ const drawIdCard = async (
   const detailsX = 20;
   
   const infoFields = [
-    { label: "PROGRAM",         value: form.experience || "Beginners Program" }, 
+    { label: "PROGRAM",         value: form.program || "Beginners Program" }, 
     { label: "TRAINING CENTER", value: form.center || "R&R Swimming Pool" },
     { label: "BATCH TIME",      value: form.slot || "6:00 AM - 7:00 AM" },
     { label: "BATCH TYPE",      value: form.batchType || "Weekday Batch" },
@@ -721,16 +721,19 @@ const Registration = () => {
             </div>
 
             {/* Premium React ID Card Preview */}
-            <div className="mx-auto mb-4 scale-[0.85] sm:scale-100 origin-top">
-              <StudentIdCard
-                studentName={form.studentName}
-                studentId={studentId}
-                trainingCenter={form.center}
-                slotTiming={form.slot}
-                batchType={form.batchType}
-                experience={form.experience}
-                photoUrl={form.photoUrl}
-              />
+            <div className="mx-auto mb-4 overflow-hidden" style={{ height: "calc(600px * 0.85)" }}>
+              <div className="scale-[0.85] origin-top">
+                <StudentIdCard
+                  studentName={form.studentName}
+                  studentId={studentId}
+                  trainingCenter={form.center}
+                  slotTiming={form.slot}
+                  batchType={form.batchType}
+                  experience={form.experience}
+                  programName={form.program}
+                  photoUrl={form.photoUrl}
+                />
+              </div>
             </div>
 
             {/* Hidden Canvas for High-Resolution Export */}

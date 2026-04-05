@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type TouchEvent } from "react";
+import { Link } from "react-router-dom";
 import {
   Dumbbell,
   ShieldCheck,
@@ -233,18 +234,22 @@ const SwimmingAcademy = () => {
               {existingPrograms.map((title) => {
                 const item = programMeta[title];
                 return (
-                  <article
+                  <Link
                     key={title}
-                    className={`relative bg-gradient-to-br ${item.color} rounded-2xl border p-5 md:p-6 transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-[0_0_32px_hsl(192_82%_50%/0.25)] overflow-hidden`}
+                    to={`/?program=${encodeURIComponent(title)}#enquiry`}
+                    className={`group relative flex flex-col bg-gradient-to-br ${item.color} rounded-2xl border p-5 md:p-6 transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-[0_0_32px_hsl(192_82%_50%/0.25)] overflow-hidden cursor-pointer`}
                   >
                     {/* decorative blur blob */}
-                    <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/5 blur-2xl" />
+                    <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/5 blur-2xl transition-transform group-hover:scale-150 duration-700" />
                     <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-black/20 backdrop-blur-sm flex items-center justify-center shrink-0 text-3xl shadow-inner">
+                      <div className="w-14 h-14 rounded-2xl bg-black/20 backdrop-blur-sm flex items-center justify-center shrink-0 text-3xl shadow-inner group-hover:scale-110 transition-transform duration-300">
                         {item.emoji}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-lg md:text-xl font-heading font-bold text-foreground mb-1">{title}</h3>
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <h3 className="text-lg md:text-xl font-heading font-bold text-foreground">{title}</h3>
+                          <span className="text-[10px] uppercase tracking-wider font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">Enquire Now →</span>
+                        </div>
                         <p className="text-xs md:text-sm text-foreground/70 leading-relaxed mb-4">{item.desc}</p>
                         <div className="flex flex-wrap gap-2">
                           {item.points.map((point) => (
@@ -258,7 +263,7 @@ const SwimmingAcademy = () => {
                         </div>
                       </div>
                     </div>
-                  </article>
+                  </Link>
                 );
               })}
             </div>

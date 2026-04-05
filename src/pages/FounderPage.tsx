@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import founderImg from "@/assets/founder-real.png";
 import logoImg from "@/assets/aqua-pulse-logo.png";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const experiencesData = [
   "Conducted multiple swimming camps across age groups",
@@ -72,47 +73,74 @@ const quickStats = [
 
 const FounderPage = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      <main className="pt-36 md:pt-32">
-        <section id="founder-page-section" className="py-16 md:py-20 -mt-[10px]">
-          <div className="w-full px-6 md:px-10 lg:px-16 xl:px-24">
-            <div className="space-y-4 md:space-y-8">
+      <main className="pt-24 lg:pt-32">
+        <section id="founder-page-section" className="section-padding relative overflow-hidden">
+          {/* Background Elements */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+          
+          <div className="container-main relative">
+            <div className="space-y-12 md:space-y-20">
 
               {/* Hero: Image + Name/Bio */}
-              <div className="grid lg:grid-cols-[auto_1fr] gap-0 lg:gap-4 items-center -mt-[30px]">
-                <div className="flex justify-center lg:justify-start mb-6 lg:mb-0">
-                  <div className="w-[240px] h-[240px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
-                    <img src={founderImg} alt="Founder - E. NAGA VENKAT" className="w-full h-full object-cover object-top" />
+              <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+                <div className="shrink-0 order-2 lg:order-1">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] lg:w-[420px] lg:h-[420px] rounded-full overflow-hidden border-4 border-primary/30 shadow-[0_0_50px_rgba(34,211,238,0.2)] group-hover:border-primary/60 transition-all duration-500">
+                      <img src={founderImg} alt="Founder - E. NAGA VENKAT" className="w-full h-full object-cover object-top scale-105 group-hover:scale-110 transition-transform duration-700" />
+                    </div>
+                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] sm:text-xs font-bold px-6 py-2 rounded-full shadow-xl tracking-wider">
+                      FOUNDER & MD
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-sm md:text-base font-bold tracking-[1.5px] text-[#22D3EE] uppercase">
-                    Head Coach & Program Director
+                <div className="text-center lg:text-left space-y-5 flex-1 order-1 lg:order-2">
+                  <div>
+                    <p className="text-sm sm:text-base font-bold tracking-[0.2em] text-primary uppercase mb-2">
+                       Visionary Leadership
+                    </p>
+                    <h1 className="text-4xl sm:text-5xl lg:text-7xl font-heading font-black text-white tracking-tight leading-none">
+                      E. NAGA VENKAT
+                    </h1>
+                  </div>
+                  <p className="text-base sm:text-lg lg:text-xl text-slate-400 leading-relaxed font-medium max-w-3xl">
+                    "Our vision is to create a world-class aquatic ecosystem where safety,
+                    performance, and passion converge to shape the next generation of swimmers. 
+                    At Aqua Pulse, we don't just teach swimming; we build champions for life."
                   </p>
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
-                    E. NAGA VENKAT
-                  </h1>
-                  <p className="text-base md:text-lg text-[#cbd5e1] leading-[1.7] max-w-4xl">
-                    Founder & Managing Director. "Our vision is to create a world-class aquatic ecosystem where safety,
-                    performance, and passion converge to shape the next generation of swimmers."
-                  </p>
+                  
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-slate-300">
+                       <Award className="w-4 h-4 text-primary" />
+                       14+ YEARS EXP
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-slate-300">
+                       <BadgeCheck className="w-4 h-4 text-primary" />
+                       ELITE COACH
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Quick Stats + Certifications */}
-              <div className="grid lg:grid-cols-[360px_1fr] gap-8 lg:gap-12 items-start">
+              <div className="grid lg:grid-cols-[400px_1fr] gap-10 md:gap-16 items-start">
                 {/* Quick Stats */}
-                <div className="space-y-4">
-                  <div className="rounded-2xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.7)] p-5 md:p-6 space-y-4">
-                    <h2 className="text-2xl font-heading font-bold text-foreground">Quick Stats</h2>
-                    <div className="grid gap-3">
+                <div className="space-y-6">
+                  <div className="rounded-[2rem] border border-white/5 bg-card/40 backdrop-blur-md p-8 sm:p-10 space-y-6 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                    <h2 className="text-2xl font-heading font-black text-white tracking-tight flex items-center gap-3">
+                      <div className="w-8 h-1 bg-primary rounded-full" />
+                      QUICK STATS
+                    </h2>
+                    <div className="grid gap-4">
                       {quickStats.map((stat) => (
-                        <div key={stat.label} className="rounded-xl border border-[rgba(34,211,238,0.2)] bg-[rgba(15,23,42,0.6)] p-4">
-                          <p className={`text-xs uppercase tracking-wider font-semibold ${stat.color}`}>{stat.label}</p>
-                          <p className="text-foreground font-medium text-base mt-1">{stat.value}</p>
+                        <div key={stat.label} className="rounded-2xl border border-white/5 bg-navy-mid/30 p-5 transition-all duration-300 hover:bg-navy-mid/50 hover:border-primary/20 group/stat">
+                          <p className={`text-[10px] uppercase tracking-[0.2em] font-black ${stat.color} mb-1.5`}>{stat.label}</p>
+                          <p className="text-white font-bold text-base sm:text-lg tracking-tight group-hover/stat:translate-x-1 transition-transform duration-300">{stat.value}</p>
                         </div>
                       ))}
                     </div>
@@ -120,24 +148,25 @@ const FounderPage = () => {
                 </div>
 
                 {/* Certifications & Affiliations */}
-                <div className="space-y-5">
-                  <h2 className="text-2xl md:text-3xl font-heading font-bold uppercase tracking-[1.5px] text-[#22D3EE]">
-                    Certifications & Affiliations
+                <div className="space-y-8">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-white tracking-tight text-center lg:text-left">
+                    PROFESSIONAL <span className="gradient-aqua-text">CREDENTIALS</span>
                   </h2>
-                  <div className="rounded-2xl border border-[rgba(34,211,238,0.15)] bg-[rgba(15,23,42,0.5)] p-5 md:p-6 space-y-1">
+                  <div className="rounded-[2.5rem] border border-white/5 bg-card/40 backdrop-blur-md p-2 sm:p-4 shadow-2xl space-y-2">
                     {certificationsData.map((item, idx) => (
                       <div
                         key={item.id}
-                        className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:bg-[rgba(34,211,238,0.05)] ${
-                          idx < certificationsData.length - 1 ? "border-b border-[rgba(34,211,238,0.1)]" : ""
-                        }`}
+                        className={cn(
+                          "flex items-center gap-4 sm:gap-6 p-5 sm:p-6 rounded-3xl transition-all duration-500 hover:bg-white/5 group/cert",
+                          idx < certificationsData.length - 1 ? "border-b border-white/5" : ""
+                        )}
                       >
-                        <div className={`${item.iconBg} p-3 rounded-xl shrink-0`}>
-                          <item.icon className={`w-6 h-6 ${item.iconClass}`} />
+                        <div className={cn(item.iconBg, "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover/cert:scale-110 transition-transform duration-500 shadow-inner")}>
+                          <item.icon className={cn("w-7 h-7 sm:w-8 sm:h-8", item.iconClass)} strokeWidth={1.5} />
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-foreground font-bold text-base md:text-lg">{item.title}</h3>
-                          <p className="text-sm md:text-base text-muted-foreground">{item.subtitle}</p>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-white font-black text-lg sm:text-xl tracking-tight mb-1">{item.title}</h3>
+                          <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed truncate sm:whitespace-normal">{item.subtitle}</p>
                         </div>
                         <button 
                           onClick={() => {
@@ -148,15 +177,15 @@ const FounderPage = () => {
                               document.body.appendChild(link);
                               link.click();
                               document.body.removeChild(link);
-                              toast.info(`Downloading ${item.title}...`, {
-                                description: "Make sure you've uploaded the real PDF to your public/certificates folder."
+                              toast.info(`Downloading credential...`, {
+                                description: `Verifying: ${item.title}`
                               });
                             }
                           }}
-                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:bg-[#22D3EE]/10 hover:text-[#22D3EE] hover:border-[#22D3EE]/30 transition-all group/btn"
+                          className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-black hover:border-primary transition-all duration-300 group/btn shrink-0 shadow-lg"
                           title="Download Certification"
                         >
-                          <Download className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                          <Download className="w-5 h-5 group-hover/btn:scale-110 transition-transform" strokeWidth={2.5} />
                         </button>
                       </div>
                     ))}

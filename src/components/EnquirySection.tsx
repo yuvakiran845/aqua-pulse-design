@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,11 +16,27 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 );
 
 const EnquirySection = () => {
+  const [searchParams] = useSearchParams();
   const [form, setForm] = useState({ name: "", phone: "", age: "", program: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  useEffect(() => {
+    const program = searchParams.get("program");
+    if (program) {
+      setForm((prev) => ({ ...prev, program }));
+    }
+    
+    // Handle hash scrolling for lazy-loaded section
+    if (window.location.hash === "#enquiry") {
+      setTimeout(() => {
+        const el = document.getElementById("enquiry");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, [searchParams]);
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -45,14 +62,6 @@ const EnquirySection = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Submitting Data:", {
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        age: form.age.trim(),
-        program: form.program,
-        message: form.message.trim(),
-      });
-      
       await fetch(ENQUIRY_API_ENDPOINT, {
         method: "POST",
         mode: "no-cors",
@@ -81,28 +90,25 @@ const EnquirySection = () => {
   };
 
 
-
   const inputClass = (field: string) =>
     `w-full bg-secondary/50 border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
       errors[field] ? "border-destructive" : "border-border/50"
     }`;
 
   return (
-    <section id="enquiry" className="section-padding relative">
+    <section id="enquiry" className="section-padding relative overflow-hidden">
       {/* Glow background */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl" />
-      </div>
+      <div className="absolute inset-x-0 top-0 h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none opacity-40" />
 
       <div className="container-main relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto items-start">
-          <div className="w-full max-w-lg mx-auto lg:mx-0">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
-              <span className="gradient-aqua-text">Get In Touch</span>
-            </h2>
-            <p className="text-muted-foreground text-sm">We will contact you shortly after receiving your enquiry.</p>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 max-w-6xl mx-auto items-start">
+          <div className="w-full">
+            <div className="text-center lg:text-left mb-8 md:mb-10">
+              <h2 className="text-[clamp(1.75rem,5vw,2.5rem)] font-heading font-black mb-3">
+                <span className="gradient-aqua-text">GET IN TOUCH</span>
+              </h2>
+              <p className="text-muted-foreground text-sm font-medium tracking-wide">Enter your details and our team will get back to you shortly.</p>
+            </div>
 
           <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 md:p-8 border border-primary/20 shadow-[0_0_40px_hsl(192_82%_50%/0.1)] space-y-5 relative overflow-hidden">
             <AnimatePresence>
@@ -225,42 +231,42 @@ const EnquirySection = () => {
         </div>
 
           {/* Reach Us Column */}
-          <div className="w-full max-w-lg mx-auto lg:mx-0">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-[2rem] font-heading font-bold mb-4">
-                <span className="gradient-aqua-text">Reach Us Directly</span>
+          <div className="w-full">
+            <div className="text-center lg:text-left mb-8 md:mb-10">
+              <h2 className="text-[clamp(1.75rem,5vw,2.5rem)] font-heading font-black mb-3">
+                <span className="gradient-aqua-text">REACH US DIRECTLY</span>
               </h2>
-              <p className="invisible text-sm">Spacer text to strictly equal left side</p>
+              <p className="text-muted-foreground text-sm font-medium tracking-wide">Connect with us immediately via our official channels.</p>
             </div>
 
-            <div className="flex flex-col gap-6">
-              <a href={`https://wa.me/918330945566`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-[#25D366]/30 shadow-[0_0_20px_rgba(37,211,102,0.1)] hover:bg-[#25D366]/5 hover:shadow-[0_0_30px_rgba(37,211,102,0.2)] hover:border-[#25D366]/50 transition-all duration-300 group">
-                <div className="w-14 h-14 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#25D366]/30 transition-all duration-300">
-                  <WhatsAppIcon className="w-7 h-7 text-[#25D366]" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-5">
+              <a href={`https://wa.me/918330945566`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-5 rounded-2xl bg-card/60 backdrop-blur-sm border border-emerald-500/10 shadow-lg hover:bg-emerald-500/5 hover:border-emerald-500/30 transition-all duration-300 group">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all duration-300">
+                  <WhatsAppIcon className="w-6 h-6 text-emerald-500" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">WhatsApp</h3>
-                  <p className="text-muted-foreground">+91 83309 45566</p>
+                  <h3 className="font-heading font-bold text-lg text-white">WhatsApp</h3>
+                  <p className="text-slate-400 text-sm font-medium tracking-wide">+91 83309 45566</p>
                 </div>
               </a>
 
-              <a href="mailto:aquapulsehub@gmail.com" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-[#EA4335]/30 shadow-[0_0_20px_rgba(234,67,53,0.1)] hover:bg-[#EA4335]/5 hover:shadow-[0_0_30px_rgba(234,67,53,0.2)] hover:border-[#EA4335]/50 transition-all duration-300 group">
-                <div className="w-14 h-14 rounded-full bg-[#EA4335]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#EA4335]/30 transition-all duration-300">
-                  <Mail className="w-7 h-7 text-[#EA4335]" />
+              <a href="mailto:aquapulsehub@gmail.com" className="flex items-center gap-4 p-5 rounded-2xl bg-card/60 backdrop-blur-sm border border-rose-500/10 shadow-lg hover:bg-rose-500/5 hover:border-rose-500/30 transition-all duration-300 group">
+                <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-rose-500/20 transition-all duration-300">
+                  <Mail className="w-6 h-6 text-rose-500" />
                 </div>
-                <div>
-                  <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">Email</h3>
-                  <p className="text-muted-foreground text-sm sm:text-base break-all sm:break-normal">aquapulsehub@gmail.com</p>
+                <div className="min-w-0">
+                  <h3 className="font-heading font-bold text-lg text-white">Email</h3>
+                  <p className="text-slate-400 text-sm font-medium tracking-wide truncate">aquapulsehub@gmail.com</p>
                 </div>
               </a>
 
-              <a href="https://www.google.com/maps?q=Vinayak+Sagar+Tirupati" target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-primary/20 shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:bg-primary/5 hover:shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:border-primary/40 transition-all duration-300 group">
-                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/30 transition-all duration-300">
-                  <MapPin className="w-7 h-7 text-primary" />
+              <a href="https://www.google.com/maps?q=Vinayak+Sagar+Tirupati" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-5 rounded-2xl bg-card/60 backdrop-blur-sm border border-primary/10 shadow-lg hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 group sm:col-span-2 lg:col-span-1">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
+                  <MapPin className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">Office</h3>
-                  <p className="text-muted-foreground">Vinayak Sagar, Tirupati</p>
+                  <h3 className="font-heading font-bold text-lg text-white">Office</h3>
+                  <p className="text-slate-400 text-sm font-medium tracking-wide">Vinayak Sagar, Tirupati</p>
                 </div>
               </a>
             </div>

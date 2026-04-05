@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Droplets, Trophy, Building2, ShieldCheck, Zap, Target, Star, Users, Briefcase } from "lucide-react";
 
 
@@ -53,6 +54,8 @@ const divisions = [
 ];
 
 const DivisionsSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section id="divisions" className="section-padding relative overflow-hidden bg-[#03080F]">
       {/* Dynamic background highlights */}
@@ -64,21 +67,21 @@ const DivisionsSection = () => {
           <div className="inline-flex items-center px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-4">
              Explore Our Sectors
           </div>
-          <h2 className="text-[clamp(2rem,6vw,3.5rem)] font-heading font-black mb-6 tracking-tight leading-none">
+          <h2 className="text-[clamp(2.5rem,6vw,3.5rem)] font-heading font-black mb-6 tracking-tight leading-none px-4">
             Our <span className="gradient-aqua-text">Core Divisions</span>
           </h2>
-          <p className="text-[#94A3B8] max-w-2xl mx-auto text-sm md:text-lg font-medium leading-relaxed">
+          <p className="text-[#94A3B8] max-w-2xl mx-auto text-sm md:text-lg font-medium leading-relaxed px-6">
             Three pillars of excellence driving our mission to create <br className="hidden md:block" /> world-class aquatic experiences.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10">
           {divisions.map((d, i) => (
             <div
               key={d.title}
               className={`group relative rounded-[2rem] border ${d.borderColor} p-6 md:p-8 cursor-pointer overflow-hidden transition-all duration-700 hover:scale-[1.02] ${d.hoverShadow} bg-navy-mid/10 backdrop-blur-sm shadow-xl active:scale-[0.98] border-opacity-30 hover:border-opacity-100 flex flex-col items-start`}
               onClick={() => {
-                if (d.link) window.location.href = d.link;
+                if (d.link) navigate(d.link);
               }}
               style={{ animationDelay: `${i * 150}ms` }}
             >
