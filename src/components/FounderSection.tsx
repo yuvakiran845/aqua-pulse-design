@@ -24,14 +24,17 @@ const FounderSection = () => {
           <div className="flex flex-col items-center gap-6">
             <div className="relative">
               <div className="w-[320px] h-[320px] md:w-[380px] md:h-[380px] lg:w-[420px] lg:h-[420px] rounded-full overflow-hidden border-4 border-primary/30 shadow-[0_0_30px_rgba(34,211,238,0.15)]">
-                <img src={founderImg} alt="Mr. Venkata Ramana" className="w-full h-full object-cover object-top" />
+                <img src={founderImg} alt="E. NAGA VENKAT" className="w-full h-full object-cover object-top" />
               </div>
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-accent text-primary-foreground text-xs font-semibold px-4 py-1.5 rounded-full whitespace-nowrap">
                 Visionary Leader in Aquatic Sports
               </div>
             </div>
             
-            <Button variant="aqua" size="lg" className="w-[280px] md:w-[320px] lg:w-[340px] text-lg py-4 font-semibold tracking-wide" asChild>
+            <Button 
+              className="w-[280px] md:w-[320px] lg:w-[340px] text-lg py-6 font-bold tracking-wide rounded-xl transition-all duration-300 bg-[#22D3EE] text-[#0F172A] border border-[#22D3EE] hover:bg-[#22D3EE]/10 hover:text-[#22D3EE] hover:border-[#22D3EE]/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] active:scale-95" 
+              asChild
+            >
               <a href="/founder#founder-page-section">Founder Details</a>
             </Button>
           </div>
@@ -39,7 +42,7 @@ const FounderSection = () => {
           {/* Info */}
           <div className="space-y-6">
             <div>
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-2">Mr. Venkata Ramana</h3>
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-2">E. NAGA VENKAT</h3>
               <p className="text-primary font-bold text-lg md:text-xl">Founder & Managing Director</p>
             </div>
             <p className="text-muted-foreground text-base md:text-lg lg:text-xl leading-relaxed">

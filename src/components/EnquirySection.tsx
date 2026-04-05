@@ -244,13 +244,13 @@ const EnquirySection = () => {
                 </div>
               </a>
 
-              <a href="mailto:aquapulseswimmingacademy@gmail.com" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-[#EA4335]/30 shadow-[0_0_20px_rgba(234,67,53,0.1)] hover:bg-[#EA4335]/5 hover:shadow-[0_0_30px_rgba(234,67,53,0.2)] hover:border-[#EA4335]/50 transition-all duration-300 group">
+              <a href="mailto:aquapulsehub@gmail.com" className="flex items-center gap-5 p-5 rounded-2xl bg-card border border-[#EA4335]/30 shadow-[0_0_20px_rgba(234,67,53,0.1)] hover:bg-[#EA4335]/5 hover:shadow-[0_0_30px_rgba(234,67,53,0.2)] hover:border-[#EA4335]/50 transition-all duration-300 group">
                 <div className="w-14 h-14 rounded-full bg-[#EA4335]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#EA4335]/30 transition-all duration-300">
                   <Mail className="w-7 h-7 text-[#EA4335]" />
                 </div>
                 <div>
                   <h3 className="font-heading font-semibold text-xl mb-1 text-foreground">Email</h3>
-                  <p className="text-muted-foreground text-sm sm:text-base break-all sm:break-normal">aquapulseswimmingacademy@gmail.com</p>
+                  <p className="text-muted-foreground text-sm sm:text-base break-all sm:break-normal">aquapulsehub@gmail.com</p>
                 </div>
               </a>
 

@@ -1,7 +1,9 @@
-import { Award, BadgeCheck, Medal, ChevronRight } from "lucide-react";
+import { Award, BadgeCheck, Medal, ChevronRight, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import founderImg from "@/assets/founder-real.png";
+import logoImg from "@/assets/aqua-pulse-logo.png";
+import { toast } from "sonner";
 
 const experiencesData = [
   "Conducted multiple swimming camps across age groups",
@@ -21,6 +23,7 @@ const certificationsData = [
     icon: Medal,
     iconClass: "text-amber-400",
     iconBg: "bg-amber-500/20",
+    pdfUrl: "/certificates/nsnis-cert.pdf"
   },
   {
     id: 2,
@@ -29,6 +32,7 @@ const certificationsData = [
     icon: BadgeCheck,
     iconClass: "text-blue-400",
     iconBg: "bg-blue-500/20",
+    pdfUrl: "/certificates/wsca-cert.pdf"
   },
   {
     id: 3,
@@ -37,6 +41,7 @@ const certificationsData = [
     icon: Award,
     iconClass: "text-emerald-400",
     iconBg: "bg-emerald-500/20",
+    pdfUrl: "/certificates/wsca-member.pdf"
   },
   {
     id: 4,
@@ -45,6 +50,16 @@ const certificationsData = [
     icon: Medal,
     iconClass: "text-amber-400",
     iconBg: "bg-amber-500/20",
+    pdfUrl: "/certificates/sfi-cert.pdf"
+  },
+  {
+    id: 5,
+    title: "Life Saving Society Certification",
+    subtitle: "Professional Lifeguard & Water Safety Training",
+    icon: Award,
+    iconClass: "text-red-400",
+    iconBg: "bg-red-500/20",
+    pdfUrl: "/certificates/lifesaving-cert.pdf"
   },
 ];
 
@@ -69,7 +84,7 @@ const FounderPage = () => {
               <div className="grid lg:grid-cols-[auto_1fr] gap-0 lg:gap-4 items-center -mt-[30px]">
                 <div className="flex justify-center lg:justify-start mb-6 lg:mb-0">
                   <div className="w-[240px] h-[240px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-full overflow-hidden border-[3px] border-[rgba(34,211,238,0.5)] shadow-[0_0_24px_rgba(34,211,238,0.3)] transition-transform duration-500 hover:scale-[1.02]">
-                    <img src={founderImg} alt="Founder - Mr. Venkata Ramana" className="w-full h-full object-cover object-top" />
+                    <img src={founderImg} alt="Founder - E. NAGA VENKAT" className="w-full h-full object-cover object-top" />
                   </div>
                 </div>
 
@@ -78,7 +93,7 @@ const FounderPage = () => {
                     Head Coach & Program Director
                   </p>
                   <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
-                    Mr. Venkata Ramana
+                    E. NAGA VENKAT
                   </h1>
                   <p className="text-base md:text-lg text-[#cbd5e1] leading-[1.7] max-w-4xl">
                     Founder & Managing Director. "Our vision is to create a world-class aquatic ecosystem where safety,
@@ -120,10 +135,29 @@ const FounderPage = () => {
                         <div className={`${item.iconBg} p-3 rounded-xl shrink-0`}>
                           <item.icon className={`w-6 h-6 ${item.iconClass}`} />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h3 className="text-foreground font-bold text-base md:text-lg">{item.title}</h3>
                           <p className="text-sm md:text-base text-muted-foreground">{item.subtitle}</p>
                         </div>
+                        <button 
+                          onClick={() => {
+                            if (item.pdfUrl) {
+                              const link = document.createElement('a');
+                              link.href = item.pdfUrl;
+                              link.download = `${item.title.replace(/\s+/g, '_')}.pdf`;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                              toast.info(`Downloading ${item.title}...`, {
+                                description: "Make sure you've uploaded the real PDF to your public/certificates folder."
+                              });
+                            }
+                          }}
+                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:bg-[#22D3EE]/10 hover:text-[#22D3EE] hover:border-[#22D3EE]/30 transition-all group/btn"
+                          title="Download Certification"
+                        >
+                          <Download className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
+                        </button>
                       </div>
                     ))}
                   </div>

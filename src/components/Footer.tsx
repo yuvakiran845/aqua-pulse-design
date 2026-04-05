@@ -61,9 +61,9 @@ const Footer = () => {
                 <Globe className="w-4 h-4 text-primary shrink-0" />
                 <span>aquapulsehub.in</span>
               </a>
-              <a href="mailto:aquapulseswimmingacademy@gmail.com" className="flex items-center gap-2 hover:text-primary transition-colors">
+              <a href="mailto:aquapulsehub@gmail.com" className="flex items-center gap-2 hover:text-primary transition-colors">
                 <Mail className="w-4 h-4 text-primary shrink-0" />
-                <span className="break-all">aquapulseswimmingacademy@gmail.com</span>
+                <span className="break-all">aquapulsehub@gmail.com</span>
               </a>
 
               <div className="flex items-start gap-2">

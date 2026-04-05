@@ -164,37 +164,45 @@ const drawIdCard = async (
   roundRect(ctx, 1.5, 1.5, w - 3, h - 3, 23);
   ctx.stroke();
 
-  // 2. Logo - FULL FIT CIRCULAR CONTAINER
-  const logoCircleR = 85; 
-  const logoCenterY = 115;
+  // 2. Logo - PREMIUM CIRCULAR RING CONTAINER
+  const logoCircleR = 75; 
+  const logoCenterY = 110;
   const logoX = w / 2;
   const logoY = logoCenterY;
 
   ctx.save();
-  // Outer glow circle for the frame
+  // Clear ring background
   ctx.beginPath();
   ctx.arc(logoX, logoY, logoCircleR, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(2, 18, 38, 0.95)";
-  ctx.shadowBlur = 45;
-  ctx.shadowColor = "rgba(34,211,238,0.7)";
+  ctx.fillStyle = "rgba(1, 10, 26, 0.9)"; // Matches card background
   ctx.fill();
 
-  // Draw logo with aggressive zoom to fill edge-to-edge
+  // Draw smooth gradient ring border
+  const ringGrad = ctx.createLinearGradient(logoX - logoCircleR, logoY - logoCircleR, logoX + logoCircleR, logoY + logoCircleR);
+  ringGrad.addColorStop(0, "#22D3EE"); // Cyan
+  ringGrad.addColorStop(1, "#0EA5E9"); // Deep Aqua
+  ctx.strokeStyle = ringGrad;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Draw logo with "contain" strategy + padding
+  const PADDING = 14; // Space between logo and ring
+  const maxD = (logoCircleR - PADDING) * 2;
+  
   await new Promise<void>((resolve) => {
     const logo = new Image();
     logo.crossOrigin = "anonymous";
     logo.onload = () => {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(logoX, logoY, logoCircleR - 1, 0, Math.PI * 2);
-      ctx.clip();
+      const iw = logo.width;
+      const ih = logo.height;
       
-      // Fit the logo inside the circle with maximum scale to remove gaps
-      // zoom=1.0 with a larger circle ensures full width without crop
-      const zoom = 1.0; 
-      const drawSize = logoCircleR * 2 * zoom;
-      ctx.drawImage(logo, logoX - drawSize/2, logoY - drawSize/2, drawSize, drawSize);
-      ctx.restore();
+      // Scale to "contain" logo within the padded circle (maxD)
+      const scale = Math.min(maxD / iw, maxD / ih);
+      const dw = iw * scale;
+      const dh = ih * scale;
+      
+      // Draw centered
+      ctx.drawImage(logo, logoX - dw/2, logoY - dh/2, dw, dh);
       resolve();
     };
     logo.onerror = () => resolve();
@@ -240,7 +248,14 @@ const drawIdCard = async (
         ctx.beginPath();
         ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
         ctx.clip();
-        ctx.drawImage(img, photoCX - photoR, photoCY - photoR, photoR * 2, photoR * 2);
+        
+        // Center-cover scaling for non-square photos
+        const iw = img.width;
+        const ih = img.height;
+        const scale = Math.max((photoR * 2) / iw, (photoR * 2) / ih);
+        const dw = iw * scale;
+        const dh = ih * scale;
+        ctx.drawImage(img, photoCX - dw/2, photoCY - dh/2, dw, dh);
         ctx.restore();
         resolve();
       };
@@ -371,7 +386,7 @@ const drawIdCard = async (
   const footerY = h - 38;
   ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
   ctx.font = "bold 10px 'Arial', sans-serif";
-  ctx.fillText("aquapulsehub.in  •  aquapulseswimmingacademy@gmail.com", w / 2, footerY);
+  ctx.fillText("aquapulsehub.in  •  aquapulsehub@gmail.com", w / 2, footerY);
 
   // Bottom Cyan Accent
   ctx.fillStyle = "#22D3EE";
@@ -885,9 +900,9 @@ const Registration = () => {
           </div>
 
           {/* ── STEPPER ── */}
-          <div className="flex items-start justify-between mb-10 px-2 overflow-x-auto pb-2">
+          <div className="flex items-start justify-center gap-2 sm:gap-4 mb-10 px-1 overflow-x-auto no-scrollbar py-2">
             {STEPS.map((label, i) => (
-              <div key={label} className="flex items-center flex-1 min-w-0">
+              <div key={label} className="flex items-center">
                 <div className="flex flex-col items-center shrink-0">
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${
@@ -901,20 +916,20 @@ const Registration = () => {
                     {i < step ? "✓" : i + 1}
                   </div>
                   <span
-                    className={`text-[10px] mt-1.5 whitespace-nowrap font-medium ${
+                    className={`text-[10px] mt-1.5 font-medium transition-all duration-300 ${
                       i === step
-                        ? "text-cyan-400"
+                        ? "text-cyan-400 opacity-100 scale-100 block"
                         : i < step
-                        ? "text-cyan-500"
-                        : "text-slate-500"
-                    }`}
+                        ? "text-cyan-500 md:block hidden opacity-60"
+                        : "text-slate-500 md:block hidden opacity-40"
+                    } whitespace-nowrap md:whitespace-normal text-center max-w-[60px] md:max-w-none`}
                   >
                     {label}
                   </span>
                 </div>
                 {i < STEPS.length - 1 && (
                   <div
-                    className={`flex-1 h-[2px] mx-2 mt-[-12px] transition-all duration-500 ${
+                    className={`flex-1 h-[2px] mx-1 sm:mx-2 mt-[-18px] transition-all duration-500 sm:block hidden ${
                       i < step ? "bg-cyan-500" : "bg-slate-700/60"
                     }`}
                   />
