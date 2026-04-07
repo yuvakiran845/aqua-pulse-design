@@ -2,7 +2,7 @@ import { Award, BadgeCheck, Medal, ChevronRight, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import founderImg from "@/assets/founder-real.png";
-import logoImg from "@/assets/aqua-pulse-logo.png";
+
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 

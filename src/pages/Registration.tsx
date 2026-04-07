@@ -1,448 +1,44 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import logoImg from "@/assets/aqua-pulse-logo.png";
 import StudentIdCard from "@/components/StudentIdCard";
+import { STEPS } from "@/constants/registration";
+import { drawIdCard } from "@/utils/id-card-renderer";
+import { useRegistrationForm } from "@/hooks/useRegistrationForm";
+import { StudentInfoStep } from "@/components/Registration/FormSteps/StudentInfo";
+import { ContactInfoStep } from "@/components/Registration/FormSteps/ContactInfo";
+import { TrainingDetailsStep } from "@/components/Registration/FormSteps/TrainingDetails";
+import { MedicalExperienceStep } from "@/components/Registration/FormSteps/MedicalExperience";
+import { TermsSubmitStep } from "@/components/Registration/FormSteps/TermsSubmit";
 
-// ─── CONSTANTS ────────────────────────────────────────────────────────────────
-
-const STEPS = [
-  "Student Info",
-  "Contact Info",
-  "Training Details",
-  "Medical & Experience",
-  "Terms & Submit",
-];
-
-const CENTERS = ["R&R Swimming Pool", "Slim Life Gym Sports Complex"];
-
-const PROGRAM_OPTIONS: Record<string, string[]> = {
-  "R&R Swimming Pool": [
-    "Summer Camp",
-    "Beginners Program",
-    "Intermediate Program",
-    "Advanced Program",
-    "Aqua Sprouts (Toddlers Program)",
-    "Ladies Exclusive Program",
-    "Special Kids Aquatic Program",
-    "Senior Citizen Swimming",
-    "Aqua Rehabilitation",
-    "1-1 Personal Training",
-  ],
-  "Slim Life Gym Sports Complex": [
-    "Summer Camp",
-    "Beginners Program",
-    "Intermediate Program",
-    "1-1 Personal Training",
-  ],
-};
-
-const BATCH_TYPES = ["Weekday Batch", "Weekend Batch"];
-
-const TIME_SLOTS: Record<string, string[]> = {
-  "🌅 Morning": [
-    "6:00 AM – 7:00 AM",
-    "7:00 AM – 8:00 AM",
-    "8:00 AM – 9:00 AM",
-    "9:00 AM – 10:00 AM",
-    "10:00 AM – 11:00 AM",
-  ],
-  "🌆 Evening": [
-    "4:00 PM – 5:00 PM",
-    "5:00 PM – 6:00 PM",
-    "6:00 PM – 7:00 PM",
-    "7:00 PM – 8:00 PM",
-    "8:00 PM – 9:00 PM",
-  ],
-};
-
-const SLOT_LIMIT = 10;
-
-// Google Sheets Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyt-2B1yPLyAZSQZQ3nocBWg7wnBSZL0Z779hABsAjtWoBWoMxQ1YWljtpLokjAQq3mKA/exec";
-
-// ─── TYPES ────────────────────────────────────────────────────────────────────
-
-interface FormState {
-  center: string;
-  program: string;
-  batchType: string;
-  slot: string;
-  studentName: string;
-  dob: string;
-  age: string;
-  gender: string;
-  billId: string;
-  parentName: string;
-  mobile: string;
-  whatsapp: string;
-  email: string;
-  address: string;
-  city: string;
-  state: string;
-  postal: string;
-  medical: string;
-  allergies: string;
-  experience: string;
-  agreed: boolean;
-  photoUrl: string;
-}
-
-interface Registration {
-  center: string;
-  program: string;
-  slot: string;
-}
-
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
-
-const calculateAge = (dobValue: string): string => {
-  if (!dobValue) return "";
-  const dob = new Date(dobValue);
-  const today = new Date();
-
-  let age = today.getFullYear() - dob.getFullYear();
-  const m = today.getMonth() - dob.getMonth();
-
-  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-    age--;
-  }
-
-  return String(age);
-};
-
-const generateStudentId = (center: string, finalizedId?: string) => {
-  if (finalizedId) return finalizedId;
-  const centerCode = center.includes("R&R") ? "R&R" : "SL";
-  return `APSA-2026-${centerCode}-XXXX`;
-};
-
-// ─── CANVAS ID CARD RENDERER ──────────────────────────────────────────────────
-// Layout strategy:
-//  • Top zone   (0 → ~310):  logo + title + divider + photo + name + ID badge
-//  • Middle zone(310 → 650): info fields (stretch to fill)
-//  • Bottom zone(650 → 820): signature block pinned to bottom
-
-const drawIdCard = async (
-  canvas: HTMLCanvasElement,
-  form: FormState,
-  studentId: string
-): Promise<void> => {
-  const SCALE = 3; // Higher scale for better print quality
-  const W = 420 * SCALE;
-  const H = 600 * SCALE;
-  canvas.width = W;
-  canvas.height = H;
-  const ctx = canvas.getContext("2d")!;
-  ctx.scale(SCALE, SCALE);
-
-  const w = 420;
-  const h = 600;
-
-  // 1. Background & Border (Premium Gradient)
-  const bgGrad = ctx.createLinearGradient(0, 0, w, h);
-  bgGrad.addColorStop(0, "#061826");
-  bgGrad.addColorStop(1, "#020d18");
-  ctx.fillStyle = bgGrad;
-  ctx.beginPath();
-  roundRect(ctx, 0, 0, w, h, 18);
-  ctx.fill();
-
-  // Cyan Glow Effect (Internal)
-  const radialGrad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w);
-  radialGrad.addColorStop(0, "rgba(0, 234, 255, 0.04)");
-  radialGrad.addColorStop(1, "transparent");
-  ctx.fillStyle = radialGrad;
-  ctx.fillRect(0, 0, w, h);
-
-  // Border
-  ctx.strokeStyle = "rgba(0, 234, 255, 0.25)";
-  ctx.lineWidth = 1;
-  ctx.stroke();
-
-  // 2. Header: Logo (Full-Bleed Circular Badge)
-  const logoW = 110;
-  const logoX = (w - logoW) / 2;
-  const logoY = 20;
-
-  // Subtle Atmospheric Glow
-  ctx.save();
-  ctx.shadowColor = "rgba(0, 234, 255, 0.5)"; // Intensified glow
-  ctx.shadowBlur = 12;
-  ctx.beginPath();
-  ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(2, 13, 24, 0.01)"; // Trigger shadow without showing fill
-  ctx.fill();
-  ctx.restore();
-
-  ctx.save();
-  // Circular clipping for absolute edge-to-edge focal fit
-  ctx.beginPath();
-  ctx.arc(logoX + logoW / 2, logoY + logoW / 2, logoW / 2, 0, Math.PI * 2);
-  ctx.clip();
-
-  await new Promise<void>((resolve) => {
-    const logo = new Image();
-    logo.crossOrigin = "anonymous";
-    logo.onload = () => {
-      // Logic to maximize logo and minimize silver border
-      const iw = logo.width;
-      const ih = logo.height;
-      const scaleBase = Math.max(logoW / iw, logoW / ih);
-      const scale = scaleBase * 1.35; // Zoom into the emblem core
-      const dw = iw * scale;
-      const dh = ih * scale;
-
-      // Centering with -2% focal correction
-      const dx = logoX + (logoW - dw) / 2;
-      const dy = (logoY + (logoW - dh) / 2) - (dh * 0.02);
-
-      // Enhance colors for more "shine"
-      ctx.filter = "saturate(1.15) brightness(1.1) contrast(1.05)";
-      ctx.drawImage(logo, dx, dy, dw, dh);
-      ctx.filter = "none";
-      resolve();
-    };
-    logo.onerror = () => resolve();
-    logo.src = logoImg;
-  });
-  ctx.restore();
-
-  // Header Title
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#00eaff";
-  ctx.font = "900 21px 'Inter', Arial, sans-serif";
-  ctx.shadowColor = "rgba(0, 234, 255, 0.15)";
-  ctx.shadowBlur = 8;
-  ctx.fillText("AQUA PULSE SWIMMING ACADEMY", w / 2, 150);
-  ctx.shadowBlur = 0;
-
-  ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
-  ctx.font = "700 9.5px 'Inter', Arial, sans-serif";
-  ctx.letterSpacing = "1.8px";
-  ctx.fillText("STUDENT IDENTITY CARD • 2026", w / 2, 162);
-  ctx.letterSpacing = "0px";
-
-  // 3. Center Section: Identity (Photo, Name, Badge)
-  const photoR = 57.5;
-  const photoCX = w / 2;
-  const photoCY = 230;
-
-  // Photo Glow Ring
-  const photoGrad = ctx.createLinearGradient(photoCX - photoR, photoCY - photoR, photoCX + photoR, photoCY + photoR);
-  photoGrad.addColorStop(0, "#00eaff");
-  photoGrad.addColorStop(1, "#0077ff");
-  ctx.strokeStyle = photoGrad;
-  ctx.lineWidth = 3.5;
-  ctx.beginPath();
-  ctx.arc(photoCX, photoCY, photoR + 4, 0, Math.PI * 2);
-  ctx.stroke();
-
-  if (form.photoUrl) {
-    await new Promise<void>((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
-        ctx.clip();
-
-        const iw = img.width;
-        const ih = img.height;
-        const scale = Math.max((photoR * 2) / iw, (photoR * 2) / ih);
-        const dw = iw * scale;
-        const dh = ih * scale;
-        ctx.drawImage(img, photoCX - dw / 2, photoCY - dh / 2, dw, dh);
-        ctx.restore();
-        resolve();
-      };
-      img.onerror = () => resolve();
-      img.src = form.photoUrl;
-    });
-  } else {
-    ctx.fillStyle = "#031424";
-    ctx.beginPath();
-    ctx.arc(photoCX, photoCY, photoR, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // Name
-  ctx.fillStyle = "#FFFFFF";
-  ctx.font = "900 25px 'Inter', Arial, sans-serif";
-  ctx.fillText((form.studentName || "SRNYMJDSTU").toUpperCase(), w / 2, 312);
-
-  // ID Badge (Courier style)
-  const idText = studentId || "APSA-2026-R&R-0001";
-  ctx.font = "bold 13px 'Courier New', monospace";
-  ctx.letterSpacing = "1.5px";
-  const idW = ctx.measureText(idText).width + 32;
-  const idX = (w - idW) / 2;
-
-  ctx.fillStyle = "rgba(0, 234, 255, 0.06)";
-  ctx.strokeStyle = "rgba(0, 234, 255, 0.15)";
-  ctx.beginPath();
-  roundRect(ctx, idX, 325, idW, 28, 8);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "#00eaff";
-  ctx.fillText(idText, w / 2, 343);
-  ctx.letterSpacing = "0px";
-
-  // 4. Boxed Details Section
-  const detailsY = 370;
-  const detailsW = w - 40;
-  const detailsX = 20;
-  
-  const infoFields = [
-    { label: "PROGRAM",         value: form.program || "Beginners Program" }, 
-    { label: "TRAINING CENTER", value: form.center || "R&R Swimming Pool" },
-    { label: "BATCH TIME",      value: form.slot || "6:00 AM - 7:00 AM" },
-    { label: "BATCH TYPE",      value: form.batchType || "Weekday Batch" },
-    { label: "ACADEMIC YEAR",   value: "2026" },
-  ];
-
-  infoFields.forEach((item, i) => {
-    const boxY = detailsY + i * 42;
-    
-    // Draw Box
-    ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.01)";
-    ctx.beginPath();
-    roundRect(ctx, detailsX, boxY, detailsW, 36, 8);
-    ctx.fill();
-    ctx.stroke();
-
-    // Label
-    ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(0, 234, 255, 0.5)";
-    ctx.font = "800 7.5px 'Inter', Arial, sans-serif";
-    ctx.letterSpacing = "0.8px";
-    ctx.fillText(item.label, detailsX + 16, boxY + 12);
-    
-    // Value
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "800 14.5px 'Inter', Arial, sans-serif";
-    ctx.letterSpacing = "0px";
-    ctx.fillText(item.value, detailsX + 16, boxY + 27);
-  });
-
-  // 5. Footer: Signature & Contact (Firmly at the bottom)
-  const footerY = 590;
-  ctx.textAlign = "center";
-  
-  ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-  ctx.font = "bold 8.5px 'Inter', Arial, sans-serif";
-  ctx.letterSpacing = "2px";
-  ctx.fillText("AUTHORISED SIGNATURE", w / 2, footerY - 35);
-
-  // Cyan Signature Wave Path
-  ctx.strokeStyle = "#00eaff";
-  ctx.lineWidth = 1;
-  ctx.shadowColor = "rgba(0, 234, 255, 0.3)";
-  ctx.shadowBlur = 3;
-  ctx.beginPath();
-  ctx.moveTo(w / 2 - 40, footerY - 22);
-  ctx.bezierCurveTo(w / 2 - 20, footerY - 34, w / 2 + 20, footerY - 10, w / 2 + 40, footerY - 22);
-  ctx.stroke();
-  ctx.shadowBlur = 0;
-
-  ctx.fillStyle = "#FFFFFF";
-  ctx.font = "800 13.5px 'Inter', Arial, sans-serif";
-  ctx.fillText("Founder & Program Director", w / 2, footerY - 6);
-  
-  ctx.fillStyle = "rgba(0, 234, 255, 0.5)";
-  ctx.font = "bold 10.5px 'Inter', Arial, sans-serif";
-  ctx.fillText("Aqua Pulse Swimming Academy", w / 2, footerY + 6);
-
-  // Contact Footer Line
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
-  ctx.beginPath();
-  ctx.moveTo(30, footerY + 10);
-  ctx.lineTo(w - 30, footerY + 10);
-  ctx.stroke();
-
-  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-  ctx.font = "600 10px 'Inter', Arial, sans-serif";
-  ctx.fillText("aquapulsehub.in  •  aquapulseswimmingacademy@gmail.com", w / 2, footerY + 28);
-};
-
-// Canvas helper: rounded rect
-function roundRect(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number
-) {
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
-
-// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
+// ─── STYLES ───
+const inputCls =
+  "w-full px-4 py-3 rounded-xl border border-white/10 bg-[#071222] text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 transition-all text-sm";
+const labelCls =
+  "block text-[11px] font-bold tracking-[2px] text-cyan-400 uppercase mb-2";
 
 const Registration = () => {
-  const [step, setStep] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-  const [studentId, setStudentId] = useState("APSA-2026-R&R-XXXX");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sheetError, setSheetError] = useState<string | null>(null);
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
-  const [cardReady, setCardReady] = useState(false);
-  const [showSaveMenu, setShowSaveMenu] = useState(false);
+  const {
+    step,
+    setStep,
+    submitted,
+    studentId,
+    isSubmitting,
+    registrations,
+    cardReady,
+    setCardReady,
+    showSaveMenu,
+    setShowSaveMenu,
+    form,
+    updateForm,
+    handlePhotoUpload,
+    canProceed,
+    handleSubmit: handleFormSubmit,
+    resetForm,
+  } = useRegistrationForm();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const [form, setForm] = useState<FormState>({
-    center: "",
-    program: "",
-    batchType: "",
-    slot: "",
-    studentName: "",
-    dob: "",
-    age: "",
-    gender: "",
-    billId: "",
-    parentName: "",
-    mobile: "",
-    whatsapp: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    postal: "",
-    medical: "",
-    allergies: "",
-    experience: "",
-    agreed: false,
-    photoUrl: "",
-  });
-
-  // Load registrations from localStorage for slot count
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("apsa_registrations");
-      if (saved) setRegistrations(JSON.parse(saved));
-    } catch {
-      console.warn("Could not load registrations from localStorage");
-    }
-  }, []);
-
-  // Auto-calculate age from DOB
-  useEffect(() => {
-    if (form.dob) {
-      setForm((prev) => ({ ...prev, age: calculateAge(form.dob) }));
-    }
-  }, [form.dob]);
 
   // Slot batch count
   const getBatchCount = (center: string, program: string, slot: string): number =>
@@ -450,153 +46,22 @@ const Registration = () => {
       (r) => r.center === center && r.program === program && r.slot === slot
     ).length;
 
-  // Update Student ID preview placeholder when center changes
-  useEffect(() => {
-    // We only update the preview if we haven't submitted yet
-    if (!submitted) {
-      setStudentId(generateStudentId(form.center));
-    }
-  }, [form.center, submitted]);
-
   const previewId = studentId;
 
-  // Field updater with cascade reset
-  const updateForm = (field: keyof FormState, value: string | boolean) => {
-    setForm((prev) => {
-      const next = { ...prev, [field]: value } as FormState;
-      if (field === "center") {
-        next.program = "";
-        next.batchType = "";
-        next.slot = "";
-      } else if (field === "program") {
-        next.batchType = "";
-        next.slot = "";
-      } else if (field === "batchType") {
-        next.slot = "";
-      }
-      return next;
-    });
-  };
-
-
-
-  // Photo upload via FileReader → base64
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      updateForm("photoUrl", reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  // Per-step validation
-  const canProceed = (): boolean => {
-    switch (step) {
-      case 0:
-        return !!(form.studentName && form.dob && form.gender && form.billId);
-      case 1:
-        return !!(form.parentName && form.mobile && form.email);
-      case 2:
-        return !!(form.center && form.program && form.batchType && form.slot);
-      case 3:
-        return !!(form.experience);
-      case 4:
-        return !!(form.agreed);
-      default:
-        return false;
-    }
-  };
-
-  // Google Sheets SUBMISSION
-  const postToGoogleSheets = async (stId: string) => {
-    const data = {
-      studentId: stId,
-      studentName: form.studentName,
-      billNumber: form.billId,
-      dob: form.dob,
-      age: form.age,
-      gender: form.gender,
-      parentName: form.parentName,
-      mobile: form.mobile,
-      email: form.email,
-      address: form.address,
-      city: form.city,
-      state: form.state,
-      postalCode: form.postal,
-      trainingCenter: form.center,
-      program: form.program,
-      batchType: form.batchType,
-      slotTiming: form.slot,
-      medicalConditions: form.medical,
-      allergies: form.allergies,
-      experience: form.experience
-    };
-
-    try {
-      console.log("Submitting Data to Sheets:", data);
-
-      const response = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      console.log("Success Result:", result);
-      return result;
-    } catch (err) {
-      console.error("Google Sheets POST failed:", err);
-      throw err;
-    }
-  };
-
-  // Submit handler
+  // Submit handler (wraps hook's submit and triggers canvas render)
   const handleSubmit = async () => {
-    if (!form.agreed || isSubmitting) return;
-
-    if (!form.billId) {
-      alert("Please enter Bill Number");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSheetError(null);
-
     try {
-      const result = await postToGoogleSheets(studentId);
-      const finalId = result.studentId || studentId;
-      setStudentId(finalId);
-
-      const newReg: Registration = {
-        center: form.center,
-        program: form.program,
-        slot: form.slot,
-      };
-      const updated = [...registrations, newReg];
-      setRegistrations(updated);
-      try {
-        localStorage.setItem("apsa_registrations", JSON.stringify(updated));
-      } catch {
-        console.warn("localStorage quota exceeded");
+      const finalId = await handleFormSubmit();
+      if (finalId) {
+        // Render canvas after state settles with the FINAL ID
+        setTimeout(async () => {
+          if (canvasRef.current) {
+            await drawIdCard(canvasRef.current, form, finalId);
+            setCardReady(true);
+          }
+        }, 300);
       }
-
-      setIsSubmitting(false);
-      setSubmitted(true);
-      alert("✅ Registration Successful");
-
-      // Render canvas after state settles with the FINAL ID
-      setTimeout(async () => {
-        if (canvasRef.current) {
-          await drawIdCard(canvasRef.current, form, finalId);
-          setCardReady(true);
-        }
-      }, 300);
-    } catch (error) {
-      setIsSubmitting(false);
+    } catch (_error) {
       alert("❌ Submission Failed. Please check your network and try again.");
     }
   };
@@ -672,15 +137,6 @@ const Registration = () => {
     }
   };
 
-  // ── STYLES ──
-  const inputCls =
-    "w-full px-4 py-3 rounded-xl border border-white/10 bg-[#071222] text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 transition-all text-sm";
-  const labelCls =
-    "block text-[11px] font-bold tracking-[2px] text-cyan-400 uppercase mb-2";
-
-  // ── PROGRAMS for current center ──
-  const availablePrograms = form.center ? PROGRAM_OPTIONS[form.center] || [] : [];
-
   // ─── SUCCESS / ID CARD VIEW ────────────────────────────────────────────────
   if (submitted) {
     return (
@@ -688,7 +144,7 @@ const Registration = () => {
         <Navbar />
         <main className="pt-28 pb-16">
           <div className="max-w-2xl mx-auto px-4 text-center">
-            {/* Pro-Level Sucess Badge */}
+            {/* Pro-Level Success Badge */}
             <div className="mb-8 relative inline-block">
               <div className="w-24 h-24 rounded-full bg-cyan-500/20 border-2 border-cyan-500/50 flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(34,211,238,0.4)] animate-pulse">
                 <div className="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center shadow-lg">
@@ -702,12 +158,7 @@ const Registration = () => {
 
             <div className="mb-8">
               <h1
-                className="text-3xl md:text-5xl font-black tracking-tighter mb-2"
-                style={{
-                  color: "#FFFFFF",
-                  fontFamily: "'Inter', sans-serif",
-                  textShadow: "0 0 20px rgba(34,211,238,0.4)"
-                }}
+                className="text-3xl md:text-5xl font-black tracking-tighter mb-2 text-white font-sans [text-shadow:0_0_20px_rgba(34,211,238,0.4)]"
               >
                 REGISTRATION <span className="text-cyan-400">SUCCESSFUL!</span>
               </h1>
@@ -715,42 +166,33 @@ const Registration = () => {
                 Welcome to Aqua Pulse Swimming Academy,{" "}
                 <span className="text-white font-semibold">{form.studentName}</span>!
               </p>
-              {sheetError && (
-                <p className="mt-2 text-amber-400 text-sm">{sheetError}</p>
-              )}
             </div>
 
             {/* Premium React ID Card Preview */}
-            <div className="mx-auto mb-4 overflow-hidden" style={{ height: "calc(600px * 0.85)" }}>
-              <div className="scale-[0.85] origin-top">
-                <StudentIdCard
-                  studentName={form.studentName}
-                  studentId={studentId}
-                  trainingCenter={form.center}
-                  slotTiming={form.slot}
-                  batchType={form.batchType}
-                  experience={form.experience}
-                  programName={form.program}
-                  photoUrl={form.photoUrl}
-                />
-              </div>
+            <div className="mx-auto mb-4 scale-[0.85] sm:scale-100 origin-top">
+              <StudentIdCard
+                studentName={form.studentName}
+                studentId={studentId}
+                trainingCenter={form.center}
+                slotTiming={form.slot}
+                batchType={form.batchType}
+                photoUrl={form.photoUrl}
+              />
             </div>
 
             {/* Hidden Canvas for High-Resolution Export */}
             <div
-              className="fixed -left-[10000px] -top-[10000px]"
-              style={{ width: 380, height: 600 }}
+              className="fixed -left-[10000px] -top-[10000px] overflow-hidden"
+              style={{ width: 420, height: 600 }}
             >
               <canvas
                 ref={canvasRef}
-                style={{ width: "380px", height: "600px", display: "block" }}
+                style={{ width: "420px", height: "600px", display: "block" }}
               />
             </div>
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-
-              {/* Save Options Button + Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setShowSaveMenu((v) => !v)}
@@ -764,14 +206,9 @@ const Registration = () => {
 
                 {showSaveMenu && (
                   <div
-                    className="absolute left-1/2 -translate-x-1/2 mt-3 w-60 rounded-2xl border border-cyan-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden z-50"
-                    style={{ background: "#071e36" }}
+                    className="absolute left-1/2 -translate-x-1/2 mt-3 w-60 rounded-2xl border border-cyan-500/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden z-50 bg-[#071e36]"
                   >
-                    {/* close on outside click */}
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setShowSaveMenu(false)}
-                    />
+                    <div className="fixed inset-0 z-40" onClick={() => setShowSaveMenu(false)} />
                     <div className="relative z-50">
                       <button
                         onClick={saveAsJpg}
@@ -809,31 +246,12 @@ const Registration = () => {
               </div>
 
               <button
-                onClick={() => {
-                  setSubmitted(false);
-                  setStep(0);
-                  setCardReady(false);
-                  setShowSaveMenu(false);
-                  setForm({
-                    center: "", program: "", batchType: "", slot: "",
-                    studentName: "", dob: "", age: "", gender: "", billId: "",
-                    parentName: "", mobile: "", whatsapp: "", email: "",
-                    address: "", city: "", state: "", postal: "",
-                    medical: "", allergies: "", experience: "",
-                    agreed: false, photoUrl: "",
-                  });
-                  const newId = generateStudentId("", "");
-                  setStudentId(newId);
-                }}
+                onClick={resetForm}
                 className="flex items-center gap-2 px-7 py-3 rounded-full font-bold text-white border border-cyan-500/50 hover:bg-cyan-500/10 transition-all"
               >
                 Register Another Student
               </button>
             </div>
-
-            <p className="mt-4 text-slate-500 text-xs">
-              📱 On mobile: tap Save → <strong>Share / Save to Gallery</strong> to save directly
-            </p>
           </div>
         </main>
         <Footer />
@@ -843,49 +261,27 @@ const Registration = () => {
 
   // ─── FORM VIEW ────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen" style={{ background: "#020c1b" }}>
+    <div className="min-h-screen bg-[#020c1b]">
       <Navbar />
       <main className="pt-28 pb-16">
         <div className="max-w-3xl mx-auto px-4">
-
-          {/* ── LOGO & TITLE HEADER ── */}
+          {/* Header */}
           <div className="mb-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "14px"
-            }}>
+            <div className="flex items-center gap-3.5">
               <img
                 src={logoImg}
-                alt="Aqua Pulse Logo"
-                style={{
-                  width: "56px",
-                  height: "56px",
-                  objectFit: "contain",
-                  borderRadius: "50%"
-                }}
+                alt="Logo"
+                className="w-14 h-14 object-contain rounded-full"
               />
-
               <div>
-                <div style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "22px",
-                  letterSpacing: "2px",
-                  color: "#22D3EE"
-                }}>
+                <div className="font-['Bebas_Neue',_sans-serif] text-[22px] tracking-[2px] text-cyan-400">
                   AQUA PULSE
                 </div>
-
-                <div style={{
-                  fontSize: "12px",
-                  color: "#7ab8cc",
-                  letterSpacing: "1px"
-                }}>
+                <div className="text-[12px] text-[#7ab8cc] tracking-[1px]">
                   SWIMMING ACADEMY
                 </div>
               </div>
             </div>
-
             <div className="text-center md:text-right">
               <h2 className="text-xl font-bold text-slate-400 tracking-[3px] uppercase">
                 Student Registration
@@ -894,7 +290,7 @@ const Registration = () => {
             </div>
           </div>
 
-          {/* ── STEPPER ── */}
+          {/* Stepper */}
           <div className="flex items-start justify-center gap-2 sm:gap-4 mb-10 px-1 overflow-x-auto no-scrollbar py-2">
             {STEPS.map((label, i) => (
               <div key={label} className="flex items-center">
@@ -911,565 +307,74 @@ const Registration = () => {
                   </div>
                   <span
                     className={`text-[10px] mt-1.5 font-medium transition-all duration-300 ${i === step
-                      ? "text-cyan-400 opacity-100 scale-100 block"
+                      ? "text-cyan-400 opacity-100 scale-100"
                       : i < step
                         ? "text-cyan-500 md:block hidden opacity-60"
                         : "text-slate-500 md:block hidden opacity-40"
-                      } whitespace-nowrap md:whitespace-normal text-center max-w-[60px] md:max-w-none`}
+                      } whitespace-nowrap md:whitespace-normal text-center`}
                   >
                     {label}
                   </span>
                 </div>
                 {i < STEPS.length - 1 && (
-                  <div
-                    className={`flex-1 h-[2px] mx-1 sm:mx-2 mt-[-18px] transition-all duration-500 sm:block hidden ${i < step ? "bg-cyan-500" : "bg-slate-700/60"
-                      }`}
-                  />
+                  <div className={`flex-1 h-[2px] mx-1 sm:mx-2 mt-[-18px] transition-all duration-500 sm:block hidden ${i < step ? "bg-cyan-500" : "bg-slate-700/60"}`} />
                 )}
               </div>
             ))}
           </div>
 
-          {/* ── STEP 0: STUDENT INFO ── */}
-          {step === 0 && (
-            <div>
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                STUDENT INFORMATION
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
+          {/* Steps */}
+          <div className="min-h-[400px]">
+            {step === 0 && (
+              <StudentInfoStep 
+                form={form} 
+                updateForm={updateForm} 
+                handlePhotoUpload={handlePhotoUpload} 
+                inputCls={inputCls} 
+                labelCls={labelCls} 
+              />
+            )}
+            {step === 1 && (
+              <ContactInfoStep 
+                form={form} 
+                updateForm={updateForm} 
+                inputCls={inputCls} 
+                labelCls={labelCls} 
+              />
+            )}
+            {step === 2 && (
+              <TrainingDetailsStep 
+                form={form} 
+                updateForm={updateForm} 
+                getBatchCount={getBatchCount} 
+                inputCls={inputCls} 
+                labelCls={labelCls} 
+              />
+            )}
+            {step === 3 && (
+              <MedicalExperienceStep 
+                form={form} 
+                updateForm={updateForm} 
+                previewId={previewId} 
+                inputCls={inputCls} 
+                labelCls={labelCls} 
+              />
+            )}
+            {step === 4 && (
+              <TermsSubmitStep 
+                form={form} 
+                updateForm={updateForm} 
+              />
+            )}
+          </div>
 
-              <div className="space-y-6">
-                {/* Student Name */}
-                <div>
-                  <label className={labelCls}>
-                    STUDENT FULL NAME <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    id="studentName"
-                    type="text"
-                    value={form.studentName}
-                    onChange={(e) => updateForm("studentName", e.target.value)}
-                    className={inputCls}
-                    placeholder="Enter full name"
-                  />
-                </div>
-
-                {/* Bill ID notice */}
-                <div className="flex items-start gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/5">
-                  <span className="text-lg shrink-0 mt-0.5">🧾</span>
-                  <div>
-                    <p className="text-[11px] font-bold tracking-wider text-amber-400 uppercase mb-1">
-                      OFFLINE PAYMENT BILL NUMBER
-                    </p>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      After paying fees at the academy, enter your bill / receipt
-                      number here. This links your payment to your registration.
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <label className={labelCls}>
-                    BILL / RECEIPT NUMBER <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    id="billNumber"
-                    type="text"
-                    className={inputCls}
-                    value={form.billId}
-                    onChange={(e) => updateForm("billId", e.target.value)}
-                    placeholder="Enter Bill/Receipt Number"
-                  />
-                </div>
-
-                {/* DOB + Age */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>
-                      DATE OF BIRTH <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      id="dob"
-                      type="date"
-                      value={form.dob}
-                      onChange={(e) => updateForm("dob", e.target.value)}
-                      className={inputCls}
-                    />
-                  </div>
-                  <div>
-                    <label className={labelCls}>AGE</label>
-                    <input
-                      id="age"
-                      type="text"
-                      value={form.age}
-                      readOnly
-                      className={`${inputCls} opacity-50 cursor-not-allowed`}
-                      placeholder="Auto calculated"
-                    />
-                  </div>
-                </div>
-
-                {/* Gender + Photo */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>
-                      GENDER <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      id="gender"
-                      value={form.gender}
-                      onChange={(e) => updateForm("gender", e.target.value)}
-                      className={inputCls}
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className={labelCls}>UPLOAD STUDENT PHOTO</label>
-                    <label
-                      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-white/10 bg-[#071222] text-slate-400 text-sm cursor-pointer hover:border-cyan-500/40 transition-all"
-                    >
-                      <span>🖼</span>
-                      <span>
-                        {form.photoUrl ? "Photo selected ✓" : "Click to upload photo"}
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handlePhotoUpload}
-                        className="hidden"
-                      />
-                    </label>
-                    {form.photoUrl && (
-                      <img
-                        src={form.photoUrl}
-                        alt="Preview"
-                        className="mt-3 w-16 h-16 object-cover rounded-full border-2 border-cyan-500/40"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 1: CONTACT INFO ── */}
-          {step === 1 && (
-            <div>
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                PARENT / CONTACT DETAILS
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
-
-              <div className="space-y-5">
-                <div>
-                  <label className={labelCls}>
-                    PARENT / GUARDIAN NAME <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    id="parentName"
-                    type="text"
-                    value={form.parentName}
-                    onChange={(e) => updateForm("parentName", e.target.value)}
-                    className={inputCls}
-                    placeholder="Enter parent/guardian name"
-                  />
-                </div>
-
-                <div>
-                  <label className={labelCls}>
-                    MOBILE NUMBER <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    id="mobile"
-                    type="tel"
-                    value={form.mobile}
-                    onChange={(e) => updateForm("mobile", e.target.value)}
-                    className={inputCls}
-                    placeholder="10-digit mobile number"
-                  />
-                </div>
-
-                <div>
-                  <label className={labelCls}>
-                    EMAIL ADDRESS <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => updateForm("email", e.target.value)}
-                    className={inputCls}
-                    placeholder="Enter email address"
-                  />
-                </div>
-
-                <div>
-                  <label className={labelCls}>FULL ADDRESS</label>
-                  <textarea
-                    id="address"
-                    value={form.address}
-                    onChange={(e) => updateForm("address", e.target.value)}
-                    className={`${inputCls} min-h-[80px] resize-none`}
-                    placeholder="Door no., Street, Area"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>CITY</label>
-                    <input
-                      id="city"
-                      type="text"
-                      value={form.city}
-                      onChange={(e) => updateForm("city", e.target.value)}
-                      className={inputCls}
-                      placeholder="City"
-                    />
-                  </div>
-                  <div>
-                    <label className={labelCls}>STATE</label>
-                    <input
-                      id="state"
-                      type="text"
-                      value={form.state}
-                      onChange={(e) => updateForm("state", e.target.value)}
-                      className={inputCls}
-                      placeholder="State"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className={labelCls}>POSTAL CODE</label>
-                  <input
-                    id="postalCode"
-                    type="text"
-                    value={form.postal}
-                    onChange={(e) => updateForm("postal", e.target.value)}
-                    className={`${inputCls} w-full sm:w-48`}
-                    placeholder="6-digit postal code"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 2: TRAINING DETAILS ── */}
-          {step === 2 && (
-            <div>
-              {/* Added consistent terminology */}
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                TRAINING DETAILS
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
-
-              <div className="space-y-8">
-                {/* Training Center */}
-                <div>
-                  <label className={labelCls}>
-                    TRAINING CENTER <span className="text-red-400">*</span>
-                  </label>
-                  <select
-                    id="trainingCenter"
-                    value={form.center}
-                    onChange={(e) => updateForm("center", e.target.value)}
-                    className={inputCls}
-                  >
-                    <option value="">Select Training Center</option>
-                    {CENTERS.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Program */}
-                {form.center && (
-                  <div>
-                    <label className={labelCls}>
-                      PROGRAM <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      id="program"
-                      value={form.program}
-                      onChange={(e) => updateForm("program", e.target.value)}
-                      className={inputCls}
-                    >
-                      <option value="">Select Program</option>
-                      {availablePrograms.map((p) => (
-                        <option key={p} value={p}>
-                          {p}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* Batch Type */}
-                {form.program && (
-                  <div>
-                    <label className={labelCls}>
-                      BATCH TYPE <span className="text-red-400">*</span>
-                    </label>
-                    <div className="flex flex-wrap gap-3">
-                      {BATCH_TYPES.map((b) => (
-                        <button
-                          key={b}
-                          type="button"
-                          onClick={() => updateForm("batchType", b)}
-                          className={`px-5 py-2.5 rounded-xl border font-bold text-sm transition-all ${form.batchType === b
-                            ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                            : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
-                            }`}
-                        >
-                          {b}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Time Slots */}
-                {form.batchType && (
-                  <div>
-                    <label className={labelCls}>
-                      PREFERRED TIME SLOT <span className="text-red-400">*</span>
-                    </label>
-                    <div className="space-y-6">
-                      {Object.entries(TIME_SLOTS).map(([cat, slots]) => (
-                        <div key={cat}>
-                          <h4 className="text-base font-bold text-cyan-400 mb-3">
-                            {cat}
-                          </h4>
-                          <div className="flex flex-wrap gap-3">
-                            {slots.map((slot) => {
-                              const count = getBatchCount(
-                                form.center,
-                                form.program,
-                                slot
-                              );
-                              const isFull = count >= SLOT_LIMIT;
-                              const isSelected = form.slot === slot;
-                              return (
-                                <button
-                                  key={slot}
-                                  type="button"
-                                  disabled={isFull}
-                                  onClick={() =>
-                                    !isFull && updateForm("slot", slot)
-                                  }
-                                  className={`w-[200px] text-left px-4 py-3.5 rounded-xl border transition-all ${isFull
-                                    ? "border-slate-700/50 bg-transparent opacity-50 cursor-not-allowed"
-                                    : isSelected
-                                      ? "border-cyan-500 bg-cyan-500 text-white font-bold shadow-[0_0_25px_rgba(34,211,238,0.6)] scale-[1.02]"
-                                      : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/50 hover:bg-white/5"
-                                    }`}
-                                >
-                                  <p className={`font-bold text-[14px] ${isSelected ? "text-white" : ""}`}>
-                                    {slot}
-                                  </p>
-                                  <span
-                                    className={`block text-[11px] mt-1 font-bold ${isFull
-                                      ? "text-red-400"
-                                      : isSelected ? "text-white/90" : "text-green-400"
-                                      }`}
-                                  >
-                                    {isFull
-                                      ? "Batch Full"
-                                      : `Limited seats`}
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 3: MEDICAL & EXPERIENCE ── */}
-          {step === 3 && (
-            <div>
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                MEDICAL &amp; EXPERIENCE
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
-
-              {/* Student ID Preview */}
-              {form.center && form.program && form.slot && (
-                <div className="flex items-center gap-4 p-4 rounded-xl border border-cyan-500/40 bg-cyan-500/5 mb-7">
-                  <div className="w-10 h-10 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center shrink-0">
-                    <span className="text-cyan-400 text-lg">🪪</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold tracking-[2px] text-slate-400 uppercase mb-0.5">
-                      YOUR STUDENT ID (PREVIEW)
-                    </p>
-                    <p className="text-xl font-black text-cyan-400 tracking-wider font-mono">
-                      {previewId}
-                    </p>
-                    <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                      This ID is generated based on your selected training center and will be finalized after submission.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-6">
-                <div>
-                  <label className={labelCls}>MEDICAL CONDITIONS (IF ANY)</label>
-                  <textarea
-                    id="medicalConditions"
-                    value={form.medical}
-                    onChange={(e) => updateForm("medical", e.target.value)}
-                    className={`${inputCls} min-h-[100px] resize-none`}
-                    placeholder="e.g. Asthma, Heart condition, Epilepsy… or 'None'"
-                  />
-                </div>
-
-                <div>
-                  <label className={labelCls}>ALLERGIES (IF ANY)</label>
-                  <input
-                    id="allergies"
-                    type="text"
-                    value={form.allergies}
-                    onChange={(e) => updateForm("allergies", e.target.value)}
-                    className={inputCls}
-                    placeholder="e.g. Chlorine allergy, Dust… or 'None'"
-                  />
-                </div>
-
-                <div>
-                  <label className={labelCls}>
-                    SWIMMING EXPERIENCE <span className="text-red-400">*</span>
-                  </label>
-                  <div className="flex flex-wrap gap-3">
-                    {["Beginner", "Intermediate", "Advanced"].map((lvl) => (
-                      <button
-                        key={lvl}
-                        type="button"
-                        onClick={() => updateForm("experience", lvl)}
-                        className={`px-6 py-3 rounded-full border font-bold text-sm transition-all ${form.experience === lvl
-                          ? "border-cyan-500 bg-cyan-500 text-white shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                          : "border-slate-700 bg-transparent text-slate-300 hover:border-cyan-500/40 hover:bg-white/5"
-                          }`}
-                      >
-                        {lvl}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 4: TERMS & SUBMIT ── */}
-          {step === 4 && (
-            <div>
-              <h2
-                className="text-2xl font-black tracking-wider mb-1"
-                style={{ color: "#22D3EE", fontFamily: "Arial, sans-serif" }}
-              >
-                TERMS &amp; CONDITIONS
-              </h2>
-              <div className="h-px bg-cyan-500/30 mb-8" />
-
-              {/* Terms list */}
-              <div className="rounded-xl border border-slate-700/60 bg-[#071222] p-5 mb-6">
-                <ol className="space-y-3">
-                  {[
-                    "Students must strictly follow all academy safety rules and guidelines at all times.",
-                    "Batch timing must be followed strictly. Late arrivals may not be accommodated.",
-                    "Fees once paid are non-refundable under any circumstances.",
-                    "All medical conditions must be disclosed to the coach before commencement.",
-                    "Academy reserves the right to modify batch timings if operationally required.",
-                    "Students must wear appropriate swimwear as per academy guidelines.",
-                    "Parents/guardians are responsible for student safety outside pool premises.",
-                    "Academy is not responsible for loss of personal belongings.",
-                  ].map((term, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm">
-                      <span className="shrink-0 w-5 h-5 rounded-sm bg-cyan-500/20 text-cyan-400 text-[11px] font-bold flex items-center justify-center mt-0.5">
-                        {i + 1}
-                      </span>
-                      <span className="text-slate-300 leading-relaxed">
-                        {term}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
-              {/* Registration Summary */}
-              <div className="rounded-xl border border-slate-700/60 bg-[#071222] p-5 mb-6">
-                <p className="text-[10px] font-bold tracking-[2px] text-cyan-400 uppercase mb-4">
-                  REGISTRATION SUMMARY
-                </p>
-                {[
-                  { label: "Center", value: form.center },
-                  { label: "Program", value: form.program },
-                  { label: "Batch", value: form.batchType },
-                  { label: "Slot", value: form.slot },
-                  { label: "Student", value: form.studentName },
-                  { label: "Bill / Receipt No.", value: form.billId || "—" },
-                  { label: "Parent", value: form.parentName },
-                  { label: "Mobile", value: form.mobile },
-                ].map(({ label, value }) => (
-                  <div
-                    key={label}
-                    className="flex justify-between py-2 border-b border-slate-800 last:border-0"
-                  >
-                    <span className="text-slate-400 text-sm">{label}</span>
-                    <span className="text-white text-sm font-semibold text-right max-w-[55%] truncate">
-                      {value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Agreement checkbox */}
-              <label className="flex items-center gap-3 cursor-pointer group mb-2">
-                <input
-                  type="checkbox"
-                  checked={form.agreed}
-                  onChange={(e) => updateForm("agreed", e.target.checked)}
-                  className="w-5 h-5 rounded accent-cyan-500"
-                />
-                <span className="text-sm text-slate-300 group-hover:text-white transition-colors">
-                  I have read and agree to the Terms &amp; Conditions of Aqua
-                  Pulse Swimming Academy
-                </span>
-              </label>
-            </div>
-          )}
-
-          {/* ── NAVIGATION BUTTONS ── */}
+          {/* Navigation */}
           <div className="flex justify-between items-center mt-10 pt-6 border-t border-slate-700/50">
             <button
               type="button"
               onClick={() => setStep((s) => Math.max(0, s - 1))}
               disabled={step === 0}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-600 text-slate-300 font-semibold text-sm hover:border-cyan-500/50 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-600 text-slate-300 font-semibold text-sm hover:border-cyan-500/50 hover:text-white transition-all disabled:opacity-30"
             >
               ← Back
             </button>
@@ -1479,12 +384,8 @@ const Registration = () => {
                 type="button"
                 onClick={() => setStep((s) => s + 1)}
                 disabled={!canProceed()}
-                className="flex items-center gap-2 px-7 py-2.5 rounded-full font-bold text-sm text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(34,211,238,0.25)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)]"
-                style={{
-                  background: canProceed()
-                    ? "linear-gradient(135deg,#22D3EE,#0ea5e9)"
-                    : "#334155",
-                }}
+                className="flex items-center gap-2 px-7 py-2.5 rounded-full font-bold text-sm text-white transition-all disabled:opacity-30 shadow-[0_0_15px_rgba(34,211,238,0.25)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)]"
+                style={{ background: canProceed() ? "linear-gradient(135deg,#22D3EE,#0ea5e9)" : "#334155" }}
               >
                 Next Step →
               </button>
@@ -1493,19 +394,11 @@ const Registration = () => {
                 type="button"
                 onClick={handleSubmit}
                 disabled={!canProceed() || isSubmitting}
-                className="flex items-center gap-2 px-7 py-2.5 rounded-full font-bold text-sm text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(34,197,94,0.25)]"
-                style={{
-                  background:
-                    canProceed() && !isSubmitting
-                      ? "linear-gradient(135deg,#22c55e,#16a34a)"
-                      : "#334155",
-                }}
+                className="flex items-center gap-2 px-7 py-2.5 rounded-full font-bold text-sm text-white transition-all disabled:opacity-30 shadow-[0_0_15px_rgba(34,197,94,0.25)]"
+                style={{ background: canProceed() && !isSubmitting ? "linear-gradient(135deg,#22c55e,#16a34a)" : "#334155" }}
               >
                 {isSubmitting ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Submitting...
-                  </>
+                  <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Submitting...</>
                 ) : (
                   <>✅ Submit Registration</>
                 )}

@@ -7,7 +7,6 @@ interface StudentIdCardProps {
   trainingCenter: string;
   slotTiming: string;
   batchType: string;
-  experience: string;
   academicYear?: string;
   photoUrl?: string; 
   programName?: string; // New prop for Program
@@ -19,7 +18,6 @@ const StudentIdCard: React.FC<StudentIdCardProps> = ({
   trainingCenter,
   slotTiming,
   batchType,
-  experience,
   academicYear = "2026",
   photoUrl,
   programName = "Beginners Program"

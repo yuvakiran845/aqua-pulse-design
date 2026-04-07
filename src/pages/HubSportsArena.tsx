@@ -74,66 +74,82 @@ const HubSportsArena = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pt-20">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden flex-1">
-        {/* Concentric Rings Background */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-          <div className="absolute w-[300px] h-[300px] rounded-full border border-white" />
-          <div className="absolute w-[600px] h-[600px] rounded-full border border-white" />
-          <div className="absolute w-[900px] h-[900px] rounded-full border border-white" />
-          <div className="absolute w-[1200px] h-[1200px] rounded-full border border-white" />
-          <div className="absolute w-[1500px] h-[1500px] rounded-full border border-white" />
+      {/* Hero Section with Mesh Gradient & Grid */}
+      <section className="relative pt-24 pb-24 md:pt-32 md:pb-32 overflow-hidden flex-1">
+        {/* Modern Professional Background Theme */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          {/* Base Mesh Gradient */}
+          <div className="absolute inset-0 bg-[#020617]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#FBBF24]/10 rounded-full blur-[120px] mix-blend-screen opacity-40" />
+          <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[40%] bg-[#22D3EE]/5 rounded-full blur-[120px] mix-blend-screen opacity-30" />
+          
+          {/* Subtle Grid Pattern */}
+          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+          
+          {/* Animated Light Orbs */}
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#FCD34D]/5 rounded-full blur-[100px] animate-pulse" />
+          <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-[#22D3EE]/5 rounded-full blur-[80px]" style={{ animationDelay: '2s' }} />
+          
+          {/* Concentric Rings (refined) */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
+             {[300, 600, 900, 1200, 1500].map((size) => (
+               <div key={size} className="absolute border border-white rounded-full" style={{ width: `${size}px`, height: `${size}px` }} />
+             ))}
+          </div>
         </div>
 
-        <div className="container-main relative z-10">
-          <div className="max-w-3xl space-y-8">
+        <div className="container-main relative z-10 max-w-7xl mx-auto">
+          <div className="max-w-4xl mx-auto text-center md:text-left">
             {/* Badges */}
-            <div className="flex flex-wrap gap-2.5">
-              <span className="px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-500 text-[10px] sm:text-xs font-black tracking-widest uppercase">
-                SPORTS DEVELOPMENT
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-10">
+              <span className="px-4 py-1.5 rounded-full border border-[#FBBF24]/30 bg-[#FBBF24]/5 text-[#FBBF24] text-xs font-bold tracking-[0.1em] uppercase shadow-[0_0_15px_rgba(251,191,36,0.1)] backdrop-blur-sm">
+                Sports Development
               </span>
-              <span className="px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-[10px] sm:text-xs font-black tracking-widest uppercase">
-                EVENT MANAGEMENT
+              <span className="px-4 py-1.5 rounded-full border border-[#22D3EE]/30 bg-[#22D3EE]/5 text-[#22D3EE] text-xs font-bold tracking-[0.1em] uppercase shadow-[0_0_15px_rgba(34,211,238,0.1)] backdrop-blur-sm">
+                Event Management
               </span>
-              <span className="px-4 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-400 text-[10px] sm:text-xs font-black tracking-widest uppercase flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                COMING SOON
+              <span className="px-4 py-1.5 rounded-full border border-red-500/30 bg-red-500/5 text-red-400 text-[10px] font-bold tracking-[0.15em] uppercase flex items-center gap-2 backdrop-blur-sm shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                 Coming Soon
               </span>
             </div>
 
-            {/* Main Title */}
-            <div className="space-y-4">
-              <h1 className="text-[clamp(2.5rem,10vw,4.5rem)] font-heading font-black tracking-tighter leading-none">
-                <span className="block text-white">HUB SPORTS</span>
-                <span className="block gradient-aqua-text">ARENA</span>
-              </h1>
-              <div className="w-24 h-1.5 bg-gradient-to-r from-primary to-transparent rounded-full" />
-            </div>
+            {/* Main Title with Premium Typography */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-black tracking-tight leading-[0.95] mb-8">
+              <span className="block text-white mb-2">HUB SPORTS</span>
+              <span className="block bg-gradient-to-r from-[#FBBF24] via-[#FCD34D] to-[#FBBF24] bg-clip-text text-transparent drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">ARENA</span>
+            </h1>
+
+            {/* Single Accent Line */}
+            <div className="w-24 h-1 bg-gradient-to-r from-[#FBBF24] to-transparent mb-8 mx-auto md:mx-0 shadow-[0_0_10px_rgba(251,191,36,0.4)]" />
 
             {/* Subtitle */}
-            <div className="space-y-4">
-              <h2 className="text-xl sm:text-2xl md:text-3xl text-primary font-bold tracking-tight">
-                Nurturing Champions. Hosting Excellence.
+            <div className="inline-block relative mb-6">
+              <h2 className="text-2xl md:text-3xl text-[#22D3EE] font-heading font-bold tracking-tight uppercase">
+                Sports Development & Event Management
               </h2>
-              <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-medium">
-                A dedicated ecosystem for building sporting excellence and managing professional
-                events, from grassroots development to elite competitive stages.
-              </p>
+              <div className="absolute -inset-1 bg-[#22D3EE]/5 blur-md rounded-lg pointer-events-none" />
             </div>
 
-            {/* Coming Soon Card */}
-            <div className="inline-flex flex-col sm:flex-row items-center gap-6 px-8 py-6 bg-card/60 backdrop-blur-xl rounded-[2rem] border border-white/5 shadow-2xl relative group">
-               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-               <div className="text-5xl sm:text-6xl shrink-0 drop-shadow-[0_0_20px_rgba(245,158,11,0.3)] animate-pulse">⏳</div>
-               <div className="text-center sm:text-left">
-                <h3 className="text-2xl font-heading font-black text-amber-500 tracking-widest mb-1">
-                  PRE-LAUNCH STATUS
+            {/* Description */}
+            <p className="text-[#94A3B8] text-base md:text-xl leading-relaxed max-w-2xl mb-12 mx-auto md:mx-0 font-medium">
+              A dedicated platform for building sporting excellence, managing professional
+              events, and developing athletes from grassroots to elite levels.
+            </p>
+
+            {/* Coming Soon Card (Professional Style) */}
+            <div className="inline-flex flex-col sm:flex-row items-center gap-6 px-10 py-7 bg-white/[0.03] backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.4)] transition-all duration-500 hover:border-[#FBBF24]/30 hover:bg-white/[0.05] group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FBBF24] to-[#B45309] flex items-center justify-center text-3xl shadow-[0_8px_20px_rgba(180,83,9,0.3)] group-hover:scale-110 transition-transform duration-500">
+                ⌛
+              </div>
+              <div className="text-center sm:text-left">
+                <h3 className="text-2xl font-heading font-black text-[#FCD34D] tracking-widest mb-1">
+                  COMING SOON...
                 </h3>
-                <p className="text-slate-400 text-sm font-medium">
-                  We're crafting a world-class experience. Stay updated!
+                <p className="text-slate-400 font-medium tracking-wide">
+                  Building the future of sports. Stay tuned!
                 </p>
               </div>
             </div>
@@ -141,34 +157,40 @@ const HubSportsArena = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-secondary/20 relative">
-        <div className="container-main max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-[#FCD34D] tracking-wide uppercase mb-3 drop-shadow-[0_0_15px_rgba(252,211,77,0.2)]">
-              WHAT'S COMING
+      {/* Features Section with Grid Background */}
+      <section className="py-24 md:py-32 bg-[#030816] relative overflow-hidden">
+        {/* Subtle decorative elements */}
+        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FBBF24]/10 to-transparent pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-64 h-64 bg-[#FBBF24]/5 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="container-main max-w-7xl mx-auto relative z-10 px-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-heading font-black text-white tracking-tight uppercase mb-6">
+              WHAT'S <span className="text-[#FCD34D]">COMING</span>
             </h2>
-            <p className="text-[#22D3EE] font-medium text-sm md:text-base">
-              Here's a glimpse of what Hub Sports Arena will offer
+            <div className="w-24 h-1 bg-[#FCD34D] mx-auto mb-6 rounded-full" />
+            <p className="text-[#22D3EE] font-bold text-base md:text-xl tracking-[0.2em] uppercase">
+               Exclusive Platform Preview
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((f, i) => (
               <div
                 key={i}
-                className="group relative bg-[#0F172A] border border-white/5 rounded-2xl p-6 md:p-8 overflow-hidden hover:border-[#FBBF24]/30 hover:bg-[#1E293B] hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300"
+                className="group relative bg-[#0F172A]/40 backdrop-blur-sm border border-white/10 rounded-[2rem] p-8 md:p-10 overflow-hidden transition-all duration-500 hover:border-[#FBBF24]/50 hover:bg-[#0F172A]/80 hover:-translate-y-2 shadow-[0_10px_40px_rgba(0,0,0,0.3)]"
               >
-                {/* Background watermark emoji */}
-                <div className="absolute -right-4 -bottom-4 text-8xl opacity-[0.03] group-hover:opacity-[0.06] group-hover:scale-110 transition-all duration-500 pointer-events-none grayscale">
+                {/* Neon accent corner */}
+                <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#FBBF24]/10 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl mb-8 group-hover:bg-[#FBBF24]/20 group-hover:border-[#FBBF24]/30 transition-all duration-500">
                   {f.emoji}
                 </div>
                 
-                <div className="text-3xl mb-5 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-300 transform origin-left">
-                  {f.emoji}
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-sm text-[#94A3B8] leading-relaxed group-hover:text-[#CBD5E1] transition-colors">
+                <h3 className="text-xl md:text-2xl font-heading font-black text-white mb-4 tracking-tight group-hover:text-[#FCD34D] transition-colors">
+                  {f.title}
+                </h3>
+                <p className="text-[#94A3B8] text-base md:text-lg leading-relaxed group-hover:text-slate-300 transition-colors font-medium">
                   {f.desc}
                 </p>
               </div>

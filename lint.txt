@@ -1,0 +1,18 @@
+﻿
+C:\Users\Yuvakiran\aqua-pulse-design\src\components\Registration\FormSteps\TermsSubmit.tsx
+  9:53  warning  'labelCls' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Yuvakiran\aqua-pulse-design\src\components\StudentIdCard.tsx
+  22:3  warning  'experience' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Yuvakiran\aqua-pulse-design\src\hooks\useRegistrationForm.ts
+  1:31  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Yuvakiran\aqua-pulse-design\src\pages\FounderPage.tsx
+  5:8  warning  'logoImg' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Yuvakiran\aqua-pulse-design\src\pages\Registration.tsx
+  64:14  warning  'error' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+Γ£û 5 problems (0 errors, 5 warnings)
+
