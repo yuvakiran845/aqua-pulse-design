@@ -44,7 +44,7 @@ const Navbar = () => {
   return (
     <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-border/50">
       <div className="container-main flex items-center justify-between min-h-[80px] py-2.5">
-        <a href="/" className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
           <div className="w-[48px] h-[48px] sm:w-[58px] sm:h-[58px] md:w-[68px] md:h-[68px] rounded-full overflow-hidden shrink-0 shadow-[0_0_14px_rgba(34,211,238,0.22)] border border-cyan-500/20">
             <img
               src={logoImg}
@@ -64,7 +64,7 @@ const Navbar = () => {
               SWIMMING ACADEMY
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop */}
         <div className="hidden lg:flex items-center gap-3 flex-1 justify-end">

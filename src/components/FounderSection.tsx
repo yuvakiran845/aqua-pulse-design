@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { BadgeCheck, Medal, Activity, Shield } from "lucide-react";
 import founderImg from "@/assets/founder-real.png";
 
+import { Link } from "react-router-dom";
+
 const services = [
   { icon: BadgeCheck, label: "Certified Aquatic Facility Operator" },
   { icon: Medal, label: "15+ Years Sports Management" },
@@ -35,7 +37,7 @@ const FounderSection = () => {
               className="w-[280px] md:w-[320px] lg:w-[340px] text-lg py-6 font-bold tracking-wide rounded-xl transition-all duration-300 bg-[#22D3EE] text-[#0F172A] border border-[#22D3EE] hover:bg-[#22D3EE]/10 hover:text-[#22D3EE] hover:border-[#22D3EE]/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] active:scale-95" 
               asChild
             >
-              <a href="/founder#founder-page-section">Founder Details</a>
+              <Link to="/founder">Founder Details</Link>
             </Button>
           </div>
 

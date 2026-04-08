@@ -136,11 +136,11 @@ const FounderPage = () => {
                       <div className="w-8 h-1 bg-primary rounded-full" />
                       QUICK STATS
                     </h2>
-                    <div className="grid gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4">
                       {quickStats.map((stat) => (
-                        <div key={stat.label} className="rounded-2xl border border-white/5 bg-navy-mid/30 p-5 transition-all duration-300 hover:bg-navy-mid/50 hover:border-primary/20 group/stat">
-                          <p className={`text-[10px] uppercase tracking-[0.2em] font-black ${stat.color} mb-1.5`}>{stat.label}</p>
-                          <p className="text-white font-bold text-base sm:text-lg tracking-tight group-hover/stat:translate-x-1 transition-transform duration-300">{stat.value}</p>
+                        <div key={stat.label} className="rounded-2xl border border-white/5 bg-navy-mid/30 p-4 sm:p-5 transition-all duration-300 hover:bg-navy-mid/50 hover:border-primary/20 group/stat">
+                          <p className={`text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-black ${stat.color} mb-1 sm:mb-1.5`}>{stat.label}</p>
+                          <p className="text-white font-bold text-sm sm:text-base lg:text-lg tracking-tight group-hover/stat:translate-x-1 transition-transform duration-300">{stat.value}</p>
                         </div>
                       ))}
                     </div>
@@ -157,16 +157,16 @@ const FounderPage = () => {
                       <div
                         key={item.id}
                         className={cn(
-                          "flex items-center gap-4 sm:gap-6 p-5 sm:p-6 rounded-3xl transition-all duration-500 hover:bg-white/5 group/cert",
+                          "flex items-center gap-3 sm:gap-6 p-4 sm:p-6 rounded-3xl transition-all duration-500 hover:bg-white/5 group/cert",
                           idx < certificationsData.length - 1 ? "border-b border-white/5" : ""
                         )}
                       >
-                        <div className={cn(item.iconBg, "w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover/cert:scale-110 transition-transform duration-500 shadow-inner")}>
-                          <item.icon className={cn("w-7 h-7 sm:w-8 sm:h-8", item.iconClass)} strokeWidth={1.5} />
+                        <div className={cn(item.iconBg, "w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover/cert:scale-110 transition-transform duration-500 shadow-inner")}>
+                          <item.icon className={cn("w-6 h-6 sm:w-8 sm:h-8", item.iconClass)} strokeWidth={1.5} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-white font-black text-lg sm:text-xl tracking-tight mb-1">{item.title}</h3>
-                          <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed truncate sm:whitespace-normal">{item.subtitle}</p>
+                          <h3 className="text-white font-black text-base sm:text-lg lg:text-xl tracking-tight mb-1">{item.title}</h3>
+                          <p className="text-[10px] sm:text-xs lg:text-sm text-slate-400 font-medium leading-relaxed">{item.subtitle}</p>
                         </div>
                         <button 
                           onClick={() => {
@@ -182,10 +182,10 @@ const FounderPage = () => {
                               });
                             }
                           }}
-                          className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-black hover:border-primary transition-all duration-300 group/btn shrink-0 shadow-lg"
+                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-black hover:border-primary transition-all duration-300 group/btn shrink-0 shadow-lg"
                           title="Download Certification"
                         >
-                          <Download className="w-5 h-5 group-hover/btn:scale-110 transition-transform" strokeWidth={2.5} />
+                          <Download className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:scale-110 transition-transform" strokeWidth={2.5} />
                         </button>
                       </div>
                     ))}
