@@ -173,7 +173,8 @@ const SwimmingAcademy = () => {
                 key={slide.src}
                 src={slide.src}
                 alt={slide.alt}
-                loading={idx === 0 ? "eager" : "lazy"}
+                loading="eager"
+                fetchPriority="high"
                 onError={() =>
                   setFailedIndices((prev) => {
                     const originalIndex = heroSlides.findIndex((s) => s.src === slide.src);

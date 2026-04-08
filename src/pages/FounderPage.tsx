@@ -90,7 +90,13 @@ const FounderPage = () => {
                   <div className="relative group">
                     <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] lg:w-[420px] lg:h-[420px] rounded-full overflow-hidden border-4 border-primary/30 shadow-[0_0_50px_rgba(34,211,238,0.2)] group-hover:border-primary/60 transition-all duration-500">
-                      <img src={founderImg} alt="Founder - E. NAGA VENKAT" className="w-full h-full object-cover object-top scale-105 group-hover:scale-110 transition-transform duration-700" />
+                      <img 
+                        src={founderImg} 
+                        alt="Founder - E. NAGA VENKAT" 
+                        loading="eager"
+                        fetchPriority="high"
+                        className="w-full h-full object-cover object-top scale-105 group-hover:scale-110 transition-transform duration-700" 
+                      />
                     </div>
                     <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] sm:text-xs font-bold px-6 py-2 rounded-full shadow-xl tracking-wider">
                       FOUNDER & MD

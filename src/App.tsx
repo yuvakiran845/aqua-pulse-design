@@ -8,6 +8,7 @@ import FloatingElements from "./components/FloatingElements.tsx";
 
 // Eager-load the home page for instant first paint
 import Index from "./pages/Index.tsx";
+import ScrollToTop from "./components/ScrollToTop.tsx";
 
 // Lazy-load all secondary pages — only downloaded when the user navigates to them
 const SwimmingAcademy = lazy(() => import("./pages/SwimmingAcademy.tsx"));
@@ -40,6 +41,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <ScrollToTop />
         <FloatingElements />
         <Suspense fallback={<PageLoader />}>
           <Routes>

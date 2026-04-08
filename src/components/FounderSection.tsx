@@ -26,7 +26,12 @@ const FounderSection = () => {
           <div className="flex flex-col items-center gap-6">
             <div className="relative">
               <div className="w-[320px] h-[320px] md:w-[380px] md:h-[380px] lg:w-[420px] lg:h-[420px] rounded-full overflow-hidden border-4 border-primary/30 shadow-[0_0_30px_rgba(34,211,238,0.15)]">
-                <img src={founderImg} alt="E. NAGA VENKAT" className="w-full h-full object-cover object-top" />
+                <img 
+                  src={founderImg} 
+                  alt="E. NAGA VENKAT" 
+                  loading="eager"
+                  className="w-full h-full object-cover object-top" 
+                />
               </div>
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-accent text-primary-foreground text-xs font-semibold px-4 py-1.5 rounded-full whitespace-nowrap">
                 Visionary Leader in Aquatic Sports

@@ -32,6 +32,8 @@ const HeroSection = () => {
             key={active}
             src={images[active].src}
             alt={images[active].alt}
+            loading="eager"
+            fetchPriority="high"
             initial={{ opacity: 0, scale: 1 }}
             animate={{ opacity: 1, scale: 1.03 }}
             exit={{ opacity: 0 }}
